@@ -1,5 +1,0 @@
-package uo.cpm.p2.exception;
-
-public class InvalidFieldsException {
-
-}

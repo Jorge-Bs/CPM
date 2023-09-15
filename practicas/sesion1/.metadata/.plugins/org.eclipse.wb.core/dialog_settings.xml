@@ -1,9 +1,0 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<section name="Workbench">
-	<section name="org.eclipse.wb.internal.core.editor.actions.errors.ErrorsDialog">
-		<item key="x" value="730"/>
-		<item key="y" value="215"/>
-		<item key="width" value="1099"/>
-		<item key="height" value="1010"/>
-	</section>
-</section>
