@@ -69,6 +69,6 @@ public class Ventana extends JFrame{
 		v.setVisible(true);
 	}
 	
-	 
+	//prueba 
 
 }
