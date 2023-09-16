@@ -187,6 +187,7 @@ public class VentanaRegistro extends JFrame {
 				}
 			});
 			btSiguiente.setBounds(368, 216, 89, 23);
+			btSiguiente.setBackground(Color.GREEN);
 		}
 		return btSiguiente;
 	}
@@ -239,6 +240,7 @@ public class VentanaRegistro extends JFrame {
 				}
 			});
 			btCancelar.setBounds(467, 216, 89, 23);
+			btCancelar.setBackground(Color.RED);
 		}
 		return btCancelar;
 	}
