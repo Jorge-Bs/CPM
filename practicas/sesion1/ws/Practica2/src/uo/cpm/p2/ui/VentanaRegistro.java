@@ -22,6 +22,10 @@ import java.awt.event.ActionListener;
 import java.sql.Date;
 import java.time.LocalDate;
 import java.awt.event.ActionEvent;
+import javax.swing.border.TitledBorder;
+import javax.swing.JRadioButton;
+import javax.swing.event.ChangeListener;
+import javax.swing.event.ChangeEvent;
 
 public class VentanaRegistro extends JFrame {
 	
@@ -38,6 +42,10 @@ public class VentanaRegistro extends JFrame {
 	private JPasswordField pwPass2;
 	private JButton btSiguiente;
 	private JButton btCancelar;
+	private JPanel pnData;
+	private JPanel pnPedido;
+	private JRadioButton rdBtLocal;
+	private JRadioButton rdBtLlevar;
 
 	
 	
@@ -85,22 +93,17 @@ public class VentanaRegistro extends JFrame {
 		setContentPane(pnContenidos);//añadir panel al marco
 		pnContenidos.setLayout(null);//eliminar layout
 		//Añadir todos los componentes al panel
-		pnContenidos.add(getLbNombre());
-		pnContenidos.add(getTxNombre());
-		pnContenidos.add(getLbYear());
-		pnContenidos.add(getCbYears());
-		pnContenidos.add(getLbPass());
-		pnContenidos.add(getPwPass1());
-		pnContenidos.add(getLbPass2());
-		pnContenidos.add(getPwPass2());
+		
 		pnContenidos.add(getBtSiguiente());
 		pnContenidos.add(getBtCancelar());
+		pnContenidos.add(getPnData());
+		pnContenidos.add(getPnPedido());
 		setLocationRelativeTo(null);
 	}
 	private JLabel getLbNombre() {
 		if (lbNombre == null) {
 			lbNombre = new JLabel("Nombre y apellidos");
-			lbNombre.setBounds(51, 31, 106, 14);
+			lbNombre.setBounds(28, 31, 106, 14);
 		}
 		return lbNombre;
 	}
@@ -115,7 +118,7 @@ public class VentanaRegistro extends JFrame {
 	private JLabel getLbYear() {
 		if (lbYear == null) {
 			lbYear = new JLabel("A\u00F1o de nacimiento");
-			lbYear.setBounds(51, 65, 106, 14);
+			lbYear.setBounds(28, 56, 106, 14);
 		}
 		return lbYear;
 	}
@@ -145,7 +148,7 @@ public class VentanaRegistro extends JFrame {
 	private JLabel getLbPass() {
 		if (lbPass == null) {
 			lbPass = new JLabel("Password:");
-			lbPass.setBounds(51, 96, 106, 14);
+			lbPass.setBounds(28, 90, 106, 14);
 		}
 		return lbPass;
 	}
@@ -159,7 +162,7 @@ public class VentanaRegistro extends JFrame {
 	private JLabel getLbPass2() {
 		if (lbPass2 == null) {
 			lbPass2 = new JLabel("Reinserte Password:");
-			lbPass2.setBounds(51, 133, 106, 14);
+			lbPass2.setBounds(28, 133, 125, 14);
 		}
 		return lbPass2;
 	}
@@ -243,4 +246,67 @@ public class VentanaRegistro extends JFrame {
 	private void finalizar() {
 		System.exit(0);
 	}
+	private JPanel getPnData() {
+		if (pnData == null) {
+			pnData = new JPanel();
+			pnData.setBackground(new Color(255, 255, 255));
+			pnData.setBorder(new TitledBorder(null, "Cliente", TitledBorder.LEADING, TitledBorder.TOP, null, null));
+			pnData.setBounds(60, 11, 362, 158);
+			pnData.setLayout(null);
+			
+			//elementos al panel
+			pnData.add(getLbNombre());
+			pnData.add(getTxNombre());
+			pnData.add(getLbYear());
+			pnData.add(getCbYears());
+			pnData.add(getLbPass());
+			pnData.add(getPwPass1());
+			pnData.add(getLbPass2());
+			pnData.add(getPwPass2());
+			
+		}
+		return pnData;
+	}
+	private JPanel getPnPedido() {
+		if (pnPedido == null) {
+			pnPedido = new JPanel();
+			pnPedido.setBorder(new TitledBorder(null, "Pedido", TitledBorder.LEADING, TitledBorder.TOP, null, null));
+			pnPedido.setBackground(new Color(255, 255, 255));
+			pnPedido.setBounds(66, 190, 163, 49);
+			pnPedido.setLayout(null);
+			pnPedido.add(getRdBtLocal());
+			pnPedido.add(getRdBtLlevar());
+		}
+		return pnPedido;
+	}
+	private JRadioButton getRdBtLocal() {
+		if (rdBtLocal == null) {
+			rdBtLocal = new JRadioButton("Local");
+			rdBtLocal.addActionListener(new ActionListener() {
+				public void actionPerformed(ActionEvent e) {
+					JRadioButton bt1 = getRdBtLlevar();
+					bt1.setEnabled(!bt1.isEnabled());
+				}
+			});
+			rdBtLocal.setBackground(new Color(255, 255, 255));
+			rdBtLocal.setBounds(6, 17, 59, 25);
+		}
+		return rdBtLocal;
+	}
+	private JRadioButton getRdBtLlevar() {
+		if (rdBtLlevar == null) {
+			rdBtLlevar = new JRadioButton("Llevar");
+			rdBtLlevar.addActionListener(new ActionListener() {
+				public void actionPerformed(ActionEvent e) {
+					JRadioButton bt1 = getRdBtLocal();
+					bt1.setEnabled(!bt1.isEnabled());
+				}
+			});
+				
+			rdBtLlevar.setBackground(new Color(255, 255, 255));
+			rdBtLlevar.setBounds(66, 17, 73, 25);
+		}
+		return rdBtLlevar;
+	}
+	
 }
