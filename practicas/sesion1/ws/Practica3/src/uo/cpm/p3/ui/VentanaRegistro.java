@@ -1,30 +1,31 @@
-package uo.cpm.p2.ui;
+package uo.cpm.p3.ui;
 
 import java.awt.EventQueue;
 
 import javax.swing.JFrame;
 import javax.swing.JPanel;
 import javax.swing.border.EmptyBorder;
-
-import uo.cpm.p2.exception.InvalidFieldsException;
-
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 
 import java.awt.Color;
 import javax.swing.JTextField;
 import javax.swing.JComboBox;
+import javax.swing.JDialog;
 import javax.swing.JPasswordField;
 import javax.swing.JButton;
 import javax.swing.DefaultComboBoxModel;
 import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
 import javax.swing.border.TitledBorder;
+
+import uo.cpm.p3.exception.InvalidFieldsException;
+
 import javax.swing.JRadioButton;
 import javax.swing.ButtonGroup;
 
 
-public class VentanaRegistro extends JFrame {
+public class VentanaRegistro extends JDialog {
 	
 	/**
 	 * 
@@ -68,7 +69,7 @@ public class VentanaRegistro extends JFrame {
 	 * Launch the application.
 	 */
 	public static void main(String[] args) {
-		//widowBuilder utiliza un hilo para la interfz
+		//widowBuilder utiliza un hilo para la interfaz
 		EventQueue.invokeLater(new Runnable() {
 			public void run() {
 				try {
@@ -87,7 +88,8 @@ public class VentanaRegistro extends JFrame {
 	public VentanaRegistro() {
 		//Marco
 		setTitle("Datos de Registro");
-		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);//operacion de la x(cerrar) de la ventana
+		//setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);//operacion de la x(cerrar) de la ventana, cierra todos los procesos abiertos
+		setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);//cierra la ventana pero no mata los procesos abiertos
 		setBounds(100, 100, 600, 300);
 		//Panel
 		pnContenidos = new JPanel();
