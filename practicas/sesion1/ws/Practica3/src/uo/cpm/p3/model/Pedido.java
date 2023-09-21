@@ -11,16 +11,27 @@ public class Pedido {
 	private String codigo;
 	
 
+	/**
+	 * Inicializa el pedido
+	 */
 	public Pedido() {
 		listaPedido = new ArrayList<Articulo>();
 		inicializar();
 	}
 
+	/**
+	 * Establece la lista de pedidos a 0 y genra un codigo para el pedido
+	 */
 	public void inicializar() {
 		listaPedido.clear();
 		generarCodigo();
 			}
 
+	/**
+	 * Añade el articulo al pedido , se necesita las unidades a añadir
+	 * @param articuloDelCatalogo
+	 * @param unidades
+	 */
 	public void add(Articulo articuloDelCatalogo, int unidades) {
 		Articulo articuloEnPedido = null;
 
@@ -39,6 +50,10 @@ public class Pedido {
 		}
 	}
 
+	/**
+	 * Devuelve el precio del pedido
+	 * @return precio
+	 */
 	public float getTotal() {
 		float precio = 0;
 		for (Articulo a : listaPedido) {
@@ -50,22 +65,41 @@ public class Pedido {
 		return precio;
 	}
 
+	/**
+	 * guarda en un archivo de nombre el codigo la lista de pedidos
+	 */
 	public void grabarPedido() {
 		FileUtil.saveToFile(codigo, listaPedido);
 	}
 
+	/**
+	 * Devuelve la lista de pedidos
+	 * @return lista  de pedidos
+	 */
 	public List<Articulo> getListaPedido() {
 		return listaPedido;
 	}
 
+	
+	/**
+	 * La lista que se de por paramtro se establece como la lista de productos del pedido
+	 * @param listaPedido
+	 */
 	public void setListaPedido(List<Articulo> listaPedido) {
 		this.listaPedido = listaPedido;
 	}
 
+	/**
+	 * Devuelve el codigo del pedido
+	 * @return codigo
+	 */
 	public String getCodigo() {
 		return codigo;
 	}
 
+	/**
+	 * Genera de forma aleatoria un codigo para el pedido
+	 */
 	public void generarCodigo() {
 		codigo = "";
 		String base = "0123456789abcdefghijklmnopqrstuvwxyz";
