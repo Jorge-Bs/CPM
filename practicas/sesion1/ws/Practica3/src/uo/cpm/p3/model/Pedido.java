@@ -59,9 +59,9 @@ public class Pedido {
 		for (Articulo a : listaPedido) {
 			precio += a.getPrecio() * a.getUnidades();
 		}
-		if (precio >= 60) {
-			precio = (precio * 0.9F);
-			}
+//		if (precio >= 60) {
+//			precio = (precio * 0.9F);
+//			}
 		return precio;
 	}
 

@@ -32,7 +32,7 @@ public class Console {
 			case 3:
 				showPedido(); break;
 			case 4:
-				procesarPedido();
+				procesarPedido();break;
 			}
 		}while(!exit);
 
@@ -59,7 +59,7 @@ public class Console {
 	
 	private void procesarPedido() {
 		showPedido();
-		print("Presione 1 para confirmar el pedido, otro numero en caso contario");
+		print("Presione 1 para confirmar el pedido, otro numero en caso contrario");
 		switch(teclado.nextInt()) {
 		case 1:
 			pedido.grabarPedido();

@@ -1,10 +1,12 @@
 package uo.cpm.p3.ui;
 
-import java.awt.EventQueue;
-
 import javax.swing.JFrame;
 import javax.swing.JPanel;
 import javax.swing.border.EmptyBorder;
+
+import uo.cpm.p3.model.Articulo;
+import uo.cpm.p3.service.McDonalds;
+
 import java.awt.Toolkit;
 import java.awt.Color;
 import javax.swing.JLabel;
@@ -15,6 +17,9 @@ import javax.swing.JSpinner;
 import javax.swing.JButton;
 import javax.swing.JTextField;
 import javax.swing.SpinnerNumberModel;
+import java.awt.event.ActionListener;
+import java.awt.event.ActionEvent;
+import javax.swing.DefaultComboBoxModel;
 
 public class VentanaPrincipal extends JFrame {
 
@@ -23,14 +28,15 @@ public class VentanaPrincipal extends JFrame {
 	private JPanel contentPane;
 	private JLabel lbLogo;
 	private JLabel lbArticulos;
-	private JComboBox cBArticulos;
+	private JComboBox<Articulo> cBArticulos;
 	private JLabel lbUnidades;
 	private JSpinner sUnidades;
 	private JButton btAñadir;
 	private JLabel lbPrecio;
-	private JTextField textField;
+	private JTextField tFPrice;
 	private JButton btSiguiente;
 	private JButton btCancelar;
+	private McDonalds mac;
 	
 	
 	/**
@@ -56,7 +62,8 @@ public class VentanaPrincipal extends JFrame {
 	/**
 	 * Create the frame.
 	 */
-	public VentanaPrincipal() {
+	public VentanaPrincipal(McDonalds mac) {
+		setMacDonalds(mac);
 		setTitle("McDonald's España");
 		setIconImage(Toolkit.getDefaultToolkit().getImage(VentanaPrincipal.class.getResource("/img/logo.png")));
 		setResizable(false);
@@ -76,10 +83,15 @@ public class VentanaPrincipal extends JFrame {
 		contentPane.add(getSUnidades());
 		contentPane.add(getBtAñadir());
 		contentPane.add(getLbPrecio());
-		contentPane.add(getTextField());
+		contentPane.add(getTFPrice());
 		contentPane.add(getBtSiguiente());
 		contentPane.add(getBtCancelar());
 	}
+	private void setMacDonalds(McDonalds mcDonalds) {
+		if(mcDonalds==null) throw new IllegalArgumentException();
+		this.mac= mcDonalds;
+	}
+	
 	private JLabel getLbLogo() {
 		if (lbLogo == null) {
 			lbLogo = new JLabel("  McDonald's");
@@ -92,20 +104,26 @@ public class VentanaPrincipal extends JFrame {
 	private JLabel getLbArticulos() {
 		if (lbArticulos == null) {
 			lbArticulos = new JLabel("Articulos:");
+			lbArticulos.setLabelFor(getCBArticulos());
+			lbArticulos.setDisplayedMnemonic('t');
 			lbArticulos.setBounds(58, 202, 192, 29);
 		}
 		return lbArticulos;
 	}
-	private JComboBox getCBArticulos() {
+	private JComboBox<Articulo> getCBArticulos() {
 		if (cBArticulos == null) {
-			cBArticulos = new JComboBox();
-			cBArticulos.setBounds(58, 242, 311, 22);
+			cBArticulos = new JComboBox<Articulo>();
+			cBArticulos.setModel(new DefaultComboBoxModel<Articulo>(mac.getArticulosCarta()));
+			cBArticulos.setBounds(38, 242, 357, 22);
 		}
 		return cBArticulos;
 	}
+	
 	private JLabel getLbUnidades() {
 		if (lbUnidades == null) {
 			lbUnidades = new JLabel("Unidades:");
+			lbUnidades.setLabelFor(getSUnidades());
+			lbUnidades.setDisplayedMnemonic('U');
 			lbUnidades.setBounds(448, 209, 167, 14);
 		}
 		return lbUnidades;
@@ -121,11 +139,39 @@ public class VentanaPrincipal extends JFrame {
 	private JButton getBtAñadir() {
 		if (btAñadir == null) {
 			btAñadir = new JButton("Añadir");
+			btAñadir.addActionListener(new ActionListener() {
+				public void actionPerformed(ActionEvent e) {
+					addArticulo();
+				}
+			});
+			btAñadir.setMnemonic('A');
 			btAñadir.setBackground(new Color(0, 255, 0));
 			btAñadir.setBounds(566, 239, 121, 29);
 		}
 		return btAñadir;
 	}
+	
+	private void addArticulo() {
+		getBtSiguiente().setEnabled(true);
+		mac.añadirAPedido(readArticulo(), readUnidades());
+		showPrice();
+	}
+	
+	private Articulo readArticulo() {
+		return (Articulo)getCBArticulos().getSelectedItem();
+	}
+	
+	private int readUnidades() {
+		return (Integer) getSUnidades().getValue();
+	}
+	
+	private void showPrice() {
+		String precio = String.format("%.2f",mac.getTotalPedido());
+		getTFPrice().setText(precio+"€");
+	}
+	
+	
+	
 	private JLabel getLbPrecio() {
 		if (lbPrecio == null) {
 			lbPrecio = new JLabel("Precio del pedido:");
@@ -133,26 +179,48 @@ public class VentanaPrincipal extends JFrame {
 		}
 		return lbPrecio;
 	}
-	private JTextField getTextField() {
-		if (textField == null) {
-			textField = new JTextField();
-			textField.setEditable(false);
-			textField.setBounds(448, 328, 96, 37);
-			textField.setColumns(10);
+	private JTextField getTFPrice() {
+		if (tFPrice == null) {
+			tFPrice = new JTextField();
+			tFPrice.setEditable(false);
+			tFPrice.setBounds(448, 328, 96, 37);
+			tFPrice.setColumns(10);
 		}
-		return textField;
+		return tFPrice;
 	}
 	private JButton getBtSiguiente() {
 		if (btSiguiente == null) {
 			btSiguiente = new JButton("Siguiente");
+			btSiguiente.setEnabled(false);
+			btSiguiente.addActionListener(new ActionListener() {
+				public void actionPerformed(ActionEvent e) {
+					showRegisterWindow();
+				}
+			});
+			btSiguiente.setMnemonic('S');
 			btSiguiente.setBackground(new Color(0, 255, 0));
 			btSiguiente.setBounds(448, 417, 130, 42);
 		}
 		return btSiguiente;
 	}
+	
+	private void showRegisterWindow() {
+		VentanaRegistro vR = new VentanaRegistro(mac);
+		
+		vR.setLocationRelativeTo(null);//null pantalla de ordenar, this en relacion a la ventana anterior
+		vR.setModal(true);
+		vR.setVisible(true); //tiene que siempre lo ultimo
+	}
+	
 	private JButton getBtCancelar() {
 		if (btCancelar == null) {
 			btCancelar = new JButton("Cancelar");
+			btCancelar.addActionListener(new ActionListener() {
+				public void actionPerformed(ActionEvent e) {
+					System.exit(0);
+				}
+			});
+			btCancelar.setMnemonic('C');
 			btCancelar.setBackground(new Color(255, 0, 0));
 			btCancelar.setBounds(588, 417, 130, 42);
 		}

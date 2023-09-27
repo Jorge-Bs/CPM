@@ -1,6 +1,6 @@
 package uo.cpm.p3.ui;
 
-import java.awt.EventQueue;
+
 
 import javax.swing.JFrame;
 import javax.swing.JPanel;
@@ -20,9 +20,11 @@ import java.awt.event.ActionEvent;
 import javax.swing.border.TitledBorder;
 
 import uo.cpm.p3.exception.InvalidFieldsException;
+import uo.cpm.p3.service.McDonalds;
 
 import javax.swing.JRadioButton;
 import javax.swing.ButtonGroup;
+import java.awt.Toolkit;
 
 
 public class VentanaRegistro extends JDialog {
@@ -50,6 +52,7 @@ public class VentanaRegistro extends JDialog {
 	private JRadioButton rdBtLocal;
 	private JRadioButton rdBtLlevar;
 	private final ButtonGroup bGroupPedido = new ButtonGroup();
+	private McDonalds mac;
 
 	
 	
@@ -65,29 +68,16 @@ public class VentanaRegistro extends JDialog {
 	 * 
 	 * 
 	 */
-	/**
-	 * Launch the application.
-	 */
-	public static void main(String[] args) {
-		//widowBuilder utiliza un hilo para la interfaz
-		EventQueue.invokeLater(new Runnable() {
-			public void run() {
-				try {
-					VentanaRegistro frame = new VentanaRegistro();
-					frame.setVisible(true);
-				} catch (Exception e) {
-					e.printStackTrace();
-				}
-			}
-		});
-	}
+	
 
 	/**
 	 * Create the frame.
 	 */
-	public VentanaRegistro() {
+	public VentanaRegistro(McDonalds mac) {
+		setMacdonal(mac);
+		setIconImage(Toolkit.getDefaultToolkit().getImage(VentanaRegistro.class.getResource("/img/logo.png")));
 		//Marco
-		setTitle("Datos de Registro");
+		setTitle("McDonald's: Datos de Registro");
 		//setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);//operacion de la x(cerrar) de la ventana, cierra todos los procesos abiertos
 		setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);//cierra la ventana pero no mata los procesos abiertos
 		setBounds(100, 100, 600, 300);
@@ -104,7 +94,13 @@ public class VentanaRegistro extends JDialog {
 		pnContenidos.add(getPnData());
 		pnContenidos.add(getPnPedido());
 		setLocationRelativeTo(null);
+		setResizable(false);
 	}
+	
+	private void setMacdonal(McDonalds mac) {
+		this.mac = mac;
+	}
+	
 	private JLabel getLbNombre() {
 		if (lbNombre == null) {
 			lbNombre = new JLabel("Nombre y apellidos:");
@@ -185,6 +181,7 @@ public class VentanaRegistro extends JDialog {
 				public void actionPerformed(ActionEvent e) {
 					try {
 						checkFields();
+						createConfirmWindow();
 					}catch(InvalidFieldsException exception) {
 						JOptionPane.showMessageDialog(null, exception.getMessage(),"Revise datos",1);
 					}
@@ -195,6 +192,12 @@ public class VentanaRegistro extends JDialog {
 			btSiguiente.setBackground(Color.GREEN);
 		}
 		return btSiguiente;
+	}
+	
+	private void createConfirmWindow() {
+		VentanaConfirmacion vC = new VentanaConfirmacion();
+		vC.setModal(true);
+		vC.setVisible(true);
 	}
 	
 	/**
@@ -247,7 +250,8 @@ public class VentanaRegistro extends JDialog {
 			btCancelar.addActionListener(new ActionListener() {
 				public void actionPerformed(ActionEvent e) {
 					//System.exit(0);
-					finalizar();
+					//finalizar();
+					dispose();
 				}
 			});
 			btCancelar.setBounds(467, 216, 89, 23);
@@ -256,9 +260,9 @@ public class VentanaRegistro extends JDialog {
 		return btCancelar;
 	}
 	
-	private void finalizar() {
+	/*private void finalizar() {
 		System.exit(0);
-	}
+	}*/
 	
 	private JPanel getPnData() {
 		if (pnData == null) {
