@@ -20,6 +20,7 @@ import javax.swing.SpinnerNumberModel;
 import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
 import javax.swing.DefaultComboBoxModel;
+import javax.swing.JTextArea;
 
 public class VentanaPrincipal extends JFrame {
 
@@ -37,6 +38,9 @@ public class VentanaPrincipal extends JFrame {
 	private JButton btSiguiente;
 	private JButton btCancelar;
 	private McDonalds mac;
+	private JLabel lbAmountProduct;
+	private JLabel lbImgDiscount;
+	private JTextArea txDiscount;
 	
 	
 	/**
@@ -86,6 +90,9 @@ public class VentanaPrincipal extends JFrame {
 		contentPane.add(getTFPrice());
 		contentPane.add(getBtSiguiente());
 		contentPane.add(getBtCancelar());
+		contentPane.add(getLbAmountProduct());
+		contentPane.add(getLbImgDiscount());
+		contentPane.add(getTxDiscount());
 	}
 	private void setMacDonalds(McDonalds mcDonalds) {
 		if(mcDonalds==null) throw new IllegalArgumentException();
@@ -113,6 +120,11 @@ public class VentanaPrincipal extends JFrame {
 	private JComboBox<Articulo> getCBArticulos() {
 		if (cBArticulos == null) {
 			cBArticulos = new JComboBox<Articulo>();
+			cBArticulos.addActionListener(new ActionListener() {
+				public void actionPerformed(ActionEvent e) {
+					showUnits();
+				}
+			});
 			cBArticulos.setModel(new DefaultComboBoxModel<Articulo>(mac.getArticulosCarta()));
 			cBArticulos.setBounds(38, 242, 357, 22);
 		}
@@ -142,6 +154,7 @@ public class VentanaPrincipal extends JFrame {
 			btAñadir.addActionListener(new ActionListener() {
 				public void actionPerformed(ActionEvent e) {
 					addArticulo();
+					showUnits();
 				}
 			});
 			btAñadir.setMnemonic('A');
@@ -151,9 +164,15 @@ public class VentanaPrincipal extends JFrame {
 		return btAñadir;
 	}
 	
+	private void showUnits() {
+		setLbAmountProductText(mac.getAmountOfProduct((Articulo)getCBArticulos().getSelectedItem()));
+	}
+	
 	private void addArticulo() {
 		getBtSiguiente().setEnabled(true);
 		mac.añadirAPedido(readArticulo(), readUnidades());
+		if(mac.getTotalPedido()<60) getTxDiscount().setVisible(false);
+		else getTxDiscount().setVisible(true);
 		showPrice();
 	}
 	
@@ -225,5 +244,37 @@ public class VentanaPrincipal extends JFrame {
 			btCancelar.setBounds(588, 417, 130, 42);
 		}
 		return btCancelar;
+	}
+	private JLabel getLbAmountProduct() {
+		if (lbAmountProduct == null) {
+			lbAmountProduct = new JLabel("New label");
+			lbAmountProduct.setBounds(38, 283, 357, 37);
+			lbAmountProduct.setText("El carrito contiene: "+0+" unidades del producto seleccionado.");
+		}
+		return lbAmountProduct;
+	}
+	
+	private void setLbAmountProductText(int unites) {
+		if(unites==1)getLbAmountProduct().setText("El carrito contiene: "+unites+" unidad del producto seleccionado.");
+		else getLbAmountProduct().setText("El carrito contiene: "+unites+" unidades del producto seleccionado.");
+	}
+	private JLabel getLbImgDiscount() {
+		if (lbImgDiscount == null) {
+			lbImgDiscount = new JLabel("");
+			lbImgDiscount.setToolTipText("Si la compra es superior a 60€, se descontará un 10%");
+			lbImgDiscount.setIcon(new ImageIcon(VentanaPrincipal.class.getResource("/img/ofertaHappy.png")));
+			lbImgDiscount.setBounds(38, 328, 228, 134);
+		}
+		return lbImgDiscount;
+	}
+	private JTextArea getTxDiscount() {
+		if (txDiscount == null) {
+			txDiscount = new JTextArea();
+			txDiscount.setVisible(false);
+			txDiscount.setTabSize(6);
+			txDiscount.setText("Se ha superado los 60€,\nel precio del pedido posee \nun 10% de descuento");
+			txDiscount.setBounds(566, 313, 152, 79);
+		}
+		return txDiscount;
 	}
 }

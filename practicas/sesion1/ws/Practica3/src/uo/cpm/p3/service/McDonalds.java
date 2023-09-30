@@ -33,6 +33,10 @@ public class McDonalds {
 	public void grabarPedido() {
 		pedido.grabarPedido();
 	}
+	
+	public int getAmountOfProduct(Articulo articulo) {
+		 return pedido.getAmount(articulo);
+	}
 
 
 

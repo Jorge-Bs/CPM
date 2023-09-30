@@ -1,0 +1,14 @@
+memonicos
+
+proporcionar acceso a los botones mediante teclado
+(alt + caracter subrayado) setMnomic
+
+hay dos tipos:
+1 componentes que admiten directamente el memonico
+2 componente que no admiten directamente el mnomic
+	utilizar jlabel: displayedMnemonic()	labelFor
+
+
+Dialogos
+
+no modal: se permite seguir interactuando con la aplicacion, ventanas anteriores

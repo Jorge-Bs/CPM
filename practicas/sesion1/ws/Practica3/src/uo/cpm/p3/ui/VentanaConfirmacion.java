@@ -7,6 +7,9 @@ import javax.swing.JLabel;
 import java.awt.Font;
 import javax.swing.ImageIcon;
 import javax.swing.JTextField;
+
+import uo.cpm.p3.service.McDonalds;
+
 import javax.swing.JButton;
 import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
@@ -21,12 +24,16 @@ public class VentanaConfirmacion extends JDialog {
 	private JTextField txCode;
 	private JLabel lbCode;
 	private JButton btConfirmar;
+	private McDonalds mac;
+	private JLabel lbTotal;
+	private JTextField textField;
 
 
 	/**
 	 * Create the dialog.
 	 */
-	public VentanaConfirmacion() {
+	public VentanaConfirmacion(McDonalds mac) {
+		setMac(mac);
 		getContentPane().setBackground(new Color(255, 255, 255));
 		setIconImage(Toolkit.getDefaultToolkit().getImage(VentanaConfirmacion.class.getResource("/img/logo.png")));
 		setTitle("McDonald's: Confirmacion");
@@ -38,8 +45,18 @@ public class VentanaConfirmacion extends JDialog {
 		getContentPane().add(getTxCode());
 		getContentPane().add(getLbCode());
 		getContentPane().add(getBtConfirmar());
+		getContentPane().add(getLbTotal());
+		getContentPane().add(getTextField());
 		setResizable(false);
 
+	}
+
+	/**
+	 * @param mac the mac to set
+	 */
+	private void setMac(McDonalds mac) {
+		if(mac==null) throw new IllegalArgumentException("el objeto mac no puede ser null");
+		this.mac = mac;
 	}
 
 	private JLabel getLbConfirmacion() {
@@ -55,8 +72,9 @@ public class VentanaConfirmacion extends JDialog {
 		if (txCode == null) {
 			txCode = new JTextField();
 			txCode.setEditable(false);
-			txCode.setBounds(379, 148, 186, 33);
+			txCode.setBounds(379, 148, 186, 26);
 			txCode.setColumns(10);
+			txCode.setText(mac.getCodigoPedido());
 		}
 		return txCode;
 	}
@@ -70,8 +88,10 @@ public class VentanaConfirmacion extends JDialog {
 	private JButton getBtConfirmar() {
 		if (btConfirmar == null) {
 			btConfirmar = new JButton("Finalizar");
+			btConfirmar.setMnemonic('F');
 			btConfirmar.addActionListener(new ActionListener() {
 				public void actionPerformed(ActionEvent e) {
+					mac.grabarPedido();
 					System.exit(0);
 				}
 			});
@@ -79,5 +99,22 @@ public class VentanaConfirmacion extends JDialog {
 			btConfirmar.setBounds(532, 249, 161, 43);
 		}
 		return btConfirmar;
+	}
+	private JLabel getLbTotal() {
+		if (lbTotal == null) {
+			lbTotal = new JLabel("Total:");
+			lbTotal.setBounds(176, 200, 131, 33);
+		}
+		return lbTotal;
+	}
+	private JTextField getTextField() {
+		if (textField == null) {
+			textField = new JTextField();
+			textField.setEditable(false);
+			textField.setBounds(379, 200, 186, 26);
+			textField.setColumns(10);
+			textField.setText(mac.getTotalPedido()+"€");
+		}
+		return textField;
 	}
 }

@@ -59,9 +59,9 @@ public class Pedido {
 		for (Articulo a : listaPedido) {
 			precio += a.getPrecio() * a.getUnidades();
 		}
-//		if (precio >= 60) {
-//			precio = (precio * 0.9F);
-//			}
+		if (precio >= 60) {
+			precio = (precio * 0.9F);
+			}
 		return precio;
 	}
 
@@ -108,6 +108,14 @@ public class Pedido {
 			int numero = (int) (Math.random() * (base.length()));
 			codigo += base.charAt(numero);
 		}
+	}
+
+	public int getAmount(Articulo articulo) {
+		List<Articulo> arti = getListaPedido();
+		for(Articulo ar:arti) {
+			if(ar.equals(articulo)) return ar.getUnidades();
+		}
+		return 0;
 	}
 	
 	

@@ -112,4 +112,40 @@ public class Articulo {
 		}
 		return strArticulo;
 	}
+
+	@Override
+	public int hashCode() {
+		final int prime = 31;
+		int result = 1;
+		result = prime * result + ((denominacion == null) ? 0 : denominacion.hashCode());
+		result = prime * result + Float.floatToIntBits(precio);
+		result = prime * result + ((tipo == null) ? 0 : tipo.hashCode());
+		return result;
+	}
+
+	@Override
+	public boolean equals(Object obj) {
+		if (this == obj)
+			return true;
+		if (obj == null)
+			return false;
+		if (getClass() != obj.getClass())
+			return false;
+		Articulo other = (Articulo) obj;
+		if (denominacion == null) {
+			if (other.denominacion != null)
+				return false;
+		} else if (!denominacion.equals(other.denominacion))
+			return false;
+		if (Float.floatToIntBits(precio) != Float.floatToIntBits(other.precio))
+			return false;
+		if (tipo == null) {
+			if (other.tipo != null)
+				return false;
+		} else if (!tipo.equals(other.tipo))
+			return false;
+		return true;
+	}
+	
+	
 }

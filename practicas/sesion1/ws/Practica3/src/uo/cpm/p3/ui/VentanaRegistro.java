@@ -104,6 +104,8 @@ public class VentanaRegistro extends JDialog {
 	private JLabel getLbNombre() {
 		if (lbNombre == null) {
 			lbNombre = new JLabel("Nombre y apellidos:");
+			lbNombre.setLabelFor(getTxNombre());
+			lbNombre.setDisplayedMnemonic('N');
 			lbNombre.setBounds(28, 31, 125, 14);
 		}
 		return lbNombre;
@@ -119,6 +121,8 @@ public class VentanaRegistro extends JDialog {
 	private JLabel getLbYear() {
 		if (lbYear == null) {
 			lbYear = new JLabel("Año de nacimiento:");
+			lbYear.setLabelFor(getCbYears());
+			lbYear.setDisplayedMnemonic('A');
 			lbYear.setBounds(28, 56, 125, 14);
 		}
 		return lbYear;
@@ -148,7 +152,9 @@ public class VentanaRegistro extends JDialog {
 	
 	private JLabel getLbPass() {
 		if (lbPass == null) {
-			lbPass = new JLabel("Password:");
+			lbPass = new JLabel("Contraseña:");
+			lbPass.setDisplayedMnemonic('O');
+			lbPass.setLabelFor(getPwPass1());
 			lbPass.setBounds(28, 90, 106, 14);
 		}
 		return lbPass;
@@ -162,8 +168,10 @@ public class VentanaRegistro extends JDialog {
 	}
 	private JLabel getLbPass2() {
 		if (lbPass2 == null) {
-			lbPass2 = new JLabel("Reinserte Password:");
-			lbPass2.setBounds(28, 133, 125, 14);
+			lbPass2 = new JLabel("Reinserte Contraseña:");
+			lbPass2.setLabelFor(getPwPass2());
+			lbPass2.setDisplayedMnemonic('R');
+			lbPass2.setBounds(28, 133, 149, 14);
 		}
 		return lbPass2;
 	}
@@ -177,6 +185,7 @@ public class VentanaRegistro extends JDialog {
 	private JButton getBtSiguiente() {
 		if (btSiguiente == null) {
 			btSiguiente = new JButton("Siguiente");
+			btSiguiente.setMnemonic('S');
 			btSiguiente.addActionListener(new ActionListener() {
 				public void actionPerformed(ActionEvent e) {
 					try {
@@ -195,7 +204,7 @@ public class VentanaRegistro extends JDialog {
 	}
 	
 	private void createConfirmWindow() {
-		VentanaConfirmacion vC = new VentanaConfirmacion();
+		VentanaConfirmacion vC = new VentanaConfirmacion(mac);
 		vC.setModal(true);
 		vC.setVisible(true);
 	}
@@ -247,6 +256,7 @@ public class VentanaRegistro extends JDialog {
 	private JButton getBtCancelar() {
 		if (btCancelar == null) {
 			btCancelar = new JButton("Cancelar");
+			btCancelar.setMnemonic('C');
 			btCancelar.addActionListener(new ActionListener() {
 				public void actionPerformed(ActionEvent e) {
 					//System.exit(0);
@@ -300,6 +310,7 @@ public class VentanaRegistro extends JDialog {
 	private JRadioButton getRdBtLocal() {
 		if (rdBtLocal == null) {
 			rdBtLocal = new JRadioButton("Local");
+			rdBtLocal.setMnemonic('L');
 			bGroupPedido.add(rdBtLocal);
 			rdBtLocal.setSelected(true);
 			rdBtLocal.setBackground(new Color(255, 255, 255));
@@ -310,6 +321,7 @@ public class VentanaRegistro extends JDialog {
 	private JRadioButton getRdBtLlevar() {
 		if (rdBtLlevar == null) {
 			rdBtLlevar = new JRadioButton("Llevar");
+			rdBtLlevar.setMnemonic('e');
 			bGroupPedido.add(rdBtLlevar);
 			rdBtLlevar.setBackground(new Color(255, 255, 255));
 			rdBtLlevar.setBounds(66, 17, 73, 25);
