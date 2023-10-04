@@ -26,7 +26,7 @@ public class VentanaConfirmacion extends JDialog {
 	private JButton btConfirmar;
 	private McDonalds mac;
 	private JLabel lbTotal;
-	private JTextField textField;
+	private JTextField tFTotal;
 
 
 	/**
@@ -46,7 +46,7 @@ public class VentanaConfirmacion extends JDialog {
 		getContentPane().add(getLbCode());
 		getContentPane().add(getBtConfirmar());
 		getContentPane().add(getLbTotal());
-		getContentPane().add(getTextField());
+		getContentPane().add(getTFTotal());
 		setResizable(false);
 
 	}
@@ -107,14 +107,20 @@ public class VentanaConfirmacion extends JDialog {
 		}
 		return lbTotal;
 	}
-	private JTextField getTextField() {
-		if (textField == null) {
-			textField = new JTextField();
-			textField.setEditable(false);
-			textField.setBounds(379, 200, 186, 26);
-			textField.setColumns(10);
-			textField.setText(mac.getTotalPedido()+"€");
+	private JTextField getTFTotal() {
+		if (tFTotal == null) {
+			tFTotal = new JTextField();
+			tFTotal.setEditable(false);
+			tFTotal.setBounds(379, 200, 186, 26);
+			tFTotal.setColumns(10);
+			tFTotal.setText(mac.getTotalPedido()+"€");
+			showPrice();
 		}
-		return textField;
+		return tFTotal;
+	}
+	
+	private void showPrice() {
+		String precio = String.format("%.2f",mac.getTotalPedido());
+		getTFTotal().setText(precio+"€");
 	}
 }
