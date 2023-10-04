@@ -26,16 +26,18 @@ public class VentanaConfirmacion extends JDialog {
 	private JTextField txCode;
 	private JLabel lbCode;
 	private JButton btConfirmar;
-	private McDonalds mac;
+	private VentanaRegistro vReg;
 	private JLabel lbTotal;
 	private JTextField tFTotal;
+	McDonalds mac;
 
 
 	/**
 	 * Create the dialog.
 	 */
-	public VentanaConfirmacion(McDonalds mac) {
-		setMac(mac);
+	public VentanaConfirmacion(VentanaRegistro vReg) {
+		this.vReg=vReg;
+		this.mac=this.vReg.mac;
 		getContentPane().setBackground(new Color(255, 255, 255));
 		setIconImage(Toolkit.getDefaultToolkit().getImage(VentanaConfirmacion.class.getResource("/img/logo.png")));
 		setTitle("McDonald's: Confirmacion");
@@ -53,13 +55,13 @@ public class VentanaConfirmacion extends JDialog {
 
 	}
 
-	/**
-	 * @param mac the mac to set
-	 */
-	private void setMac(McDonalds mac) {
-		if(mac==null) throw new IllegalArgumentException("el objeto mac no puede ser null");
-		this.mac = mac;
-	}
+//	/**
+//	 * @param mac the mac to set
+//	 */
+//	private void setMac(McDonalds mac) {
+//		if(mac==null) throw new IllegalArgumentException("el objeto mac no puede ser null");
+//		this.mac = mac;
+//	}
 
 	private JLabel getLbConfirmacion() {
 		if (lbConfirmacion == null) {
@@ -93,9 +95,7 @@ public class VentanaConfirmacion extends JDialog {
 			btConfirmar.setMnemonic('F');
 			btConfirmar.addActionListener(new ActionListener() {
 				public void actionPerformed(ActionEvent e) {
-					mac.grabarPedido();
-					JOptionPane.showMessageDialog(null,"Muchas gracias por su pedido");
-					System.exit(0);
+					finalizar();
 				}
 			});
 			btConfirmar.setBackground(new Color(0, 255, 0));
@@ -103,6 +103,16 @@ public class VentanaConfirmacion extends JDialog {
 		}
 		return btConfirmar;
 	}
+	
+	private void finalizar() {
+		dispose();
+		mac.grabarPedido();
+		mac.inicializarPedido();
+		vReg.dispose();
+		vReg.vPrincipal.inicializar();
+		JOptionPane.showMessageDialog(null,"Muchas gracias por su pedido");
+	}
+	
 	private JLabel getLbTotal() {
 		if (lbTotal == null) {
 			lbTotal = new JLabel("Total:");

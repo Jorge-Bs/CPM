@@ -21,6 +21,7 @@ import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
 import javax.swing.DefaultComboBoxModel;
 import javax.swing.JTextArea;
+import javax.swing.JScrollPane;
 
 public class VentanaPrincipal extends JFrame {
 
@@ -37,10 +38,12 @@ public class VentanaPrincipal extends JFrame {
 	private JTextField tFPrice;
 	private JButton btSiguiente;
 	private JButton btCancelar;
-	private McDonalds mac;
+	McDonalds mac;
 	private JLabel lbAmountProduct;
 	private JLabel lbImgDiscount;
 	private JTextArea txDiscount;
+	private JScrollPane scrollPane;
+	private JTextArea textArea;
 	
 	
 	/**
@@ -93,6 +96,7 @@ public class VentanaPrincipal extends JFrame {
 		contentPane.add(getLbAmountProduct());
 		contentPane.add(getLbImgDiscount());
 		contentPane.add(getTxDiscount());
+		contentPane.add(getScrollPane());
 	}
 	private void setMacDonalds(McDonalds mcDonalds) {
 		if(mcDonalds==null) throw new IllegalArgumentException();
@@ -104,7 +108,7 @@ public class VentanaPrincipal extends JFrame {
 			lbLogo = new JLabel("  McDonald's");
 			lbLogo.setFont(new Font("Arial Black", Font.PLAIN, 44));
 			lbLogo.setIcon(new ImageIcon(VentanaPrincipal.class.getResource("/img/logo.png")));
-			lbLogo.setBounds(58, 25, 617, 150);
+			lbLogo.setBounds(58, 25, 453, 150);
 		}
 		return lbLogo;
 	}
@@ -225,7 +229,7 @@ public class VentanaPrincipal extends JFrame {
 	}
 	
 	private void showRegisterWindow() {
-		VentanaRegistro vR = new VentanaRegistro(mac);
+		VentanaRegistro vR = new VentanaRegistro(this);
 		
 		vR.setLocationRelativeTo(null);//null pantalla de ordenar, this en relacion a la ventana anterior
 		vR.setModal(true);
@@ -277,5 +281,30 @@ public class VentanaPrincipal extends JFrame {
 			txDiscount.setBounds(566, 313, 167, 79);
 		}
 		return txDiscount;
+	}
+	
+	void inicializar() {
+		mac.inicializarPedido();
+		getCBArticulos().setSelectedIndex(0);
+		getSUnidades().setValue(1);
+		setLbAmountProductText(0);
+		getTxDiscount().setVisible(false);
+		getBtSiguiente().setEnabled(false);
+		getTFPrice().setText("");
+	}
+	private JScrollPane getScrollPane() {
+		if (scrollPane == null) {
+			scrollPane = new JScrollPane();
+			scrollPane.setBounds(520, 63, 198, 134);
+			scrollPane.setViewportView(getTextArea());
+		}
+		return scrollPane;
+	}
+	private JTextArea getTextArea() {
+		if (textArea == null) {
+			textArea = new JTextArea();
+			textArea.setEditable(false);
+		}
+		return textArea;
 	}
 }
