@@ -110,7 +110,7 @@ public class VentanaConfirmacion extends JDialog {
 		mac.inicializarPedido();
 		vReg.dispose();
 		vReg.vPrincipal.inicializar();
-		JOptionPane.showMessageDialog(null,"Muchas gracias por su pedido");
+		JOptionPane.showInternalMessageDialog(null,"Muchas gracias por su pedido", "McDonald's España: Gracias", 1);
 	}
 	
 	private JLabel getLbTotal() {

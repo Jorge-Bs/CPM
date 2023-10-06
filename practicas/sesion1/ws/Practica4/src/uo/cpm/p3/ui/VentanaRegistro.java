@@ -192,6 +192,7 @@ public class VentanaRegistro extends JDialog {
 				public void actionPerformed(ActionEvent e) {
 					try {
 						checkFields();
+						tomarUbiPedido();
 						createConfirmWindow();
 					}catch(InvalidFieldsException exception) {
 						JOptionPane.showMessageDialog(null, exception.getMessage(),"Revise datos",1);
@@ -203,6 +204,10 @@ public class VentanaRegistro extends JDialog {
 			btSiguiente.setBackground(Color.GREEN);
 		}
 		return btSiguiente;
+	}
+	
+	private void tomarUbiPedido() {
+		mac.setLlevar(getRdBtLlevar().isSelected());
 	}
 	
 	private void createConfirmWindow() {

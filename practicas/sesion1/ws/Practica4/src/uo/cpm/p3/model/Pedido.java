@@ -9,6 +9,13 @@ public class Pedido {
 
 	private List<Articulo> listaPedido;
 	private String codigo;
+	private boolean discount= false;
+	private boolean llevar= true;
+
+	
+	
+
+	
 	
 
 	/**
@@ -17,6 +24,19 @@ public class Pedido {
 	public Pedido() {
 		listaPedido = new ArrayList<Articulo>();
 		inicializar();
+	}
+	
+	public boolean isDiscount() {
+		return discount;
+	}
+
+	
+	private void setDiscount(boolean discount) {
+		this.discount = discount;
+	}
+	
+	public void setLlevar(boolean llevar) {
+		this.llevar = llevar;
 	}
 
 	/**
@@ -60,7 +80,10 @@ public class Pedido {
 			precio += a.getPrecio() * a.getUnidades();
 		}
 		if (precio >= 60) {
+			setDiscount(true);
 			precio = (precio * 0.9F);
+			}else {
+				setDiscount(false);
 			}
 		return precio;
 	}
@@ -69,7 +92,7 @@ public class Pedido {
 	 * guarda en un archivo de nombre el codigo la lista de pedidos
 	 */
 	public void grabarPedido() {
-		FileUtil.saveToFile(codigo, listaPedido);
+		FileUtil.saveToFile(codigo, listaPedido,llevar);
 	}
 
 	/**
@@ -118,5 +141,35 @@ public class Pedido {
 		return 0;
 	}
 	
+	public String getPedido() {
+		StringBuilder sb = new StringBuilder();
+		for(Articulo art:listaPedido) {
+			
+			sb.append(parseArt(art)+"\n");
+		}
+		sb.append("Total: "+ String.format("%.2f",getTotal())+"€");
+		return sb.toString();
+	}
+	
+	private String parseArt(Articulo articulo) {
+		return articulo.getDenominacion()+": "+ articulo.getUnidades()+" uds.";
+		}
+
+	public void eliminarProductos(int amount,Articulo articulo) {
+		List<Articulo> arti = getListaPedido();
+		for(Articulo ar:arti) {
+			if(ar.equals(articulo)) {
+				eliminarArticulo(ar,amount);
+				break;
+			}
+		}
+	}
+	
+	private void eliminarArticulo(Articulo articulo,int amount) {
+		int units = articulo.getUnidades()-amount;
+		if(units<=0) listaPedido.remove(articulo);
+		articulo.setUnidades(units);
+	}
+
 	
 }

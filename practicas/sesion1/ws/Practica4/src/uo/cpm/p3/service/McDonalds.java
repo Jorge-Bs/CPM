@@ -38,6 +38,19 @@ public class McDonalds {
 		 return pedido.getAmount(articulo);
 	}
 
+	public String getPedido() {
+		return pedido.getPedido();
+	}
 
-
+	public void eliminarProductos(int amount,Articulo articulo) {
+		pedido.eliminarProductos(amount,articulo);
+	}
+	
+	public boolean hasDiscount() {
+		return pedido.isDiscount();
+	}
+	
+	public void setLlevar(boolean llevar) {
+		pedido.setLlevar(llevar);
+	}
 }

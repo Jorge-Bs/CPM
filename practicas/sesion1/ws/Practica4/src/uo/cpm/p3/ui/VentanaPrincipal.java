@@ -22,6 +22,10 @@ import java.awt.event.ActionEvent;
 import javax.swing.DefaultComboBoxModel;
 import javax.swing.JTextArea;
 import javax.swing.JScrollPane;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
+import java.awt.event.FocusAdapter;
+import java.awt.event.FocusEvent;
 
 public class VentanaPrincipal extends JFrame {
 
@@ -42,8 +46,10 @@ public class VentanaPrincipal extends JFrame {
 	private JLabel lbAmountProduct;
 	private JLabel lbImgDiscount;
 	private JTextArea txDiscount;
-	private JScrollPane scrollPane;
-	private JTextArea textArea;
+	private JScrollPane scrollPanePedido;
+	private JTextArea textAreaPedido;
+	private JLabel lbIcPedido;
+	private JButton btEliminar;
 	
 	
 	/**
@@ -75,7 +81,7 @@ public class VentanaPrincipal extends JFrame {
 		setIconImage(Toolkit.getDefaultToolkit().getImage(VentanaPrincipal.class.getResource("/img/logo.png")));
 		setResizable(false);
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		setBounds(100, 100, 757, 519);
+		setBounds(100, 100, 854, 519);
 		this.setLocationRelativeTo(null);
 		contentPane = new JPanel();
 		contentPane.setBackground(new Color(255, 255, 255));
@@ -96,7 +102,9 @@ public class VentanaPrincipal extends JFrame {
 		contentPane.add(getLbAmountProduct());
 		contentPane.add(getLbImgDiscount());
 		contentPane.add(getTxDiscount());
-		contentPane.add(getScrollPane());
+		contentPane.add(getScrollPanePedido());
+		contentPane.add(getLbIcPedido());
+		contentPane.add(getBtEliminar());
 	}
 	private void setMacDonalds(McDonalds mcDonalds) {
 		if(mcDonalds==null) throw new IllegalArgumentException();
@@ -108,7 +116,7 @@ public class VentanaPrincipal extends JFrame {
 			lbLogo = new JLabel("  McDonald's");
 			lbLogo.setFont(new Font("Arial Black", Font.PLAIN, 44));
 			lbLogo.setIcon(new ImageIcon(VentanaPrincipal.class.getResource("/img/logo.png")));
-			lbLogo.setBounds(58, 25, 453, 150);
+			lbLogo.setBounds(38, 25, 484, 150);
 		}
 		return lbLogo;
 	}
@@ -128,12 +136,18 @@ public class VentanaPrincipal extends JFrame {
 				public void actionPerformed(ActionEvent e) {
 					showUnits();
 					getSUnidades().setValue(1);//cada vez que se cambia el articulo seleccionado se pone a 1
+					disableEliminar();
 				}
 			});
 			cBArticulos.setModel(new DefaultComboBoxModel<Articulo>(mac.getArticulosCarta()));
 			cBArticulos.setBounds(38, 242, 357, 22);
 		}
 		return cBArticulos;
+	}
+	private void disableEliminar() {
+		Articulo art = (Articulo)getCBArticulos().getSelectedItem();
+		if(mac.getAmountOfProduct(art)==0) getBtEliminar().setEnabled(false);
+		else getBtEliminar().setEnabled(true);
 	}
 	
 	private JLabel getLbUnidades() {
@@ -159,7 +173,9 @@ public class VentanaPrincipal extends JFrame {
 			btAñadir.addActionListener(new ActionListener() {
 				public void actionPerformed(ActionEvent e) {
 					addArticulo();
+					disableEliminar();
 					showUnits();
+					fillPanelPedido();
 				}
 			});
 			btAñadir.setMnemonic('A');
@@ -176,9 +192,8 @@ public class VentanaPrincipal extends JFrame {
 	private void addArticulo() {
 		getBtSiguiente().setEnabled(true);
 		mac.añadirAPedido(readArticulo(), readUnidades());
-		if(mac.getTotalPedido()<60) getTxDiscount().setVisible(false);
-		else getTxDiscount().setVisible(true);
 		showPrice();
+		
 	}
 	
 	private Articulo readArticulo() {
@@ -190,8 +205,12 @@ public class VentanaPrincipal extends JFrame {
 	}
 	
 	private void showPrice() {
-		String precio = String.format("%.2f",mac.getTotalPedido());
+		float total = mac.getTotalPedido();
+		String precio = String.format("%.2f",total);
 		getTFPrice().setText(precio+"€");
+		if(total==0) getBtSiguiente().setEnabled(false);
+		if(mac.hasDiscount()) getTxDiscount().setVisible(true);
+		else getTxDiscount().setVisible(false);
 	}
 	
 	
@@ -223,7 +242,7 @@ public class VentanaPrincipal extends JFrame {
 			});
 			btSiguiente.setMnemonic('S');
 			btSiguiente.setBackground(new Color(0, 255, 0));
-			btSiguiente.setBounds(448, 417, 130, 42);
+			btSiguiente.setBounds(518, 417, 130, 42);
 		}
 		return btSiguiente;
 	}
@@ -246,7 +265,7 @@ public class VentanaPrincipal extends JFrame {
 			});
 			btCancelar.setMnemonic('C');
 			btCancelar.setBackground(new Color(255, 0, 0));
-			btCancelar.setBounds(588, 417, 130, 42);
+			btCancelar.setBounds(670, 417, 130, 42);
 		}
 		return btCancelar;
 	}
@@ -275,6 +294,7 @@ public class VentanaPrincipal extends JFrame {
 	private JTextArea getTxDiscount() {
 		if (txDiscount == null) {
 			txDiscount = new JTextArea();
+			txDiscount.setEditable(false);
 			txDiscount.setVisible(false);
 			txDiscount.setTabSize(6);
 			txDiscount.setText("Se ha superado los 60€,\nel precio del pedido posee \nun 10% de descuento");
@@ -291,20 +311,68 @@ public class VentanaPrincipal extends JFrame {
 		getTxDiscount().setVisible(false);
 		getBtSiguiente().setEnabled(false);
 		getTFPrice().setText("");
+		getTextAreaPedido().setText("");
 	}
-	private JScrollPane getScrollPane() {
-		if (scrollPane == null) {
-			scrollPane = new JScrollPane();
-			scrollPane.setBounds(520, 63, 198, 134);
-			scrollPane.setViewportView(getTextArea());
+	private JScrollPane getScrollPanePedido() {
+		if (scrollPanePedido == null) {
+			scrollPanePedido = new JScrollPane();
+			scrollPanePedido.setBounds(566, 63, 264, 134);
+			scrollPanePedido.setViewportView(getTextAreaPedido());
+			scrollPanePedido.setVisible(false);
 		}
-		return scrollPane;
+		return scrollPanePedido;
 	}
-	private JTextArea getTextArea() {
-		if (textArea == null) {
-			textArea = new JTextArea();
-			textArea.setEditable(false);
+	private JTextArea getTextAreaPedido() {
+		if (textAreaPedido == null) {
+			textAreaPedido = new JTextArea();
+			textAreaPedido.setEditable(false);
 		}
-		return textArea;
+		return textAreaPedido;
+	}
+	private JLabel getLbIcPedido() {
+		if (lbIcPedido == null) {
+			lbIcPedido = new JLabel("");
+			lbIcPedido.addMouseListener(new MouseAdapter() {
+				@Override
+				public void mousePressed(MouseEvent e) {
+					getScrollPanePedido().setVisible(true);
+					getTextAreaPedido().setVisible(true);
+				}
+				@Override
+				public void mouseReleased(MouseEvent e) {
+					getScrollPanePedido().setVisible(false);
+				}
+			});
+			lbIcPedido.setIcon(new ImageIcon(VentanaPrincipal.class.getResource("/img/pedido.png")));
+			lbIcPedido.setBounds(670, 25, 133, 41);
+		}
+		return lbIcPedido;
+	}
+	
+	private void fillPanelPedido() {
+		getTextAreaPedido().setText(mac.getPedido());
+	}
+	private JButton getBtEliminar() {
+		if (btEliminar == null) {
+			btEliminar = new JButton("Eliminar");
+			btEliminar.addActionListener(new ActionListener() {
+				public void actionPerformed(ActionEvent e) {
+					eliminarProductos();
+					disableEliminar();
+					showUnits();
+					fillPanelPedido();
+					showPrice();
+				}
+			});
+			btEliminar.setEnabled(false);
+			btEliminar.setMnemonic('E');
+			btEliminar.setBackground(new Color(255, 0, 0));
+			btEliminar.setBounds(709, 239, 121, 29);
+		}
+		return btEliminar;
+	}
+	
+	private void eliminarProductos() {
+		mac.eliminarProductos((Integer)getSUnidades().getValue(),(Articulo)getCBArticulos().getSelectedItem());
 	}
 }

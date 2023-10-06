@@ -28,11 +28,13 @@ public abstract class FileUtil {
 		}
 	}
 
-	public static void saveToFile(String nombreFicheroSalida, List<Articulo> listaPedido) {
+	public static void saveToFile(String nombreFicheroSalida, List<Articulo> listaPedido,boolean llevar) {
 		try {
 			BufferedWriter fichero = new BufferedWriter(new FileWriter("files/" + nombreFicheroSalida + ".dat"));
-			String linea = listaPedido.toString();
+			String linea = listaPedido.toString()+"\n";
 			fichero.write(linea);
+			if(llevar)fichero.write("\nPedido para llevar");
+			else fichero.write("\nPedido para consumir en el local");
 			fichero.close();
 		}
 
