@@ -1,11 +1,11 @@
-package uo.cpm.p4.ui;
+package uo.cpm.p5.ui;
 
 import javax.swing.JFrame;
 import javax.swing.JPanel;
 import javax.swing.border.EmptyBorder;
 
-import uo.cpm.p4.model.Articulo;
-import uo.cpm.p4.service.McDonalds;
+import uo.cpm.p5.model.Articulo;
+import uo.cpm.p5.service.McDonalds;
 
 import java.awt.Toolkit;
 import java.awt.Color;
@@ -24,6 +24,7 @@ import javax.swing.JTextArea;
 import javax.swing.JScrollPane;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
+import java.awt.GridLayout;
 
 public class VentanaPrincipal extends JFrame {
 
@@ -48,6 +49,13 @@ public class VentanaPrincipal extends JFrame {
 	private JTextArea textAreaPedido;
 	private JLabel lbIcPedido;
 	private JButton btEliminar;
+	private JPanel pnFiltro;
+	private JButton btHamburgesa;
+	private JButton btnNewButton_1;
+	private JButton btBebida;
+	private JButton btnNewButton_3;
+	private JButton btnNewButton_4;
+	private JLabel lbImgProduct;
 	
 	
 	/**
@@ -79,7 +87,7 @@ public class VentanaPrincipal extends JFrame {
 		setIconImage(Toolkit.getDefaultToolkit().getImage(VentanaPrincipal.class.getResource("/img/logo.png")));
 		setResizable(false);
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		setBounds(100, 100, 854, 519);
+		setBounds(100, 100, 1073, 519);
 		this.setLocationRelativeTo(null);
 		contentPane = new JPanel();
 		contentPane.setBackground(new Color(255, 255, 255));
@@ -103,6 +111,8 @@ public class VentanaPrincipal extends JFrame {
 		contentPane.add(getScrollPanePedido());
 		contentPane.add(getLbIcPedido());
 		contentPane.add(getBtEliminar());
+		contentPane.add(getPnFiltro());
+		contentPane.add(getLbImgProduct());
 	}
 	private void setMacDonalds(McDonalds mcDonalds) {
 		if(mcDonalds==null) throw new IllegalArgumentException();
@@ -135,6 +145,7 @@ public class VentanaPrincipal extends JFrame {
 					showUnits();
 					getSUnidades().setValue(1);//cada vez que se cambia el articulo seleccionado se pone a 1
 					disableEliminar();
+					changeIcon();
 				}
 			});
 			cBArticulos.setModel(new DefaultComboBoxModel<Articulo>(mac.getArticulosCarta()));
@@ -146,6 +157,12 @@ public class VentanaPrincipal extends JFrame {
 		Articulo art = (Articulo)getCBArticulos().getSelectedItem();
 		if(mac.getAmountOfProduct(art)==0) getBtEliminar().setEnabled(false);
 		else getBtEliminar().setEnabled(true);
+	}
+	
+	
+	private void changeIcon() {
+		String path= "/img/"+((Articulo)cBArticulos.getSelectedItem()).getCodigo()+".png";
+		getLbImgProduct().setIcon(new ImageIcon(VentanaPrincipal.class.getResource(path)));
 	}
 	
 	private JLabel getLbUnidades() {
@@ -286,7 +303,7 @@ public class VentanaPrincipal extends JFrame {
 			lbImgDiscount = new JLabel("");
 			lbImgDiscount.setToolTipText("Si la compra es superior a 60€, se descontará un 10%");
 			lbImgDiscount.setIcon(new ImageIcon(VentanaPrincipal.class.getResource("/img/ofertaHappy.png")));
-			lbImgDiscount.setBounds(38, 328, 228, 134);
+			lbImgDiscount.setBounds(38, 344, 212, 127);
 		}
 		return lbImgDiscount;
 	}
@@ -315,7 +332,7 @@ public class VentanaPrincipal extends JFrame {
 	private JScrollPane getScrollPanePedido() {
 		if (scrollPanePedido == null) {
 			scrollPanePedido = new JScrollPane();
-			scrollPanePedido.setBounds(566, 63, 264, 134);
+			scrollPanePedido.setBounds(649, 63, 181, 134);
 			scrollPanePedido.setViewportView(getTextAreaPedido());
 			scrollPanePedido.setVisible(false);
 		}
@@ -375,5 +392,57 @@ public class VentanaPrincipal extends JFrame {
 	
 	private void eliminarProductos() {
 		mac.eliminarProductos((Integer)getSUnidades().getValue(),(Articulo)getCBArticulos().getSelectedItem());
+	}
+	private JPanel getPnFiltro() {
+		if (pnFiltro == null) {
+			pnFiltro = new JPanel();
+			pnFiltro.setBounds(876, 37, 173, 407);
+			pnFiltro.setLayout(new GridLayout(5, 1, 0, 0));
+			pnFiltro.add(getBtHamburgesa());
+			pnFiltro.add(getBtBebida());
+			pnFiltro.add(getBtnNewButton_3());
+			pnFiltro.add(getBtnNewButton_4());
+			pnFiltro.add(getBtnNewButton_1());
+		}
+		return pnFiltro;
+	}
+	private JButton getBtHamburgesa() {
+		if (btHamburgesa == null) {
+			btHamburgesa = new JButton("Hamburgesa");
+			btHamburgesa.setIcon(new ImageIcon(VentanaPrincipal.class.getResource("/img/Hamburguesa.png")));
+		}
+		return btHamburgesa;
+	}
+	private JButton getBtnNewButton_1() {
+		if (btnNewButton_1 == null) {
+			btnNewButton_1 = new JButton("New button");
+		}
+		return btnNewButton_1;
+	}
+	private JButton getBtBebida() {
+		if (btBebida == null) {
+			btBebida = new JButton("New button");
+			btBebida.setIcon(new ImageIcon(VentanaPrincipal.class.getResource("/img/Bebida.png")));
+		}
+		return btBebida;
+	}
+	private JButton getBtnNewButton_3() {
+		if (btnNewButton_3 == null) {
+			btnNewButton_3 = new JButton("New button");
+		}
+		return btnNewButton_3;
+	}
+	private JButton getBtnNewButton_4() {
+		if (btnNewButton_4 == null) {
+			btnNewButton_4 = new JButton("New button");
+		}
+		return btnNewButton_4;
+	}
+	private JLabel getLbImgProduct() {
+		if (lbImgProduct == null) {
+			lbImgProduct = new JLabel("");
+			lbImgProduct.setBounds(257, 370, 173, 89);
+		}
+		return lbImgProduct;
 	}
 }

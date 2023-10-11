@@ -1,8 +1,8 @@
-package uo.cpm.p4.model;
+package uo.cpm.p5.model;
 
 import java.util.*;
 
-import uo.cpm.p4.util.FileUtil;
+import uo.cpm.p5.util.FileUtil;
 
 
 public class Pedido {
