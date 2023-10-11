@@ -1,9 +1,9 @@
-package uo.cpm.p3.util;
+package uo.cpm.p4.util;
 
 import java.io.*;
 import java.util.*;
 
-import uo.cpm.p3.model.Articulo;
+import uo.cpm.p4.model.Articulo;
 
 public abstract class FileUtil {
 

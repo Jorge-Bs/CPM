@@ -1,10 +1,10 @@
-package uo.cpm.p3.console;
+package uo.cpm.p4.console;
 
 import java.util.Scanner;
 
-import uo.cpm.p3.model.Articulo;
-import uo.cpm.p3.model.Carta;
-import uo.cpm.p3.model.Pedido;
+import uo.cpm.p4.model.Articulo;
+import uo.cpm.p4.model.Carta;
+import uo.cpm.p4.model.Pedido;
 
 public class Console {
 

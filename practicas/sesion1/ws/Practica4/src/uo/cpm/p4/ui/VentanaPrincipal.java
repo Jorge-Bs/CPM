@@ -1,11 +1,11 @@
-package uo.cpm.p3.ui;
+package uo.cpm.p4.ui;
 
 import javax.swing.JFrame;
 import javax.swing.JPanel;
 import javax.swing.border.EmptyBorder;
 
-import uo.cpm.p3.model.Articulo;
-import uo.cpm.p3.service.McDonalds;
+import uo.cpm.p4.model.Articulo;
+import uo.cpm.p4.service.McDonalds;
 
 import java.awt.Toolkit;
 import java.awt.Color;

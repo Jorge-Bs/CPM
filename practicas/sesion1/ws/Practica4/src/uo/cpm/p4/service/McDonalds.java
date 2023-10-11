@@ -1,6 +1,6 @@
-package uo.cpm.p3.service;
+package uo.cpm.p4.service;
 
-import uo.cpm.p3.model.*;
+import uo.cpm.p4.model.*;
 
 public class McDonalds {
 	Carta carta = new Carta();

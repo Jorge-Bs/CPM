@@ -1,11 +1,11 @@
-package uo.cpm.p3;
+package uo.cpm.p4;
 
 import java.awt.EventQueue;
 
 import javax.swing.UIManager;
 
-import uo.cpm.p3.service.McDonalds;
-import uo.cpm.p3.ui.VentanaPrincipal;
+import uo.cpm.p4.service.McDonalds;
+import uo.cpm.p4.ui.VentanaPrincipal;
 
 public class Main {
 

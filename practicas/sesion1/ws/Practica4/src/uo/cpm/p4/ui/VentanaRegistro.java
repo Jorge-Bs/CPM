@@ -1,4 +1,4 @@
-package uo.cpm.p3.ui;
+package uo.cpm.p4.ui;
 
 
 
@@ -19,8 +19,8 @@ import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
 import javax.swing.border.TitledBorder;
 
-import uo.cpm.p3.exception.InvalidFieldsException;
-import uo.cpm.p3.service.McDonalds;
+import uo.cpm.p4.exception.InvalidFieldsException;
+import uo.cpm.p4.service.McDonalds;
 
 import javax.swing.JRadioButton;
 import javax.swing.ButtonGroup;

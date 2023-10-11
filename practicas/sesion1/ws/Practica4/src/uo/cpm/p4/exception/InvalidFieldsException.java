@@ -1,4 +1,4 @@
-package uo.cpm.p3.exception;
+package uo.cpm.p4.exception;
 
 public class InvalidFieldsException extends Exception{
 	

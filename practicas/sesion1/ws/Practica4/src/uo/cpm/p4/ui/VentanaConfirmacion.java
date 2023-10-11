@@ -1,4 +1,4 @@
-package uo.cpm.p3.ui;
+package uo.cpm.p4.ui;
 
 import javax.swing.JDialog;
 import java.awt.Color;
@@ -10,7 +10,7 @@ import java.awt.Font;
 import javax.swing.ImageIcon;
 import javax.swing.JTextField;
 
-import uo.cpm.p3.service.McDonalds;
+import uo.cpm.p4.service.McDonalds;
 
 import javax.swing.JButton;
 import java.awt.event.ActionListener;

@@ -1,4 +1,4 @@
-package uo.cpm.p3.console;
+package uo.cpm.p4.console;
 
 public class MainConsole {
 

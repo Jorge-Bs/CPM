@@ -1,4 +1,4 @@
-package uo.cpm.p3.model;
+package uo.cpm.p4.model;
 
 public class Articulo {
 

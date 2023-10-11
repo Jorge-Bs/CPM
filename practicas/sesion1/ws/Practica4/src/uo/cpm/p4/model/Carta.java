@@ -1,8 +1,8 @@
-package uo.cpm.p3.model;
+package uo.cpm.p4.model;
 
 import java.util.*;
 
-import uo.cpm.p3.util.FileUtil;
+import uo.cpm.p4.util.FileUtil;
 
 public class Carta {
 
