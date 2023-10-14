@@ -27,7 +27,7 @@ public class McDonalds {
 	}
 
 	public float getTotalPedido() {
-		return pedido.getTotal();
+		return pedido.getFinalTotal();
 	}
  
 	public void grabarPedido() {
@@ -52,5 +52,9 @@ public class McDonalds {
 	
 	public void setLlevar(boolean llevar) {
 		pedido.setLlevar(llevar);
+	}
+
+	public Articulo[] getArticulosCarta(String denominacion) {
+		return carta.getArticulos(denominacion);
 	}
 }

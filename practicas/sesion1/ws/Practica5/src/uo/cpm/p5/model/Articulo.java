@@ -33,6 +33,15 @@ public class Articulo {
 		this(otroArticulo.codigo, otroArticulo.tipo, otroArticulo.denominacion, otroArticulo.precio,
 				otroArticulo.unidades);
 	}
+	
+	
+
+	/**
+	 * @return the tipo
+	 */
+	public String getTipo() {
+		return tipo;
+	}
 
 	/**
 	 * Devuelve la denominacion el objeto

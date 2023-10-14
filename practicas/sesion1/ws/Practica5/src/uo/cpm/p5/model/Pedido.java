@@ -10,12 +10,8 @@ public class Pedido {
 	private List<Articulo> listaPedido;
 	private String codigo;
 	private boolean discount= false;
-	private boolean llevar= true;
+	private boolean llevar= false;
 
-	
-	
-
-	
 	
 
 	/**
@@ -149,7 +145,7 @@ public class Pedido {
 			
 			sb.append(parseArt(art)+"\n");
 		}
-		sb.append("Total: "+ String.format("%.2f",getTotal())+"€");
+		sb.append("Total: "+ String.format("%.2f",getFinalTotal())+"€");
 		}
 		return sb.toString();
 	}
@@ -184,6 +180,11 @@ public class Pedido {
 			pd = pd +"\nPedido para consumir en el local";
 		}
 		return pd;
+	}
+	
+	public float getFinalTotal() {
+		float total = getTotal();
+		return llevar ? (total+0.1F):total; 
 	}
 	
 }

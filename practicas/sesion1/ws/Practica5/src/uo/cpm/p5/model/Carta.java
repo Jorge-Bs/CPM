@@ -2,6 +2,7 @@ package uo.cpm.p5.model;
 
 import java.util.*;
 
+
 import uo.cpm.p5.util.FileUtil;
 
 public class Carta {
@@ -33,6 +34,19 @@ public class Carta {
 	public Articulo[] getArticulos() {
 		Articulo[] articulos = listaArticulos.toArray(new Articulo[listaArticulos.size()]);
 		return articulos;
+	}
+
+	public Articulo[] getArticulos(String denominacion) {
+		if(denominacion.equals("Todo")) return getArticulos();
+		Articulo[] art = getArticulos();
+		List<Articulo> retorno = new ArrayList<Articulo>();
+		for(int i=0;i<art.length;i++) {
+			if(art[i].getTipo().equals(denominacion)) {
+				retorno.add(art[i]);
+			}
+		}
+		int size = retorno.size();
+		return retorno.toArray(new Articulo[size]);
 	}
 
 }

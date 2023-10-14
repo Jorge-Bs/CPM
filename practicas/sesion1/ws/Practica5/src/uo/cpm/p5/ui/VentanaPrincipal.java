@@ -19,12 +19,14 @@ import javax.swing.JTextField;
 import javax.swing.SpinnerNumberModel;
 import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
+
 import javax.swing.DefaultComboBoxModel;
 import javax.swing.JTextArea;
 import javax.swing.JScrollPane;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.awt.GridLayout;
+import javax.swing.SwingConstants;
 
 public class VentanaPrincipal extends JFrame {
 
@@ -51,10 +53,10 @@ public class VentanaPrincipal extends JFrame {
 	private JButton btEliminar;
 	private JPanel pnFiltro;
 	private JButton btHamburgesa;
-	private JButton btnNewButton_1;
+	private JButton btnTodo;
 	private JButton btBebida;
-	private JButton btnNewButton_3;
-	private JButton btnNewButton_4;
+	private JButton btnComplementos;
+	private JButton btnPsotre;
 	private JLabel lbImgProduct;
 	
 	
@@ -97,6 +99,7 @@ public class VentanaPrincipal extends JFrame {
 		contentPane.setLayout(null);
 		contentPane.add(getLbLogo());
 		contentPane.add(getLbArticulos());
+		contentPane.add(getLbImgProduct());
 		contentPane.add(getCBArticulos());
 		contentPane.add(getLbUnidades());
 		contentPane.add(getSUnidades());
@@ -112,7 +115,7 @@ public class VentanaPrincipal extends JFrame {
 		contentPane.add(getLbIcPedido());
 		contentPane.add(getBtEliminar());
 		contentPane.add(getPnFiltro());
-		contentPane.add(getLbImgProduct());
+		
 	}
 	private void setMacDonalds(McDonalds mcDonalds) {
 		if(mcDonalds==null) throw new IllegalArgumentException();
@@ -124,7 +127,7 @@ public class VentanaPrincipal extends JFrame {
 			lbLogo = new JLabel("  McDonald's");
 			lbLogo.setFont(new Font("Arial Black", Font.PLAIN, 44));
 			lbLogo.setIcon(new ImageIcon(VentanaPrincipal.class.getResource("/img/logo.png")));
-			lbLogo.setBounds(38, 25, 484, 150);
+			lbLogo.setBounds(244, 25, 484, 150);
 		}
 		return lbLogo;
 	}
@@ -133,7 +136,7 @@ public class VentanaPrincipal extends JFrame {
 			lbArticulos = new JLabel("Articulos:");
 			lbArticulos.setLabelFor(getCBArticulos());
 			lbArticulos.setDisplayedMnemonic('t');
-			lbArticulos.setBounds(58, 202, 192, 29);
+			lbArticulos.setBounds(218, 239, 192, 29);
 		}
 		return lbArticulos;
 	}
@@ -149,7 +152,7 @@ public class VentanaPrincipal extends JFrame {
 				}
 			});
 			cBArticulos.setModel(new DefaultComboBoxModel<Articulo>(mac.getArticulosCarta()));
-			cBArticulos.setBounds(38, 242, 357, 22);
+			cBArticulos.setBounds(286, 242, 357, 22);
 		}
 		return cBArticulos;
 	}
@@ -170,7 +173,7 @@ public class VentanaPrincipal extends JFrame {
 			lbUnidades = new JLabel("Unidades:");
 			lbUnidades.setLabelFor(getSUnidades());
 			lbUnidades.setDisplayedMnemonic('U');
-			lbUnidades.setBounds(448, 209, 167, 14);
+			lbUnidades.setBounds(680, 209, 167, 14);
 		}
 		return lbUnidades;
 	}
@@ -178,7 +181,7 @@ public class VentanaPrincipal extends JFrame {
 		if (sUnidades == null) {
 			sUnidades = new JSpinner();
 			sUnidades.setModel(new SpinnerNumberModel(1, 1, 100, 1));
-			sUnidades.setBounds(448, 239, 74, 29);
+			sUnidades.setBounds(678, 239, 74, 29);
 		}
 		return sUnidades;
 	}
@@ -195,7 +198,7 @@ public class VentanaPrincipal extends JFrame {
 			});
 			btAñadir.setMnemonic('A');
 			btAñadir.setBackground(new Color(0, 255, 0));
-			btAñadir.setBounds(566, 239, 121, 29);
+			btAñadir.setBounds(775, 239, 121, 29);
 		}
 		return btAñadir;
 	}
@@ -233,7 +236,7 @@ public class VentanaPrincipal extends JFrame {
 	private JLabel getLbPrecio() {
 		if (lbPrecio == null) {
 			lbPrecio = new JLabel("Precio del pedido:");
-			lbPrecio.setBounds(448, 287, 152, 29);
+			lbPrecio.setBounds(743, 287, 152, 29);
 		}
 		return lbPrecio;
 	}
@@ -242,7 +245,7 @@ public class VentanaPrincipal extends JFrame {
 			tFPrice = new JTextField();
 			tFPrice.setText("0€");
 			tFPrice.setEditable(false);
-			tFPrice.setBounds(448, 328, 96, 37);
+			tFPrice.setBounds(743, 326, 96, 37);
 			tFPrice.setColumns(10);
 		}
 		return tFPrice;
@@ -258,7 +261,7 @@ public class VentanaPrincipal extends JFrame {
 			});
 			btSiguiente.setMnemonic('S');
 			btSiguiente.setBackground(new Color(0, 255, 0));
-			btSiguiente.setBounds(518, 417, 130, 42);
+			btSiguiente.setBounds(757, 417, 130, 42);
 		}
 		return btSiguiente;
 	}
@@ -281,14 +284,14 @@ public class VentanaPrincipal extends JFrame {
 			});
 			btCancelar.setMnemonic('C');
 			btCancelar.setBackground(new Color(255, 0, 0));
-			btCancelar.setBounds(670, 417, 130, 42);
+			btCancelar.setBounds(897, 417, 130, 42);
 		}
 		return btCancelar;
 	}
 	private JLabel getLbAmountProduct() {
 		if (lbAmountProduct == null) {
 			lbAmountProduct = new JLabel("New label");
-			lbAmountProduct.setBounds(38, 283, 357, 37);
+			lbAmountProduct.setBounds(260, 186, 357, 37);
 			lbAmountProduct.setText("El carrito contiene: "+0+" unidades del producto seleccionado.");
 		}
 		return lbAmountProduct;
@@ -303,7 +306,7 @@ public class VentanaPrincipal extends JFrame {
 			lbImgDiscount = new JLabel("");
 			lbImgDiscount.setToolTipText("Si la compra es superior a 60€, se descontará un 10%");
 			lbImgDiscount.setIcon(new ImageIcon(VentanaPrincipal.class.getResource("/img/ofertaHappy.png")));
-			lbImgDiscount.setBounds(38, 344, 212, 127);
+			lbImgDiscount.setBounds(480, 344, 212, 127);
 		}
 		return lbImgDiscount;
 	}
@@ -314,7 +317,7 @@ public class VentanaPrincipal extends JFrame {
 			txDiscount.setVisible(false);
 			txDiscount.setTabSize(6);
 			txDiscount.setText("Se ha superado los 60€,\nel precio del pedido posee \nun 10% de descuento");
-			txDiscount.setBounds(566, 313, 167, 79);
+			txDiscount.setBounds(860, 313, 167, 79);
 		}
 		return txDiscount;
 	}
@@ -332,7 +335,7 @@ public class VentanaPrincipal extends JFrame {
 	private JScrollPane getScrollPanePedido() {
 		if (scrollPanePedido == null) {
 			scrollPanePedido = new JScrollPane();
-			scrollPanePedido.setBounds(649, 63, 181, 134);
+			scrollPanePedido.setBounds(846, 64, 181, 134);
 			scrollPanePedido.setViewportView(getTextAreaPedido());
 			scrollPanePedido.setVisible(false);
 		}
@@ -362,7 +365,7 @@ public class VentanaPrincipal extends JFrame {
 				}
 			});
 			lbIcPedido.setIcon(new ImageIcon(VentanaPrincipal.class.getResource("/img/pedido.png")));
-			lbIcPedido.setBounds(670, 25, 133, 41);
+			lbIcPedido.setBounds(894, 25, 133, 41);
 		}
 		return lbIcPedido;
 	}
@@ -385,7 +388,7 @@ public class VentanaPrincipal extends JFrame {
 			btEliminar.setEnabled(false);
 			btEliminar.setMnemonic('E');
 			btEliminar.setBackground(new Color(255, 0, 0));
-			btEliminar.setBounds(709, 239, 121, 29);
+			btEliminar.setBounds(906, 239, 121, 29);
 		}
 		return btEliminar;
 	}
@@ -396,52 +399,97 @@ public class VentanaPrincipal extends JFrame {
 	private JPanel getPnFiltro() {
 		if (pnFiltro == null) {
 			pnFiltro = new JPanel();
-			pnFiltro.setBounds(876, 37, 173, 407);
+			pnFiltro.setBounds(38, 39, 173, 407);
 			pnFiltro.setLayout(new GridLayout(5, 1, 0, 0));
 			pnFiltro.add(getBtHamburgesa());
 			pnFiltro.add(getBtBebida());
-			pnFiltro.add(getBtnNewButton_3());
-			pnFiltro.add(getBtnNewButton_4());
-			pnFiltro.add(getBtnNewButton_1());
+			pnFiltro.add(getBtnComplementos());
+			pnFiltro.add(getBtnPsotre());
+			pnFiltro.add(getBtnTodo());
 		}
 		return pnFiltro;
 	}
 	private JButton getBtHamburgesa() {
 		if (btHamburgesa == null) {
 			btHamburgesa = new JButton("Hamburgesa");
+			btHamburgesa.addActionListener(new ActionListener() {
+				public void actionPerformed(ActionEvent e) {
+					fillCombo("Hamburguesa");
+				}
+			});
+			btHamburgesa.setMnemonic('H');
+			btHamburgesa.setHorizontalAlignment(SwingConstants.LEFT);
 			btHamburgesa.setIcon(new ImageIcon(VentanaPrincipal.class.getResource("/img/Hamburguesa.png")));
 		}
 		return btHamburgesa;
 	}
-	private JButton getBtnNewButton_1() {
-		if (btnNewButton_1 == null) {
-			btnNewButton_1 = new JButton("New button");
+	private JButton getBtnTodo() {
+		if (btnTodo == null) {
+			btnTodo = new JButton("Todo");
+			btnTodo.setMnemonic('O');
+			btnTodo.addActionListener(new ActionListener() {
+				public void actionPerformed(ActionEvent e) {
+					fillCombo("Todo");
+				}
+			});
 		}
-		return btnNewButton_1;
+		return btnTodo;
 	}
 	private JButton getBtBebida() {
 		if (btBebida == null) {
-			btBebida = new JButton("New button");
+			btBebida = new JButton("Bebidas");
+			btBebida.setMnemonic('B');
+			btBebida.setHorizontalAlignment(SwingConstants.LEFT);
+			btBebida.addActionListener(new ActionListener() {
+				public void actionPerformed(ActionEvent e) {
+					fillCombo("Bebida");
+				}
+			});
 			btBebida.setIcon(new ImageIcon(VentanaPrincipal.class.getResource("/img/Bebida.png")));
 		}
 		return btBebida;
 	}
-	private JButton getBtnNewButton_3() {
-		if (btnNewButton_3 == null) {
-			btnNewButton_3 = new JButton("New button");
-		}
-		return btnNewButton_3;
+	
+	private void fillCombo(String denominacion) {
+		getCBArticulos().setModel(new DefaultComboBoxModel<Articulo>(mac.getArticulosCarta(denominacion)));
+		changeIcon();
 	}
-	private JButton getBtnNewButton_4() {
-		if (btnNewButton_4 == null) {
-			btnNewButton_4 = new JButton("New button");
+	
+	
+	
+	private JButton getBtnComplementos() {
+		if (btnComplementos == null) {
+			btnComplementos = new JButton("Complementos");
+			btnComplementos.addActionListener(new ActionListener() {
+				public void actionPerformed(ActionEvent e) {
+					fillCombo("Complemento");
+				}
+			});
+			btnComplementos.setMnemonic('C');
+			btnComplementos.setHorizontalAlignment(SwingConstants.LEFT);
+			btnComplementos.setIcon(new ImageIcon(VentanaPrincipal.class.getResource("/img/Complemento.png")));
 		}
-		return btnNewButton_4;
+		return btnComplementos;
+	}
+	private JButton getBtnPsotre() {
+		if (btnPsotre == null) {
+			btnPsotre = new JButton("Postres");
+			btnPsotre.setMnemonic('P');
+			btnPsotre.setHorizontalAlignment(SwingConstants.LEFT);
+			btnPsotre.setIcon(new ImageIcon(VentanaPrincipal.class.getResource("/img/Postre.png")));
+			btnPsotre.addActionListener(new ActionListener() {
+				public void actionPerformed(ActionEvent e) {
+					fillCombo("Postre");
+				}
+			});
+		}
+		return btnPsotre;
 	}
 	private JLabel getLbImgProduct() {
 		if (lbImgProduct == null) {
 			lbImgProduct = new JLabel("");
-			lbImgProduct.setBounds(257, 370, 173, 89);
+			lbImgProduct.setBounds(263, 326, 173, 89);
+			changeIcon();
 		}
 		return lbImgProduct;
 	}

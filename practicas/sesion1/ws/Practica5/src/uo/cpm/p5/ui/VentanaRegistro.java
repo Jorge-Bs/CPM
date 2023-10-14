@@ -25,6 +25,7 @@ import uo.cpm.p5.service.McDonalds;
 import javax.swing.JRadioButton;
 import javax.swing.ButtonGroup;
 import java.awt.Toolkit;
+import javax.swing.JTextArea;
 
 
 public class VentanaRegistro extends JDialog {
@@ -54,6 +55,7 @@ public class VentanaRegistro extends JDialog {
 	private final ButtonGroup bGroupPedido = new ButtonGroup();
 	McDonalds mac;
 	VentanaPrincipal vPrincipal;
+	private JTextArea txtrPrecioExtra;
 
 	
 	
@@ -95,6 +97,7 @@ public class VentanaRegistro extends JDialog {
 		pnContenidos.add(getBtCancelar());
 		pnContenidos.add(getPnData());
 		pnContenidos.add(getPnPedido());
+		pnContenidos.add(getTxtrPrecioExtra());
 		setLocationRelativeTo(null);
 		setResizable(false);
 	}
@@ -317,6 +320,11 @@ public class VentanaRegistro extends JDialog {
 	private JRadioButton getRdBtLocal() {
 		if (rdBtLocal == null) {
 			rdBtLocal = new JRadioButton("Local");
+			rdBtLocal.addActionListener(new ActionListener() {
+				public void actionPerformed(ActionEvent e) {
+					enablePrecioExtra(false);
+				}
+			});
 			rdBtLocal.setMnemonic('L');
 			bGroupPedido.add(rdBtLocal);
 			rdBtLocal.setSelected(true);
@@ -325,9 +333,21 @@ public class VentanaRegistro extends JDialog {
 		}
 		return rdBtLocal;
 	}
+	
+	private void enablePrecioExtra(boolean condition) {
+		getTxtrPrecioExtra().setVisible(condition);
+	}
+	
+	
+	
 	private JRadioButton getRdBtLlevar() {
 		if (rdBtLlevar == null) {
 			rdBtLlevar = new JRadioButton("Llevar");
+			rdBtLlevar.addActionListener(new ActionListener() {
+				public void actionPerformed(ActionEvent e) {
+					enablePrecioExtra(true);
+				}
+			});
 			rdBtLlevar.setMnemonic('e');
 			bGroupPedido.add(rdBtLlevar);
 			rdBtLlevar.setBackground(new Color(255, 255, 255));
@@ -335,5 +355,17 @@ public class VentanaRegistro extends JDialog {
 		}
 		return rdBtLlevar;
 	}
-	
+	private JTextArea getTxtrPrecioExtra() {
+		if (txtrPrecioExtra == null) {
+			txtrPrecioExtra = new JTextArea();
+			txtrPrecioExtra.setVisible(false);
+			txtrPrecioExtra.setText("Los pedidos a llevar tiene un extra de 10 centimos");
+			txtrPrecioExtra.setEditable(false);
+			txtrPrecioExtra.setLineWrap(true);
+			txtrPrecioExtra.setWrapStyleWord(true);
+			txtrPrecioExtra.setBounds(239, 179, 119, 73);
+			
+		}
+		return txtrPrecioExtra;
+	}
 }
