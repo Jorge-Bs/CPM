@@ -42,6 +42,7 @@ public class Pedido {
 		listaPedido.clear();
 		//setDiscount(false);
 		generarCodigo();
+		setLlevar(false);
 			}
 
 	/**

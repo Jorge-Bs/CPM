@@ -27,6 +27,14 @@ import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.awt.GridLayout;
 import javax.swing.SwingConstants;
+import javax.swing.JMenuBar;
+import javax.swing.JMenu;
+import javax.swing.JMenuItem;
+import javax.swing.JOptionPane;
+import javax.swing.KeyStroke;
+import java.awt.event.KeyEvent;
+import java.awt.event.InputEvent;
+import javax.swing.JSeparator;
 
 public class VentanaPrincipal extends JFrame {
 
@@ -58,6 +66,15 @@ public class VentanaPrincipal extends JFrame {
 	private JButton btnComplementos;
 	private JButton btnPsotre;
 	private JLabel lbImgProduct;
+	private JMenuBar menuBar;
+	private JMenu menuPedido;
+	private JMenu menuAyuda;
+	private JMenuItem mnNuevo;
+	private JMenuItem mntmContenidos;
+	private JMenuItem nmtSalir;
+	private JMenuItem mntmAcerca;
+	private JSeparator separator;
+	private JSeparator separator_1;
 	
 	
 	/**
@@ -89,8 +106,9 @@ public class VentanaPrincipal extends JFrame {
 		setIconImage(Toolkit.getDefaultToolkit().getImage(VentanaPrincipal.class.getResource("/img/logo.png")));
 		setResizable(false);
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		setBounds(100, 100, 1073, 519);
+		setBounds(100, 100, 1073, 560);
 		this.setLocationRelativeTo(null);
+		setJMenuBar(getMenuBar_1());
 		contentPane = new JPanel();
 		contentPane.setBackground(new Color(255, 255, 255));
 		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
@@ -196,7 +214,7 @@ public class VentanaPrincipal extends JFrame {
 					fillPanelPedido();
 				}
 			});
-			btAñadir.setMnemonic('A');
+			btAñadir.setMnemonic('d');
 			btAñadir.setBackground(new Color(0, 255, 0));
 			btAñadir.setBounds(775, 239, 121, 29);
 		}
@@ -331,6 +349,8 @@ public class VentanaPrincipal extends JFrame {
 		getBtSiguiente().setEnabled(false);
 		getTFPrice().setText("");
 		getTextAreaPedido().setText("");
+		getCBArticulos().setModel(new DefaultComboBoxModel<Articulo>(mac.getArticulosCarta()));
+		changeIcon();
 	}
 	private JScrollPane getScrollPanePedido() {
 		if (scrollPanePedido == null) {
@@ -399,7 +419,7 @@ public class VentanaPrincipal extends JFrame {
 	private JPanel getPnFiltro() {
 		if (pnFiltro == null) {
 			pnFiltro = new JPanel();
-			pnFiltro.setBounds(38, 39, 173, 407);
+			pnFiltro.setBounds(38, 11, 173, 460);
 			pnFiltro.setLayout(new GridLayout(5, 1, 0, 0));
 			pnFiltro.add(getBtHamburgesa());
 			pnFiltro.add(getBtBebida());
@@ -412,13 +432,15 @@ public class VentanaPrincipal extends JFrame {
 	private JButton getBtHamburgesa() {
 		if (btHamburgesa == null) {
 			btHamburgesa = new JButton("Hamburgesa");
+			btHamburgesa.setBackground(new Color(255, 255, 255));
+			btHamburgesa.setVerticalTextPosition(SwingConstants.BOTTOM);
+			btHamburgesa.setHorizontalTextPosition(SwingConstants.CENTER);
 			btHamburgesa.addActionListener(new ActionListener() {
 				public void actionPerformed(ActionEvent e) {
 					fillCombo("Hamburguesa");
 				}
 			});
 			btHamburgesa.setMnemonic('H');
-			btHamburgesa.setHorizontalAlignment(SwingConstants.LEFT);
 			btHamburgesa.setIcon(new ImageIcon(VentanaPrincipal.class.getResource("/img/Hamburguesa.png")));
 		}
 		return btHamburgesa;
@@ -426,6 +448,9 @@ public class VentanaPrincipal extends JFrame {
 	private JButton getBtnTodo() {
 		if (btnTodo == null) {
 			btnTodo = new JButton("Todo");
+			btnTodo.setBackground(new Color(255, 255, 255));
+			btnTodo.setVerticalAlignment(SwingConstants.BOTTOM);
+			btnTodo.setHorizontalTextPosition(SwingConstants.CENTER);
 			btnTodo.setMnemonic('O');
 			btnTodo.addActionListener(new ActionListener() {
 				public void actionPerformed(ActionEvent e) {
@@ -438,8 +463,10 @@ public class VentanaPrincipal extends JFrame {
 	private JButton getBtBebida() {
 		if (btBebida == null) {
 			btBebida = new JButton("Bebidas");
+			btBebida.setBackground(new Color(255, 255, 255));
+			btBebida.setHorizontalTextPosition(SwingConstants.CENTER);
+			btBebida.setVerticalTextPosition(SwingConstants.BOTTOM);
 			btBebida.setMnemonic('B');
-			btBebida.setHorizontalAlignment(SwingConstants.LEFT);
 			btBebida.addActionListener(new ActionListener() {
 				public void actionPerformed(ActionEvent e) {
 					fillCombo("Bebida");
@@ -460,13 +487,15 @@ public class VentanaPrincipal extends JFrame {
 	private JButton getBtnComplementos() {
 		if (btnComplementos == null) {
 			btnComplementos = new JButton("Complementos");
+			btnComplementos.setBackground(new Color(255, 255, 255));
+			btnComplementos.setHorizontalTextPosition(SwingConstants.CENTER);
+			btnComplementos.setVerticalTextPosition(SwingConstants.BOTTOM);
 			btnComplementos.addActionListener(new ActionListener() {
 				public void actionPerformed(ActionEvent e) {
 					fillCombo("Complemento");
 				}
 			});
 			btnComplementos.setMnemonic('C');
-			btnComplementos.setHorizontalAlignment(SwingConstants.LEFT);
 			btnComplementos.setIcon(new ImageIcon(VentanaPrincipal.class.getResource("/img/Complemento.png")));
 		}
 		return btnComplementos;
@@ -474,8 +503,10 @@ public class VentanaPrincipal extends JFrame {
 	private JButton getBtnPsotre() {
 		if (btnPsotre == null) {
 			btnPsotre = new JButton("Postres");
-			btnPsotre.setMnemonic('P');
-			btnPsotre.setHorizontalAlignment(SwingConstants.LEFT);
+			btnPsotre.setBackground(new Color(255, 255, 255));
+			btnPsotre.setHorizontalTextPosition(SwingConstants.CENTER);
+			btnPsotre.setVerticalTextPosition(SwingConstants.BOTTOM);
+			btnPsotre.setMnemonic('o');
 			btnPsotre.setIcon(new ImageIcon(VentanaPrincipal.class.getResource("/img/Postre.png")));
 			btnPsotre.addActionListener(new ActionListener() {
 				public void actionPerformed(ActionEvent e) {
@@ -492,5 +523,89 @@ public class VentanaPrincipal extends JFrame {
 			changeIcon();
 		}
 		return lbImgProduct;
+	}
+	private JMenuBar getMenuBar_1() {
+		if (menuBar == null) {
+			menuBar = new JMenuBar();
+			menuBar.add(getMenuPedido());
+			menuBar.add(getMenuAyuda());
+		}
+		return menuBar;
+	}
+	private JMenu getMenuPedido() {
+		if (menuPedido == null) {
+			menuPedido = new JMenu("Pedido");
+			menuPedido.setMnemonic('p');
+			menuPedido.add(getMnNuevo());
+			menuPedido.add(getSeparator());
+			menuPedido.add(getNmtSalir());
+		}
+		return menuPedido;
+	}
+	private JMenu getMenuAyuda() {
+		if (menuAyuda == null) {
+			menuAyuda = new JMenu("Ayuda");
+			menuAyuda.setMnemonic('A');
+			menuAyuda.add(getMntmContenidos());
+			menuAyuda.add(getSeparator_1());
+			menuAyuda.add(getMntmAcerca());
+		}
+		return menuAyuda;
+	}
+	private JMenuItem getMnNuevo() {
+		if (mnNuevo == null) {
+			mnNuevo = new JMenuItem("Nuevo");
+			mnNuevo.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_N, InputEvent.CTRL_DOWN_MASK));
+			mnNuevo.setMnemonic('n');
+		}
+		return mnNuevo;
+	}
+	private JMenuItem getMntmContenidos() {
+		if (mntmContenidos == null) {
+			mntmContenidos = new JMenuItem("Contenidos");
+			mntmContenidos.addActionListener(new ActionListener() {
+				public void actionPerformed(ActionEvent e) {
+					/* Mensajes mostrados desde el menú: */
+					JOptionPane.showMessageDialog(null, "Ayuda no disponible", "Contenidos de la Ayuda",
+												JOptionPane.INFORMATION_MESSAGE);
+				}
+			});
+			mntmContenidos.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_F1, 0));
+			mntmContenidos.setMnemonic('C');
+		}
+		return mntmContenidos;
+	}
+	private JMenuItem getNmtSalir() {
+		if (nmtSalir == null) {
+			nmtSalir = new JMenuItem("Salir");
+			nmtSalir.setMnemonic('S');
+		}
+		return nmtSalir;
+	}
+	private JMenuItem getMntmAcerca() {
+		if (mntmAcerca == null) {
+			mntmAcerca = new JMenuItem("Acerca de");
+			mntmAcerca.addActionListener(new ActionListener() {
+				public void actionPerformed(ActionEvent e) {
+					JOptionPane.showMessageDialog(null,
+												"Aplicación para TPV de comida rápida \n Realizada por Jorge Blanco Sanchez\n Prácticas CPM 22-23 \n EII Oviedo",
+												"Acerca de", JOptionPane.INFORMATION_MESSAGE);
+				}
+			});
+			mntmAcerca.setMnemonic('E');
+		}
+		return mntmAcerca;
+	}
+	private JSeparator getSeparator() {
+		if (separator == null) {
+			separator = new JSeparator();
+		}
+		return separator;
+	}
+	private JSeparator getSeparator_1() {
+		if (separator_1 == null) {
+			separator_1 = new JSeparator();
+		}
+		return separator_1;
 	}
 }
