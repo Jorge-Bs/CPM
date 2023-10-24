@@ -12,3 +12,23 @@ hay dos tipos:
 Dialogos
 
 no modal: se permite seguir interactuando con la aplicacion, ventanas anteriores
+
+
+barra de menu superior
+
+1 JMEnuBar
+2 JMenu
+3 JMenuButton
+
+Fiajarse en el 
+	orden de las opciones
+	nenomics(a todas las opciones)
+	aceleradores(las opciones mas usadas)
+	separadores
+
+Menu ayuda(siempre la opcion más a la derecha)
+	contenidos
+	acerca de
+		Titulo + version
+		autor
+		contacto
