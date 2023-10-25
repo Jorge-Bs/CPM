@@ -12,7 +12,6 @@ import uo.cpm.p6.service.SpaceInvaders;
 
 import java.awt.Toolkit;
 import java.awt.Color;
-import java.awt.Component;
 
 import javax.swing.JButton;
 import javax.swing.ImageIcon;
@@ -94,6 +93,7 @@ public class VentanaPrincipal extends JFrame {
 	private JButton getBtnDado() {
 		if (btnDado == null) {
 			btnDado = new JButton("");
+			btnDado.setDisabledIcon(new ImageIcon(VentanaPrincipal.class.getResource("/img/dice.jpg")));
 			btnDado.setBackground(new Color(0, 0, 0));
 			btnDado.addActionListener(new ActionListener() {
 				public void actionPerformed(ActionEvent e) {
@@ -352,7 +352,7 @@ public class VentanaPrincipal extends JFrame {
 			nmtAcercaDE.addActionListener(new ActionListener() {
 				public void actionPerformed(ActionEvent e) {
 					JOptionPane.showMessageDialog(null,
-							"Version del Juego Space Ninvaders \n Realizada por Jorge Blanco Sanchez\n Prácticas CPM 22-23 \n EII Oviedo",
+							"Version del Juego Space Ninvaders \n Realizada por Jorge Blanco Sanchez\n Prácticas CPM 23-24 \n EII Oviedo",
 							"Acerca de", JOptionPane.INFORMATION_MESSAGE);
 					}
 			});
@@ -410,7 +410,7 @@ public class VentanaPrincipal extends JFrame {
 		if (sp.isPartidaFinalizada()) {
 			habilitaTablero(false);
 			limpiarCasillas();
-			JOptionPane.showMessageDialog(null, "Partida finalizada", "Invasión espacial",
+			JOptionPane.showMessageDialog(null, "Partida finalizada: " +sp.getEndMessage()+" encontrado", "Invasión espacial",
 					JOptionPane.INFORMATION_MESSAGE);
 			iniciarNuevaPartida();
 		}
@@ -419,7 +419,7 @@ public class VentanaPrincipal extends JFrame {
 	private void desabilitaBoton(int value) {
 			ImageIcon imagen = new ImageIcon(VentanaPrincipal.class.getResource(sp.obtenerImagen(value)));
 			((JButton) getPnTablero().getComponent(value)).setIcon(imagen);
-			((JButton) getPnTablero().getComponent(value)).setDisabledIcon(imagen);
+			((JButton) getPnTablero().getComponent(value)).setDisabledIcon(imagen);//solo funciona si hay un valor en icon, puede ser cualquier imagen
 			((JButton) getPnTablero().getComponent(value)).setEnabled(false);
 		}
 	private void limpiarCasillas() {
@@ -431,8 +431,10 @@ public class VentanaPrincipal extends JFrame {
 	
 	private void iniciarNuevaPartida() {
 		getBtnDado().setEnabled(true);
-		int value = sp.getDisparos();
-		for(int i=0;i<value;i++) limpiarDisparos();
+		//int value = sp.getDisparos();
+		//for(int i=0;i<value;i++) limpiarDisparos();
+		getPnDisparos().removeAll();
+		getPnDisparos().repaint();
 		sp.inicializar();
 		habilitaTablero(false);
 		getTxtPuntos().setText(sp.getPuntuacion()+"");

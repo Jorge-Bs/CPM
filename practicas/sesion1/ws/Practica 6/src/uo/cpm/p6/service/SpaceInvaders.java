@@ -46,5 +46,9 @@ public class SpaceInvaders {
 	{
 		return juego.obtenerImagen(i);
 	}
+	
+	public String getEndMessage() {
+		return juego.getEnemigoEncontrado();
+	}
 
 }
