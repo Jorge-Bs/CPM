@@ -32,3 +32,15 @@ Menu ayuda(siempre la opcion más a la derecha)
 		Titulo + version
 		autor
 		contacto
+
+
+.setDisableIcon() establece una imagen tras desactivar un boton, es necesario que tenga un icon, puede ser cualquiera
+.validate() repinta cuando se han añadido nuevos componentes a la ventana
+.repaint() repinta cuando se han eliminado componentes de la ventana
+
+
+Layouts
+
+Absolute 	necesita poner un bounds(tamaño)
+Grid 		divide un panel o la pantalla de igual tamaño, tiene como param las filas y las columnas
+Flow 		coloca los componentes uno a continuacion del otro, pone el primero en el centro,propiedad de aligmente del layout, los 		sucesivos a su derecha pero va desplazando el conjunto hacia la izquierda, matiene el tamaño de los componentes
