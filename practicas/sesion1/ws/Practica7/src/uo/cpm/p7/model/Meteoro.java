@@ -1,4 +1,4 @@
-package uo.cpm.p6.model;
+package uo.cpm.p7.model;
 
 public class Meteoro extends Casilla{
 

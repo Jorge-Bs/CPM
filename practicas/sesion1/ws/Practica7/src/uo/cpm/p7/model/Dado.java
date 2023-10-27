@@ -1,5 +1,5 @@
-package uo.cpm.p6.model;
-import uo.cpm.p6.game.Juego;
+package uo.cpm.p7.model;
+import uo.cpm.p7.game.Juego;
 
 
 public class Dado {

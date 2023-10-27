@@ -1,11 +1,11 @@
-package uo.cpm.p6;
+package uo.cpm.p7;
 
 import java.awt.EventQueue;
 
 import javax.swing.UIManager;
 
-import uo.cpm.p6.service.SpaceInvaders;
-import uo.cpm.p6.ui.VentanaPrincipal;
+import uo.cpm.p7.service.SpaceInvaders;
+import uo.cpm.p7.ui.VentanaPrincipal;
 
 public class Main {
 

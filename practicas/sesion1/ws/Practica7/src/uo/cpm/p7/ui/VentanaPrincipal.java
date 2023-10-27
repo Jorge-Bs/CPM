@@ -1,4 +1,4 @@
-package uo.cpm.p6.ui;
+package uo.cpm.p7.ui;
 
 
 import javax.swing.JFrame;
@@ -9,8 +9,7 @@ import javax.swing.JPanel;
 import javax.swing.border.EmptyBorder;
 import javax.swing.border.LineBorder;
 
-
-import uo.cpm.p6.service.SpaceInvaders;
+import uo.cpm.p7.service.SpaceInvaders;
 
 import java.awt.Toolkit;
 import java.awt.Color;

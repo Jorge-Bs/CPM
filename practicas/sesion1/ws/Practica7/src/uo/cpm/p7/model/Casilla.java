@@ -1,4 +1,4 @@
-package uo.cpm.p6.model;
+package uo.cpm.p7.model;
 
 public abstract class Casilla {
 	

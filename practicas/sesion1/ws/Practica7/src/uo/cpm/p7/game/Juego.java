@@ -1,6 +1,6 @@
-package uo.cpm.p6.game;
+package uo.cpm.p7.game;
 
-import uo.cpm.p6.model.*;
+import uo.cpm.p7.model.*;
 
 public class Juego {
 	

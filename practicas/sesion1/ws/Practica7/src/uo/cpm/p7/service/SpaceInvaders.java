@@ -1,7 +1,7 @@
-package uo.cpm.p6.service;
+package uo.cpm.p7.service;
 
-import uo.cpm.p6.game.Juego;
-import uo.cpm.p6.model.Tablero;
+import uo.cpm.p7.game.Juego;
+import uo.cpm.p7.model.Tablero;
 
 public class SpaceInvaders {
 
