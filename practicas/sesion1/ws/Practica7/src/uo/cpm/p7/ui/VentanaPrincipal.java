@@ -30,6 +30,8 @@ import javax.swing.KeyStroke;
 import java.awt.event.KeyEvent;
 import javax.swing.JRadioButtonMenuItem;
 import javax.swing.ButtonGroup;
+import java.awt.event.WindowAdapter;
+import java.awt.event.WindowEvent;
 
 public class VentanaPrincipal extends JFrame {
 
@@ -84,11 +86,17 @@ public class VentanaPrincipal extends JFrame {
 	 * Create the frame.
 	 */
 	public VentanaPrincipal(SpaceInvaders sp) {
+		addWindowListener(new WindowAdapter() {
+			@Override
+			public void windowClosing(WindowEvent e) {
+				if(confirmarCancelacion()) System.exit(0);
+			}
+		});
 		this.sp=sp;
 		setIconImage(Toolkit.getDefaultToolkit().getImage(VentanaPrincipal.class.getResource("/img/spaceship.png")));
 		setResizable(false);
 		setTitle("Invasion Espacial");
-		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		setDefaultCloseOperation(JFrame.DO_NOTHING_ON_CLOSE);
 		setBounds(100, 100, 1080, 385);
 		setJMenuBar(getMenuBar_1());
 		contentPane = new JPanel();
@@ -324,7 +332,7 @@ public class VentanaPrincipal extends JFrame {
 			mntmSalir = new JMenuItem("Salir");
 			mntmSalir.addActionListener(new ActionListener() {
 				public void actionPerformed(ActionEvent e) {
-					System.exit(0);
+					if(confirmarCancelacion()) System.exit(0);
 				}
 			});
 			mntmSalir.setMnemonic('s');
@@ -537,4 +545,12 @@ public class VentanaPrincipal extends JFrame {
 			}
 	}
 	
+		private boolean confirmarCancelacion() {
+			boolean confirmacion = false;
+			int respuesta = JOptionPane.showConfirmDialog(this, "¿Estás seguro que quieres salir de la aplicación?");
+			if (respuesta == JOptionPane.YES_OPTION) 
+				confirmacion = true;
+			
+			return confirmacion;
+		}
 }
