@@ -49,8 +49,11 @@ public class Tablero {
 	private void colocaInvasor(int value) {
 		for(int i=0;i<value;i++) {
 			int posicionInvasor = (int) (Math.random() * DIM);
-			casillas[posicionInvasor] = new Invasor();	
-			if(POSITION)System.out.println("Posicion alien = "+posicionInvasor);
+			if(casillas[posicionInvasor].getTipo().equals("Espacio")) {
+				casillas[posicionInvasor] = new Invasor();
+				if(POSITION)System.out.println("Posicion Invasor = "+posicionInvasor);
+			}
+			else colocaInvasor(1);
 		}
 	}
 	

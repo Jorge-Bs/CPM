@@ -32,6 +32,7 @@ import javax.swing.JRadioButtonMenuItem;
 import javax.swing.ButtonGroup;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
+import java.awt.event.InputEvent;
 
 public class VentanaPrincipal extends JFrame {
 
@@ -318,6 +319,7 @@ public class VentanaPrincipal extends JFrame {
 	private JMenuItem getMntNuevo() {
 		if (mntNuevo == null) {
 			mntNuevo = new JMenuItem("Nueva Partida");
+			mntNuevo.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_N, InputEvent.CTRL_DOWN_MASK));
 			mntNuevo.addActionListener(new ActionListener() {
 				public void actionPerformed(ActionEvent e) {
 					iniciarNuevaPartida();
@@ -495,7 +497,7 @@ public class VentanaPrincipal extends JFrame {
 		sp.inicializar();
 		fillTablero(sp.size());
 		habilitaTablero(false);
-		getTxtPuntos().setText(sp.getPuntuacion()+"");
+		getPoints();
 		setOriginalColor();
 	}
 	
@@ -546,11 +548,8 @@ public class VentanaPrincipal extends JFrame {
 	}
 	
 		private boolean confirmarCancelacion() {
-			boolean confirmacion = false;
 			int respuesta = JOptionPane.showConfirmDialog(this, "¿Estás seguro que quieres salir de la aplicación?");
-			if (respuesta == JOptionPane.YES_OPTION) 
-				confirmacion = true;
-			
-			return confirmacion;
+			return respuesta==JOptionPane.YES_OPTION;
+			//this centra respesto a la ventana, null respecto a la pantalla
 		}
 }
