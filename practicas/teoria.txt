@@ -44,3 +44,4 @@ Layouts
 Absolute 	necesita poner un bounds(tamaño)
 Grid 		divide un panel o la pantalla de igual tamaño, tiene como param las filas y las columnas
 Flow 		coloca los componentes uno a continuacion del otro, pone el primero en el centro,propiedad de aligmente del layout, los 		sucesivos a su derecha pero va desplazando el conjunto hacia la izquierda, matiene el tamaño de los componentes
+BorderLayout	Divide la pantalla en Norte, Sur, Este, Oeste y Centro, cada zona requiere un panel
