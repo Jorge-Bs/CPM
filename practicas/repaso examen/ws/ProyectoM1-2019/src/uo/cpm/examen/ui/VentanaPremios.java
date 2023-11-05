@@ -34,7 +34,7 @@ public class VentanaPremios extends JDialog {
 	 * 
 	 */
 	private static final long serialVersionUID = 1L;
-	private final JPanel contentPanel = new JPanel();
+	//private final JPanel contentPanel = new JPanel();
 	private JPanel panel;
 	private JButton btnTodo;
 	private JButton btElectronica;
@@ -64,9 +64,10 @@ public class VentanaPremios extends JDialog {
 		setModal(true);
 		setIconImage(Toolkit.getDefaultToolkit().getImage(VentanaPremios.class.getResource("/img/ruleta.png")));
 		setBounds(100, 100, 825, 552);
-		contentPanel.setLayout(new FlowLayout());
-		contentPanel.setBorder(new EmptyBorder(5, 5, 5, 5));
+		getContentPane().setLayout(new FlowLayout());
+		//getContentPane().setBorder(new EmptyBorder(5, 5, 5, 5));
 		setLocationRelativeTo(null);
+		setResizable(false);
 		getContentPane().setLayout(null);
 		getContentPane().add(getPanel());
 		getContentPane().add(getLbPremio());
@@ -144,12 +145,15 @@ public class VentanaPremios extends JDialog {
 			btOcio.setVerticalTextPosition(SwingConstants.BOTTOM);
 			btOcio.setHorizontalTextPosition(SwingConstants.CENTER);
 			btOcio.setIcon(new ImageIcon(VentanaPremios.class.getResource("/img/iconoOcio.png")));
+			btOcio.setMnemonic('o');
 		}
 		return btOcio;
 	}
 	private JLabel getLbPremio() {
 		if (lbPremio == null) {
 			lbPremio = new JLabel("Elige Tu Premio:");
+			lbPremio.setLabelFor(getCbPremio());
+			lbPremio.setDisplayedMnemonic('E');
 			lbPremio.setBounds(204, 226, 292, 29);
 		}
 		return lbPremio;
@@ -170,7 +174,7 @@ public class VentanaPremios extends JDialog {
 	private JSpinner getSpUnidades() {
 		if (spUnidades == null) {
 			spUnidades = new JSpinner();
-			spUnidades.setModel(new SpinnerNumberModel(1, 0, 100, 1));
+			spUnidades.setModel(new SpinnerNumberModel(1, 1, 100, 1));
 			spUnidades.setBounds(614, 226, 63, 29);
 		}
 		return spUnidades;
@@ -178,6 +182,8 @@ public class VentanaPremios extends JDialog {
 	private JLabel getLbUnidades() {
 		if (lbUnidades == null) {
 			lbUnidades = new JLabel("Unidades:");
+			lbUnidades.setDisplayedMnemonic('U');
+			lbUnidades.setLabelFor(getSpUnidades());
 			lbUnidades.setBounds(614, 201, 110, 14);
 		}
 		return lbUnidades;
@@ -259,9 +265,10 @@ public class VentanaPremios extends JDialog {
 	private JButton getBtnEnd() {
 		if (btnEnd == null) {
 			btnEnd = new JButton("Finalizar");
+			btnEnd.setMnemonic('F');
 			btnEnd.addActionListener(new ActionListener() {
 				public void actionPerformed(ActionEvent e) {
-					JOptionPane.showMessageDialog(null,"Enhorabuena y gracias por juagar","Gracias",1);
+					JOptionPane.showMessageDialog(null,"Enhorabuena y gracias por jugar","Gracias",1);
 					disa();
 				}
 			});

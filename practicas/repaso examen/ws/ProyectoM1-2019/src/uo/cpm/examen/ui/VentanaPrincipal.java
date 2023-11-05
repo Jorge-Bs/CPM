@@ -19,6 +19,9 @@ import javax.swing.JMenu;
 import javax.swing.JMenuItem;
 import javax.swing.JOptionPane;
 import javax.swing.JSeparator;
+import javax.swing.KeyStroke;
+import java.awt.event.KeyEvent;
+import java.awt.event.InputEvent;
 
 public class VentanaPrincipal extends JFrame {
 
@@ -99,6 +102,7 @@ public class VentanaPrincipal extends JFrame {
 	private JButton getBtPremio() {
 		if (btPremio == null) {
 			btPremio = new JButton("Canjea tu premio");
+			btPremio.setMnemonic('c');
 			btPremio.setEnabled(false);
 			btPremio.addActionListener(new ActionListener() {
 				public void actionPerformed(ActionEvent e) {
@@ -148,6 +152,8 @@ public class VentanaPrincipal extends JFrame {
 	private JMenuItem getMNuevo() {
 		if (mNuevo == null) {
 			mNuevo = new JMenuItem("Nuevo");
+			mNuevo.setMnemonic('n');
+			mNuevo.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_N, InputEvent.CTRL_DOWN_MASK));
 			mNuevo.addActionListener(new ActionListener() {
 				public void actionPerformed(ActionEvent e) {
 					inicializar();
@@ -159,6 +165,7 @@ public class VentanaPrincipal extends JFrame {
 	private JMenuItem getMSalir() {
 		if (mSalir == null) {
 			mSalir = new JMenuItem("Salir");
+			mSalir.setMnemonic('s');
 			mSalir.addActionListener(ps);
 		}
 		return mSalir;
@@ -172,6 +179,7 @@ public class VentanaPrincipal extends JFrame {
 	private JMenuItem getMAcerca() {
 		if (mAcerca == null) {
 			mAcerca = new JMenuItem("Acerca de");
+			mAcerca.setMnemonic('c');
 			mAcerca.addActionListener(new ActionListener() {
 				public void actionPerformed(ActionEvent e) {
 					JOptionPane.showMessageDialog(null,"Practica de Examan Realizada por:\n"
