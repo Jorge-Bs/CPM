@@ -27,6 +27,7 @@ import javax.swing.Icon;
 
 import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
+import javax.swing.JScrollPane;
 
 public class VentanaPremios extends JDialog {
 
@@ -59,15 +60,16 @@ public class VentanaPremios extends JDialog {
 	 * Create the dialog.
 	 */
 	public VentanaPremios(VentanaPrincipal vp) {
+		setDefaultCloseOperation(JDialog.DISPOSE_ON_CLOSE);
 		setTitle("Ruleta de la Suerte: Premios");
 		this.vp = vp;
 		setModal(true);
 		setIconImage(Toolkit.getDefaultToolkit().getImage(VentanaPremios.class.getResource("/img/ruleta.png")));
 		setBounds(100, 100, 825, 552);
-		getContentPane().setLayout(new FlowLayout());
 		//getContentPane().setBorder(new EmptyBorder(5, 5, 5, 5));
 		setLocationRelativeTo(null);
 		setResizable(false);
+		getContentPane().setLayout(null);
 		getContentPane().setLayout(null);
 		getContentPane().add(getPanel());
 		getContentPane().add(getLbPremio());
@@ -164,6 +166,7 @@ public class VentanaPremios extends JDialog {
 			cbPremio.addActionListener(new ActionListener() {
 				public void actionPerformed(ActionEvent e) {
 					getLbImagen().setIcon(getImage());
+					getSpUnidades().setValue(1);
 				}
 			});
 			cbPremio.setModel(new DefaultComboBoxModel<Articulo>(vp.ap.getArticulos()));
@@ -279,7 +282,7 @@ public class VentanaPremios extends JDialog {
 	private JLabel getLbImagen() {
 		if (lbImagen == null) {
 			lbImagen = new JLabel("");
-			lbImagen.setBounds(250, 312, 184, 114);
+			lbImagen.setBounds(250, 312, 0, 0);
 			lbImagen.setIcon(getImage());
 		}
 		return lbImagen;
@@ -288,7 +291,11 @@ public class VentanaPremios extends JDialog {
 	private Icon getImage() {
 		Articulo art = (Articulo)getCbPremio().getSelectedItem();
 		String path ="/img/"+art.getCode()+".png";
-		return new ImageIcon(VentanaPremios.class.getResource(path));
+		Icon ic=  new ImageIcon(VentanaPremios.class.getResource(path));
+		int wit=ic.getIconWidth();
+		int he=ic.getIconHeight();
+		getLbImagen().setBounds(250, 312, wit, he);
+		return ic;
 	}
 	
 	private void disa() {

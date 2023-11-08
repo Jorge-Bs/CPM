@@ -4,6 +4,7 @@ import javax.swing.JOptionPane;
 import javax.swing.SwingUtilities;
 import javax.swing.UIManager;
 
+import com.jtattoo.plaf.hifi.HiFiLookAndFeel;
 
 import uo.cpm.p8.player.MusicPlayer;
 import uo.cpm.p8.ui.VentanaPrincipal;
@@ -16,10 +17,10 @@ public class Main {
 			public void run() {
 		      try {
 		    	  // Cambia el look and feel
-		    	 /* Properties props = new Properties();
+		    	 Properties props = new Properties();
 		    	  props.put("logoString", "");
 		    	  HiFiLookAndFeel.setCurrentTheme(props);
-		    	  UIManager.setLookAndFeel("com.jtattoo.plaf.hifi.HiFiLookAndFeel");*/
+		    	  UIManager.setLookAndFeel("com.jtattoo.plaf.hifi.HiFiLookAndFeel");
 		    	  
 		    	  // Crea la ventana
 		    	 VentanaPrincipal v = new VentanaPrincipal();
