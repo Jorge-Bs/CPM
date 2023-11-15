@@ -141,7 +141,7 @@ public class VentanaPrincipal extends JFrame {
 			lbVolumen = new JLabel("Vol:");
 			lbVolumen.setHorizontalAlignment(SwingConstants.RIGHT);
 			lbVolumen.setFont(new Font("Dialog", Font.BOLD, 32));
-			lbVolumen.setForeground(Color.ORANGE);
+			lbVolumen.setForeground(new Color(255, 128, 0));
 			lbVolumen.setBackground(Color.BLACK);
 		}
 		return lbVolumen;
@@ -192,7 +192,7 @@ public class VentanaPrincipal extends JFrame {
 			lbLibrary = new JLabel();
 			lbLibrary.setDisplayedMnemonic('l');
 			lbLibrary.setLabelFor(getListLibrary());
-			lbLibrary.setForeground(Color.ORANGE);
+			lbLibrary.setForeground(new Color(255, 128, 0));
 			lbLibrary.setFont(new Font("Dialog", Font.BOLD, 18));
 			lbLibrary.setText("\u266a"+"Library:");
 		}
@@ -201,7 +201,7 @@ public class VentanaPrincipal extends JFrame {
 	private JScrollPane getScrListLibrary() {
 		if (scrListLibrary == null) {
 			scrListLibrary = new JScrollPane();
-			scrListLibrary.setBorder(new LineBorder(Color.ORANGE, 3));
+			scrListLibrary.setBorder(new LineBorder(new Color(255, 128, 0), 3));
 			scrListLibrary.setViewportView(getListLibrary());
 		}
 		return scrListLibrary;
@@ -210,7 +210,7 @@ public class VentanaPrincipal extends JFrame {
 		if (listLibrary == null) {
 			listLibrary = new JList();
 			listLibrary.setBackground(Color.BLACK);
-			listLibrary.setForeground(Color.ORANGE);
+			listLibrary.setForeground(new Color(255, 128, 0));
 		}
 		return listLibrary;
 	}
@@ -249,7 +249,7 @@ public class VentanaPrincipal extends JFrame {
 			lbPlayList.setDisplayedMnemonic('P');
 			lbPlayList.setBackground(Color.BLACK);
 			lbPlayList.setText("♪PlayList:");
-			lbPlayList.setForeground(Color.ORANGE);
+			lbPlayList.setForeground(new Color(255, 128, 0));
 			lbPlayList.setFont(new Font("Dialog", Font.BOLD, 18));
 		}
 		return lbPlayList;
@@ -257,7 +257,7 @@ public class VentanaPrincipal extends JFrame {
 	private JScrollPane getScrPlayList() {
 		if (scrPlayList == null) {
 			scrPlayList = new JScrollPane();
-			scrPlayList.setBorder(new LineBorder(Color.ORANGE, 3));
+			scrPlayList.setBorder(new LineBorder(new Color(255, 128, 0), 3));
 			scrPlayList.setViewportView(getListPlayList());
 		}
 		return scrPlayList;
@@ -265,7 +265,7 @@ public class VentanaPrincipal extends JFrame {
 	private JList getListPlayList() {
 		if (listPlayList == null) {
 			listPlayList = new JList();
-			listPlayList.setForeground(Color.ORANGE);
+			listPlayList.setForeground(new Color(255, 128, 0));
 			listPlayList.setBackground(Color.BLACK);
 		}
 		return listPlayList;
