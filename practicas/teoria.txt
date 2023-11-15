@@ -39,6 +39,9 @@ Menu ayuda(siempre la opcion más a la derecha)
 .repaint() repinta cuando se han eliminado componentes de la ventana
 
 
+
+JSlider min() valor minimo y max()
+
 Layouts
 
 Absolute 	necesita poner un bounds(tamaño)
