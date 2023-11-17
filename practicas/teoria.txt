@@ -40,6 +40,11 @@ Menu ayuda(siempre la opcion más a la derecha)
 
 
 
+
+JFileChooser.showOpenDialog(this); //se abre la venta de explorador devuelve un int
+if el entero = JFileChooser.Aprove_OPtion se cargan los ficheros;
+
+
 JSlider min() valor minimo y max()
 
 Layouts

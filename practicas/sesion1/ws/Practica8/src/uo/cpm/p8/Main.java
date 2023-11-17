@@ -12,6 +12,7 @@ import uo.cpm.p8.ui.VentanaPrincipal;
 
 public class Main {
 	public static void main(String[] args) {
+		MusicPlayer mp = new MusicPlayer();
 		
 		SwingUtilities.invokeLater(new Runnable() {
 			public void run() {
@@ -23,7 +24,7 @@ public class Main {
 		    	  UIManager.setLookAndFeel("com.jtattoo.plaf.hifi.HiFiLookAndFeel");
 		    	  
 		    	  // Crea la ventana
-		    	 VentanaPrincipal v = new VentanaPrincipal();
+		    	 VentanaPrincipal v = new VentanaPrincipal(mp);
 		    	  v.setVisible(true);
 		      } catch (Exception e) {
 		        JOptionPane.showMessageDialog(null, "Error: "+e);
