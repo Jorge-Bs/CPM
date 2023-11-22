@@ -30,14 +30,13 @@ import javax.swing.JSeparator;
 import javax.swing.KeyStroke;
 import java.awt.event.KeyEvent;
 import java.io.File;
-import java.nio.channels.Selector;
 import java.util.List;
-import java.util.Random;
 import java.awt.event.InputEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
 import javax.swing.ListSelectionModel;
 import javax.swing.event.ChangeListener;
+import javax.swing.filechooser.FileNameExtensionFilter;
 import javax.swing.event.ChangeEvent;
 
 public class VentanaPrincipal extends JFrame {
@@ -132,6 +131,8 @@ public class VentanaPrincipal extends JFrame {
 			
 			//Fijar el directorio de despliege del JFileChooser
 			String path = System.getProperty("user.home")+"/music"; //user.dir<-directorio actual, escritorio user.home
+			//establecer un filtro para la extensiones mp3
+			chooser.setFileFilter(new FileNameExtensionFilter("Archvios mp3", "mp3"));
 			chooser.setCurrentDirectory(new File(path));
 		}
 		return chooser;
@@ -281,6 +282,7 @@ public class VentanaPrincipal extends JFrame {
 				public void actionPerformed(ActionEvent e) {
 					cambiarArchivos();
 					enableButtons(true);
+					getMmRandom().setEnabled(true);
 				}
 			});
 			btAdd.setMnemonic('A');
@@ -410,6 +412,7 @@ public class VentanaPrincipal extends JFrame {
 					modelPlayList.removeElement(file);
 					if(modelPlayList.size()==0) {
 						enableButtons(false);
+						getMmRandom().setEnabled(false);
 					}
 				}
 			});
@@ -550,7 +553,9 @@ public class VentanaPrincipal extends JFrame {
 			for(File file:archivos) {
 				//String[] letras = file.toString().split("\");
 				MyFile myFile = new MyFile(file);
-				modelLibrary.addElement(myFile);
+				if(!modelLibrary.contains(myFile)) {
+					modelLibrary.addElement(myFile);
+				}
 			}
 		}
 	}
@@ -581,6 +586,7 @@ public class VentanaPrincipal extends JFrame {
 	private JMenuItem getMmRandom() {
 		if (mmRandom == null) {
 			mmRandom = new JMenuItem("Random");
+			mmRandom.setEnabled(false);
 			mmRandom.addActionListener(new ActionListener() {
 				public void actionPerformed(ActionEvent e) {
 					randomMusic();
@@ -592,8 +598,7 @@ public class VentanaPrincipal extends JFrame {
 	}
 	
 	private void randomMusic() {
-		Random rd = new Random();
-		int value = rd.nextInt(modelPlayList.size());
+		int value = mp.random(modelLibrary.size());
 		getListPlayList().setSelectedIndex(value);
 		play();
 	}

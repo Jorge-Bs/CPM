@@ -2,6 +2,7 @@ package uo.cpm.p8.player;
 
 
 import java.io.File;
+import java.util.Random;
 
 import javazoom.jlgui.basicplayer.*;
 
@@ -38,5 +39,11 @@ public class MusicPlayer {
 		}
 		catch (BasicPlayerException e){
 		}
+	}
+	
+	public int random(int size) {
+		Random rd = new Random();
+		int value = rd.nextInt();
+		return value;
 	}
 }
