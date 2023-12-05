@@ -12,6 +12,8 @@ import javax.swing.JLabel;
 import javax.swing.DefaultListModel;
 import javax.swing.ImageIcon;
 import java.awt.Color;
+import java.awt.Dimension;
+
 import javax.swing.JSlider;
 import java.awt.Font;
 import javax.swing.SwingConstants;
@@ -38,6 +40,11 @@ import javax.swing.ListSelectionModel;
 import javax.swing.event.ChangeListener;
 import javax.swing.filechooser.FileNameExtensionFilter;
 import javax.swing.event.ChangeEvent;
+import javax.help.*;
+import java.net.*;
+import java.io.*;
+import java.awt.event.ComponentAdapter;
+import java.awt.event.ComponentEvent;
 
 public class VentanaPrincipal extends JFrame {
 
@@ -95,6 +102,12 @@ public class VentanaPrincipal extends JFrame {
 	 * Create the frame.
 	 */
 	public VentanaPrincipal(MusicPlayer mp) {
+		addComponentListener(new ComponentAdapter() {
+			@Override
+			public void componentResized(ComponentEvent e) {
+				ventanMin();
+			}
+		});
 		this.mp =mp;
 		setIconImage(Toolkit.getDefaultToolkit().getImage(VentanaPrincipal.class.getResource("/img/logoTitulo.png")));
 		setTitle("EII Music Player");
@@ -110,7 +123,11 @@ public class VentanaPrincipal extends JFrame {
 		contentPane.setLayout(new BorderLayout(0, 0));
 		contentPane.add(getNorthPanel(), BorderLayout.NORTH);
 		contentPane.add(getCenterPanel());
+		
+		setMinimumSize(new Dimension(503, 419));
+		cargaAyuda();
 	}
+	
 	private JPanel getNorthPanel() {
 		if (NorthPanel == null) {
 			NorthPanel = new JPanel();
@@ -162,7 +179,7 @@ public class VentanaPrincipal extends JFrame {
 					modificarVolumen();
 				}
 			});
-			slVolumen.setFocusable(false);//quita el borde del componente al tener el foco
+			//slVolumen.setFocusable(false);//quita el borde del componente al tener el foco
 			slVolumen.setForeground(Color.WHITE);
 			slVolumen.setBackground(new Color(0, 0, 0));
 			slVolumen.setMinimum(0);
@@ -626,5 +643,41 @@ public class VentanaPrincipal extends JFrame {
 			separator_1 = new JSeparator();
 		}
 		return separator_1;
+	}
+	
+	private void cargaAyuda(){
+
+		   URL hsURL;
+		   HelpSet hs;
+
+		    try {
+			    	File fichero = new File("help/ayuda.hs");
+			    	hsURL = fichero.toURI().toURL();
+			        hs = new HelpSet(null, hsURL);
+			      }
+
+		    catch (Exception e){
+		      System.out.println("Ayuda no encontrada");
+		      return;
+		   }
+
+		   HelpBroker hb = hs.createHelpBroker();
+		   hb.initPresentation();
+
+		   hb.enableHelpKey(getRootPane(),"intro", hs);//habilita la tecla f1
+		   //getRootPane incluye todos los paneles de la app
+		   
+		   //asociar ayuda a un elemento a un elemento de menu
+		   hb.enableHelpOnButton(getMmContents(), "intro", hs);
+		   
+		   //ayuda sensible a un componente el componete tiene que estar activo y seleccionado
+		   hb.enableHelp(getBtAdd(), "add", hs);
+		   hb.enableHelp(getSlVolumen(), "vol", hs);
+	}
+	
+	
+	private void ventanMin() {
+		Dimension d = this.getSize();
+		System.out.println(d);
 	}
 }

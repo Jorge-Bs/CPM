@@ -1,0 +1,31 @@
+	private JButton nuevoBoton(Integer posicion) {
+		JButton boton = new JButton("");
+		boton.setBackground(Color.white);
+		boton.setBorder(new LineBorder(Color.LIGHT_GRAY, 2, true));
+		boton.setToolTipText(carta.getListaArticulos().get(posicion).toString());
+		boton.setActionCommand(posicion.toString());
+		boton.addActionListener(aB);
+		return boton;
+	}
+
+	class AccionBoton implements ActionListener {
+		public void actionPerformed(ActionEvent e) {
+			JButton bt = (JButton) e.getSource();
+			añadirAPedido(Integer.parseInt(bt.getActionCommand()));
+		}
+	}
+
+
+	private void asociaImagenBotones() {
+		for (int i = 0; i < pnArticulos.getComponents().length; i++)
+		{
+			JButton boton = (JButton) (pnArticulos.getComponents()[i]);
+			setImagenAdaptada(boton, "/img/"+ carta.getListaArticulos().get(i).getCodigo() + ".png");
+		}
+	}
+
+	private void setImagenAdaptada(JButton boton, String rutaImagen){
+		 Image imgOriginal = new ImageIcon(getClass().getResource(rutaImagen)).getImage(); 
+		 Image imgEscalada = imgOriginal.getScaledInstance(boton.getWidth(),boton.getHeight(), Image.SCALE_SMOOTH);
+		 boton.setIcon(new ImageIcon(imgEscalada));
+	}

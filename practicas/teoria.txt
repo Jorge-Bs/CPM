@@ -53,3 +53,15 @@ Absolute 	necesita poner un bounds(tamaño)
 Grid 		divide un panel o la pantalla de igual tamaño, tiene como param las filas y las columnas
 Flow 		coloca los componentes uno a continuacion del otro, pone el primero en el centro,propiedad de aligmente del layout, los 		sucesivos a su derecha pero va desplazando el conjunto hacia la izquierda, matiene el tamaño de los componentes
 BorderLayout	Divide la pantalla en Norte, Sur, Este, Oeste y Centro, cada zona requiere un panel
+Card Layout 	tener varias pantallas en la principal, tiene estos 3 metodos (next, show, previous), sigue el orden de los paneles,
+		el show muestra el panel que tu decidas
+
+
+Ayuda
+-----------------------
+1 construir topic html
+2 construir map.jhm
+3 archivo helpset
+4 modificar toc (table of contents)
+5 indice -----> no es lo mismo que toc, tiene que estar ordenado, y en minusculas
+6 jhindex sobre la carpeta con htmls

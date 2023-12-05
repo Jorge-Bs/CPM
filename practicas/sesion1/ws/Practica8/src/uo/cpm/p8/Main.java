@@ -20,6 +20,7 @@ public class Main {
 		    	  // Cambia el look and feel
 		    	 Properties props = new Properties();
 		    	  props.put("logoString", "");
+		    	  props.put("focusColor", "0 0 0");
 		    	  HiFiLookAndFeel.setCurrentTheme(props);
 		    	  UIManager.setLookAndFeel("com.jtattoo.plaf.hifi.HiFiLookAndFeel");
 		    	  
