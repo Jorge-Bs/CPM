@@ -12,6 +12,9 @@ public class Game {
 	private Casilla board[][];
 	private List<String> listaType = new ArrayList<>();
 	
+	private int diceValue;
+	private int remainingMoves;
+	
 	public Game() {
 		inicializar();
 	}
@@ -19,6 +22,7 @@ public class Game {
 	public void inicializar() {
 		createList();
 		fillBoard();
+		remainingMoves=7;
 	}
 	
 	private void fillBoard() {
@@ -89,6 +93,19 @@ public class Game {
 	
 	public Casilla getCasilla(int fila,int columna) {
 		return board[fila][columna];
+	}
+	
+	public boolean isFinished() {
+		return remainingMoves==0;
+	}
+	
+	public void lanzar() {
+		remainingMoves--;
+		diceValue=Dice.lanzar();
+	}
+	
+	public int getDiceValue() {
+		return diceValue;
 	}
 	
 }

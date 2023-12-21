@@ -6,22 +6,34 @@ import java.util.ResourceBundle;
 
 import javax.swing.JDialog;
 import java.awt.Toolkit;
+
+
 import javax.swing.JPanel;
+
+import javax.swing.UIManager;
 
 import castleBooker.game.Casilla;
 import castleBooker.game.Game;
 import castleBooker.sevice.App;
 import java.awt.GridLayout;
 import java.awt.Image;
-
 import javax.swing.JButton;
-import javax.swing.Icon;
+
 import javax.swing.ImageIcon;
 import java.awt.Color;
-import java.awt.FlowLayout;
-import java.awt.BorderLayout;
 import java.awt.event.ComponentAdapter;
 import java.awt.event.ComponentEvent;
+
+
+import javax.swing.JLabel;
+import javax.swing.JOptionPane;
+
+
+import javax.swing.border.TitledBorder;
+import javax.swing.border.EtchedBorder;
+import java.awt.event.ActionListener;
+import java.awt.event.ActionEvent;
+
 
 public class GameUi extends JDialog {
 	
@@ -31,9 +43,15 @@ public class GameUi extends JDialog {
 	private static final long serialVersionUID = 1L;
 	private Locale location = new Locale("es");
 	private JPanel pnBoard;
-	private JPanel pnDice;
+	private JPanel pnDiceValue;
 	private App app= new App();
-
+	private JPanel PnResult;
+	private JPanel pnDic;
+	private JLabel lbResult;
+	
+	
+	private ResourceBundle textos;
+	private JButton btDice;
 
 	/**
 	 * Launch the application.
@@ -42,6 +60,7 @@ public class GameUi extends JDialog {
 		EventQueue.invokeLater(new Runnable() {
 			public void run() {
 				try {
+					UIManager.setLookAndFeel("com.formdev.flatlaf.FlatIntelliJLaf");
 					GameUi dialog = new GameUi();
 					dialog.setDefaultCloseOperation(JDialog.DISPOSE_ON_CLOSE);
 					dialog.setVisible(true);
@@ -59,16 +78,17 @@ public class GameUi extends JDialog {
 		addComponentListener(new ComponentAdapter() {
 			@Override
 			public void componentResized(ComponentEvent e) {
-				setButtonsImage();
+				setImages();
 			}
 		});
 		setIconImage(Toolkit.getDefaultToolkit().getImage(GameUi.class.getResource("/img/icon.png")));
-		setBounds(100, 100, 662, 454);
+		setBounds(100, 100, 661, 712);
 		getContentPane().setLayout(null);
 		getContentPane().add(getPnBoard());
-		getContentPane().add(getPnDice());
+		getContentPane().add(getPnDiceValue());
 
 		setTextLocation();
+		
 	}
 	
 	public Locale getLocale() {
@@ -80,24 +100,28 @@ public class GameUi extends JDialog {
 	}
 
 	private void setTextLocation() {
-		ResourceBundle textos = ResourceBundle.getBundle("rcs/text",getLocale());
+		textos = ResourceBundle.getBundle("rcs/text",getLocale());
 		setTitle(textos.getString("titulo"));
+		((TitledBorder)pnDiceValue.getBorder()).setTitle(textos.getString("pnDice"));
 	}
 	private JPanel getPnBoard() {
 		if (pnBoard == null) {
 			pnBoard = new JPanel();
-			pnBoard.setBounds(0, 0, 648, 407);
+			pnBoard.setBounds(0, 0, 647, 483);
 			fillBoard();
 		}
 		return pnBoard;
 	}
-	private JPanel getPnDice() {
-		if (pnDice == null) {
-			pnDice = new JPanel();
-			pnDice.setBounds(0, 407, 648, 10);
-			pnDice.setLayout(new FlowLayout(FlowLayout.CENTER, 5, 5));
+	private JPanel getPnDiceValue() {
+		if (pnDiceValue == null) {
+			pnDiceValue = new JPanel();
+			pnDiceValue.setBounds(5, 492, 632, 182);
+			pnDiceValue.setBorder(new TitledBorder(new EtchedBorder(EtchedBorder.LOWERED, new Color(255, 255, 255), new Color(160, 160, 160)), "", TitledBorder.LEADING, TitledBorder.TOP, null, new Color(0, 0, 0)));
+			pnDiceValue.setLayout(null);
+			pnDiceValue.add(getPnDic());
+			pnDiceValue.add(getPnResult());
 		}
-		return pnDice;
+		return pnDiceValue;
 	}
 	
 	private void fillBoard() {;
@@ -112,7 +136,9 @@ public class GameUi extends JDialog {
 	}
 
 	private JButton createBoton() {
-		return Button();
+		JButton button = new JButton();
+		button.setBackground(new Color(255, 255, 255));
+		return button;
 	}
 	
 
@@ -120,10 +146,11 @@ public class GameUi extends JDialog {
 		getPnBoard().setLayout(new GridLayout(row,0, 0, 0));
 	}
 	
-	private JButton Button() {
-		JButton button = new JButton();
-		button.setBackground(new Color(240, 240, 240));
-		return button;
+	
+	private void setImages() {
+		setButtonsImage();
+		setDiceImage();
+		validate();
 	}
 	
 	private void setButtonsImage(){
@@ -135,19 +162,21 @@ public class GameUi extends JDialog {
 				counter++;
 			}
 		}
-		validate();
 	}
 	
-	private void setImagenAdaptada(JButton boton, String rutaImagen){
+	private void setDiceImage() {
+		String path= "/img/dice.png";
+		int width=getBtDice().getWidth();
+		int height = getBtDice().getHeight();
+		getBtDice().setIcon(setImagenAdaptada(width,height, path));
+	}
+	
+	private ImageIcon setImagenAdaptada(int width, int height, String rutaImagen){
 		 Image imgOriginal = new ImageIcon(getClass().getResource(rutaImagen)).getImage(); 
-		 Image imgEscalada = imgOriginal.getScaledInstance(boton.getWidth(),boton.getHeight(), Image.SCALE_FAST);
+		 Image imgEscalada = imgOriginal.getScaledInstance(width,height, Image.SCALE_FAST);
 		 ImageIcon icon = new ImageIcon(imgEscalada);
-		 if(rutaImagen.equals("/img/wall.png")) {
-			 disableButton(boton);
-			 boton.setDisabledIcon(icon);
-		 }
-		 boton.setIcon(icon);
-		 boton.setBorderPainted(false);
+		 icon.setDescription("dice.png");
+		 return icon;
 	}
 
 	private void disableButton(JButton boton) {
@@ -156,6 +185,72 @@ public class GameUi extends JDialog {
 
 	private void setImageButton(JButton button, Casilla casilla) {
 		String path = "/img/"+casilla.getImg();
-		setImagenAdaptada(button, path);
+		int width=button.getWidth();
+		int height = button.getHeight();
+		
+		ImageIcon image = setImagenAdaptada(width,height, path);
+		
+		
+		if(path.equals("/img/wall.png")) {
+			 disableButton(button);
+			 button.setDisabledIcon(image);
+			 button.setBorderPainted(false);
+		 }
+		 button.setIcon(image);
+	}
+	private JPanel getPnResult() {
+		if (PnResult == null) {
+			PnResult = new JPanel();
+			PnResult.setBounds(320, 20, 305, 144);
+			PnResult.setLayout(null);
+			PnResult.add(getLbResult());
+		}
+		return PnResult;
+	}
+	private JPanel getPnDic() {
+		if (pnDic == null) {
+			pnDic = new JPanel();
+			pnDic.setBounds(5, 20, 321, 144);
+			pnDic.setLayout(null);
+			pnDic.add(getBtDice());
+		}
+		return pnDic;
+	}
+	private JLabel getLbResult() {
+		if (lbResult == null) {
+			lbResult = new JLabel("");
+			lbResult.setBounds(10, 11, 285, 122);
+		}
+		return lbResult;
+	}
+	
+	
+	
+	private void lanzar() {
+		if(!app.isFinishedGame()) {
+			app.lanzar();
+			pintarResultado();
+			System.out.print(app.getDiceValue());
+		}else {
+			JOptionPane.showMessageDialog(null, textos.getString("finJuego"));
+		}
+		
+	}
+	
+	private void pintarResultado() {
+		String path = "/img/"+ 2+".png";
+		getLbResult().setIcon(setImagenAdaptada(150, 150, path));
+	}
+	private JButton getBtDice() {
+		if (btDice == null) {
+			btDice = new JButton("");
+			btDice.addActionListener(new ActionListener() {
+				public void actionPerformed(ActionEvent e) {
+					lanzar();
+				}
+			});
+			btDice.setBounds(62, 11, 130, 130);
+		}
+		return btDice;
 	}
 }

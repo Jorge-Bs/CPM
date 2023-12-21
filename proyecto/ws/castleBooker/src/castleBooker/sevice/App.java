@@ -11,4 +11,17 @@ public class App {
 	public Casilla getCasilla(int fila,int columna) {
 		return booker.getGame().getCasilla(fila, columna);
 	}
+	
+	public void lanzar() {
+		booker.getGame().lanzar();
+	}
+	
+	public int getDiceValue() {
+		return booker.getGame().getDiceValue();
+	}
+	
+	public boolean isFinishedGame() {
+		return booker.getGame().isFinished();
+	}
+	
 }
