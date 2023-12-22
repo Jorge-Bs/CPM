@@ -18,9 +18,10 @@ import castleBooker.sevice.App;
 import java.awt.GridLayout;
 import java.awt.Image;
 import javax.swing.JButton;
-
+import javax.swing.Icon;
 import javax.swing.ImageIcon;
 import java.awt.Color;
+import java.awt.Component;
 import java.awt.event.ComponentAdapter;
 import java.awt.event.ComponentEvent;
 
@@ -52,6 +53,7 @@ public class GameUi extends JDialog {
 	
 	private ResourceBundle textos;
 	private JButton btDice;
+	private ProcesaMovimiento pM = new ProcesaMovimiento();
 
 	/**
 	 * Launch the application.
@@ -129,6 +131,9 @@ public class GameUi extends JDialog {
 		for(int i=0;i<Game.FILAS;i++) {
 			for(int j=0;j<Game.COLUMNAS;j++) {
 				JButton button = createBoton();
+				button.setEnabled(false);
+				button.setActionCommand(""+j);
+				button.addActionListener(pM);
 				pnBoard.add(button);
 			}
 		}
@@ -166,16 +171,19 @@ public class GameUi extends JDialog {
 	
 	private void setDiceImage() {
 		String path= "/img/dice.png";
+		String name="dice.png";
 		int width=getBtDice().getWidth();
 		int height = getBtDice().getHeight();
-		getBtDice().setIcon(setImagenAdaptada(width,height, path));
+		ImageIcon img= setImagenAdaptada(width,height, path,name);
+		getBtDice().setIcon(img);
+		getBtDice().setDisabledIcon(img);
 	}
 	
-	private ImageIcon setImagenAdaptada(int width, int height, String rutaImagen){
+	private ImageIcon setImagenAdaptada(int width, int height, String rutaImagen,String name){
 		 Image imgOriginal = new ImageIcon(getClass().getResource(rutaImagen)).getImage(); 
 		 Image imgEscalada = imgOriginal.getScaledInstance(width,height, Image.SCALE_FAST);
 		 ImageIcon icon = new ImageIcon(imgEscalada);
-		 icon.setDescription("dice.png");
+		 icon.setDescription(name);
 		 return icon;
 	}
 
@@ -184,12 +192,13 @@ public class GameUi extends JDialog {
 	}
 
 	private void setImageButton(JButton button, Casilla casilla) {
-		String path = "/img/"+casilla.getImg();
+		String name=casilla.getImg();
+		String path = "/img/"+name;
 		int width=button.getWidth();
 		int height = button.getHeight();
 		
-		ImageIcon image = setImagenAdaptada(width,height, path);
-		
+		ImageIcon image = setImagenAdaptada(width,height, path,name);
+		button.setDisabledIcon(image);
 		
 		if(path.equals("/img/wall.png")) {
 			 disableButton(button);
@@ -227,19 +236,27 @@ public class GameUi extends JDialog {
 	
 	
 	private void lanzar() {
-		if(!app.isFinishedGame()) {
-			app.lanzar();
-			pintarResultado();
-			System.out.print(app.getDiceValue());
+		app.lanzar();
+		enableGhostBusterButtons(true);
+		pintarResultado();
+	}
+	
+	private void showFinalDialog() {
+		if(app.canGetDiscount()) {
+			double discount = app.getDiscountValuePercentage();
+			String messageDiscount = textos.getString("Descuento") + discount+"%";
+			String titleDiscount = textos.getString("TituloDescuentoFinal");
+			JOptionPane.showMessageDialog(null, messageDiscount, titleDiscount , JOptionPane.INFORMATION_MESSAGE);
 		}else {
-			JOptionPane.showMessageDialog(null, textos.getString("finJuego"));
+			String messageNoDiscount = textos.getString("NoDescuento");
+			String titleNoDiscount = textos.getString("TituloSinDescuentoFinal");
+			JOptionPane.showMessageDialog(null, messageNoDiscount, titleNoDiscount , JOptionPane.INFORMATION_MESSAGE);
 		}
-		
 	}
 	
 	private void pintarResultado() {
-		String path = "/img/"+ 2+".png";
-		getLbResult().setIcon(setImagenAdaptada(150, 150, path));
+		String path = "/img/"+app.getDiceValue()+".png";
+		getLbResult().setIcon(setImagenAdaptada(150, 150, path,"2"));
 	}
 	private JButton getBtDice() {
 		if (btDice == null) {
@@ -247,10 +264,64 @@ public class GameUi extends JDialog {
 			btDice.addActionListener(new ActionListener() {
 				public void actionPerformed(ActionEvent e) {
 					lanzar();
+					getBtDice().setEnabled(false);
 				}
 			});
 			btDice.setBounds(62, 11, 130, 130);
 		}
 		return btDice;
 	}
+	
+	private void enableGhostBusterButtons(boolean status) {
+		Component[] lista = getPnBoard().getComponents();
+		for(Component elemento:lista) {
+			JButton ele = (JButton)elemento;
+			if(ele.getIcon().toString().equals("ghostBuster.png")) {
+				ele.setEnabled(status);
+			}
+
+		}
+	}
+	
+	private class ProcesaMovimiento implements ActionListener{
+
+		@Override
+		public void actionPerformed(ActionEvent e) {
+			String value = e.getActionCommand();
+			mover(value);
+		}
+
+		
+	}
+	private void mover(String value) {
+		int move=Integer.parseInt(value);
+		if(app.move(move)) {
+			enableGhostBusterButtons(false);
+			pintarImagenes(move);
+			clearResult();
+			checkEnd();
+		}
+	}
+	
+	private void pintarImagenes(int value) {
+		int counter = value;
+		for(int i=0;i<Game.FILAS;i++) {
+			JButton button =(JButton)getPnBoard().getComponent(counter);
+			setImageButton(button,app.getCasilla(i, value));
+			counter+=Game.COLUMNAS;
+		}
+	}
+	
+	private void checkEnd() {
+		if(!app.isFinishedGame()) {
+			getBtDice().setEnabled(true);
+		}else {
+			showFinalDialog();
+		}
+	}
+	
+	private void clearResult() {
+		getLbResult().setIcon(null);
+	}
+	
 }

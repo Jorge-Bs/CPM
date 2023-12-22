@@ -1,8 +1,12 @@
 package castleBooker.game;
 
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Random;
+import java.util.Set;
+
+import castleBooker.booker.Discount;
 
 public class Game {
 
@@ -15,6 +19,12 @@ public class Game {
 	private int diceValue;
 	private int remainingMoves;
 	
+	private Set<String> enemies;
+	
+	private Discount discount;
+	
+
+	
 	public Game() {
 		inicializar();
 	}
@@ -23,8 +33,18 @@ public class Game {
 		createList();
 		fillBoard();
 		remainingMoves=7;
+		defaultGhost();
+		discount=null;
 	}
 	
+	private void defaultGhost() {
+		enemies = new HashSet<>();
+	}
+
+	protected void setDiscount(Discount discount) {
+		this.discount = discount;
+	}
+
 	private void fillBoard() {
 		board= new Casilla[FILAS][COLUMNAS];
 		int notToFill=6;
@@ -95,10 +115,6 @@ public class Game {
 		return board[fila][columna];
 	}
 	
-	public boolean isFinished() {
-		return remainingMoves==0;
-	}
-	
 	public void lanzar() {
 		remainingMoves--;
 		diceValue=Dice.lanzar();
@@ -107,5 +123,65 @@ public class Game {
 	public int getDiceValue() {
 		return diceValue;
 	}
+	
+	private int search(int posicion) {
+		for(int i=0;i<FILAS;i++) {
+			if(board[i][posicion].getType().equals("G")) {
+				return i;
+			}
+		}
+		throw new IllegalArgumentException("El elemento no se encontró");
+	}
+
+	public boolean move(int location) { 
+		int ghostLocation=search(location);
+		int place = ghostLocation-getDiceValue();
+		if(place<0 || board[place][location].getType().equals("pared")) {
+			return false;
+		}else {
+			setPoints(board[place][location]);
+			board[place][location]=board[ghostLocation][location];
+			board[ghostLocation][location]=new Casilla("pared", "wall");
+			return true;
+		}
+	}
+
+	private void setPoints(Casilla casilla) {
+		String type = casilla.getType();
+		enemies.add(type);
+	}
+	
+	public boolean isFinished() {
+		if(remainingMoves==0 || (oneTypeDefeat()&& enemies.contains("X"))) {
+			calculateDiscount();
+			return true;
+		}
+		return false;
+	}
+	
+	private boolean oneTypeDefeat() {
+		return enemies.contains("A") && enemies.contains("B") && enemies.contains("C") && 
+				enemies.contains("D") && enemies.contains("E");
+	}
+	
+	public boolean canGetDicount() {
+		return getDiscount()!=0;
+	}
+	
+	private void calculateDiscount() {
+		if(oneTypeDefeat()&& enemies.contains("X")) {
+			setDiscount(Discount.EXTRA25);
+		}else if(oneTypeDefeat()) {
+			setDiscount(Discount.EXTRA10);
+		}
+	}
+	
+	public double getDiscount() {
+		if(discount==null) return 0;
+		else {
+			return discount.getAmount();
+		}
+	}
+	
 	
 }

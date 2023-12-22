@@ -24,4 +24,20 @@ public class App {
 		return booker.getGame().isFinished();
 	}
 	
+	public boolean move(int location) {
+		return booker.getGame().move(location);
+	}
+
+	public boolean canGetDiscount() {
+		return booker.getGame().canGetDicount();
+	}
+
+	public double getDiscountValue() {
+		return booker.getGame().getDiscount();
+	}
+	
+	public double getDiscountValuePercentage() {
+		return booker.getGame().getDiscount()*100;
+	}
+	
 }

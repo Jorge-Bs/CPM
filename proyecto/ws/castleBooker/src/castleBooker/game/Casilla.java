@@ -19,10 +19,10 @@ public class Casilla {
 	public String getImg() {
 		return img;
 	}
-	private void setType(String type) {
+	 void setType(String type) {
 		this.type = type;
 	}
-	private void setImg(String img) {
+	 void setImg(String img) {
 		this.img = img+".png";
 	}
 	 
