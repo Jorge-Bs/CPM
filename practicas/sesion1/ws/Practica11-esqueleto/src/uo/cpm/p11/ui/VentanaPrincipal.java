@@ -3,6 +3,7 @@ package uo.cpm.p11.ui;
 
 import javax.swing.*;
 import java.awt.Color;
+import java.awt.Component;
 import java.awt.Font;
 
 
@@ -15,11 +16,15 @@ import java.awt.Rectangle;
 import java.awt.BorderLayout;
 import java.awt.event.ComponentAdapter;
 import java.awt.event.ComponentEvent;
+import java.awt.event.KeyAdapter;
+import java.awt.event.KeyEvent;
+
 import javax.swing.border.LineBorder;
 import java.awt.CardLayout;
 import javax.swing.border.TitledBorder;
 import uo.cpm.p11.service.*;
 import uo.cpm.p11.model.Articulo;
+import java.awt.FlowLayout;
 
 public class VentanaPrincipal extends JFrame {
 	private static final long serialVersionUID = 1L;
@@ -70,7 +75,20 @@ public class VentanaPrincipal extends JFrame {
 	
 	private DefaultListModel<Articulo> modeloListComida;
 	private DefaultListModel<Articulo> modeloListBebida;
+	private JButton btAnular2;
+	private JButton btSiguiente2;
+	private JButton btnAnterior;
+	private JButton btConfirmar;
+	private ProcesaSupr ps= new ProcesaSupr();
+	private JPanel pnCentroArticulos;
+	private JPanel pnFIltro;
+	private JButton btTodo;
+	private JButton btHamb;
+	private JButton btComple;
+	private JButton btPostre;
+	private JButton btBebidas;
 
+	private ProcesaBoton pbt= new ProcesaBoton();
 
 	/**
 	 * Create the frame.
@@ -80,6 +98,7 @@ public class VentanaPrincipal extends JFrame {
 			@Override
 			public void componentResized(ComponentEvent e) {
 				asociaImagenBotones();
+				setImgFiltro();
 			}
 		});
 		this.mcdonalds = mc;
@@ -87,7 +106,7 @@ public class VentanaPrincipal extends JFrame {
 		setIconImage(Toolkit.getDefaultToolkit().getImage(VentanaPrincipal.class.getResource("/img/logo.PNG")));
 		setTitle("McDonald's España");
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		setBounds(100, 100, 837, 820);
+		setBounds(100, 100, 916, 820);
 		setLocationRelativeTo(null);
 		contentPane = new JPanel();
 		contentPane.setBackground(Color.WHITE);
@@ -116,9 +135,19 @@ public class VentanaPrincipal extends JFrame {
 	
 	protected void inicializar() {
 		mcdonalds.inicializarPedido();
+		borrarListas();
+		showPrice();
+		disableButtons();
+		desabilitaBotones("Todo");
 		//COMPLETAR
 	}
 	
+
+	private void borrarListas() {
+		modeloListBebida.clear();
+		modeloListComida.clear();
+	}
+
 	private JPanel getPnInfo1() {
 		if (pnInfo1 == null) {
 			pnInfo1 = new JPanel();
@@ -192,6 +221,7 @@ public class VentanaPrincipal extends JFrame {
 		mcdonalds.añadirAPedido(mcdonalds.getArticulo(posArticuloEnCarta), 1);
 		mostrarEnLista();
 		showPrice();
+		enableButtons();
 	}
 	//COMPLETAR 3
 	private void mostrarEnLista() {//(Articulo a)
@@ -200,7 +230,7 @@ public class VentanaPrincipal extends JFrame {
 	}
 	
 	private void showPrice() {
-		float precio = mcdonalds.getTotalPedido();
+		String precio =String.format("%.2f", mcdonalds.getTotalPedido()); 
 		getTxPrecio().setText("Precio del pedido: "+precio+"€");
 	}
 	
@@ -216,15 +246,27 @@ public class VentanaPrincipal extends JFrame {
 
 	//COMPLETAR 4
 	private void mostrarPn1() {
+		getPnInfo1().add(getTabbedPane());
+		getPnBts1().add(getTxPrecio(),0);
+		CardLayout la = (CardLayout)pnContenidos.getLayout();
+		la.show(pnContenidos, "pn1");;
 	}
 	
 	private void mostrarPn2() {
+		getPnInfo2().add(getTabbedPane());
+		getPnBts2().add(getTxPrecio(),0);
+		CardLayout la = (CardLayout)pnContenidos.getLayout();
+		la.show(pnContenidos, "pn2");
 	}
 	
 	private void mostrarPn3() {
+		
 		if (comprobarCampos())
 		{   
-			// COMPLETAR
+			getPnInfo3().add(getTabbedPane());
+			getPnBts3().add(getTxPrecio(),0);
+			CardLayout la = (CardLayout)pnContenidos.getLayout();
+			la.show(pnContenidos, "pn3");
 		}
 	}
 	
@@ -234,8 +276,8 @@ public class VentanaPrincipal extends JFrame {
 			pnBts1.setBackground(Color.WHITE);
 			pnBts1.setLayout(new GridLayout(1, 3, 0, 0));
 			pnBts1.add(getTxPrecio());
-			pnBts1.add(getButton_1());
-			pnBts1.add(getButton_2());
+			pnBts1.add(getBtAnular());
+			pnBts1.add(getBtSiguiente());
 		}
 		return pnBts1;
 	}
@@ -245,6 +287,8 @@ public class VentanaPrincipal extends JFrame {
 			pnBts2 = new JPanel();
 			pnBts2.setBackground(Color.WHITE);
 			pnBts2.setLayout(new GridLayout(1, 3, 0, 0));
+			pnBts2.add(getBtAnular2());
+			pnBts2.add(getBtSiguiente2());
 		}
 		return pnBts2;
 	}
@@ -254,6 +298,8 @@ public class VentanaPrincipal extends JFrame {
 			pnBts3 = new JPanel();
 			pnBts3.setBackground(Color.WHITE);
 			pnBts3.setLayout(new GridLayout(1, 3, 0, 0));
+			pnBts3.add(getBtnAnterior());
+			pnBts3.add(getBtConfirmar());
 		}
 		return pnBts3;
 	}
@@ -421,8 +467,8 @@ public class VentanaPrincipal extends JFrame {
 		if (pn1 == null) {
 			pn1 = new JPanel();
 			pn1.setLayout(new BorderLayout(0, 0));
-			pn1.add(getPnArticulos(), BorderLayout.CENTER);
 			pn1.add(getPnInfo1(), BorderLayout.SOUTH);
+			pn1.add(getPnCentroArticulos());
 		}
 		return pn1;
 	}
@@ -525,7 +571,7 @@ public class VentanaPrincipal extends JFrame {
 	private void finalizar() {
 		mcdonalds.getPedido().grabarPedido();
 		inicializar();
-		//COMPLETAR
+		mostrarPn1();
 	}
 	
 	private JLabel getLbAviso() {
@@ -573,18 +619,34 @@ public class VentanaPrincipal extends JFrame {
 		}
 		return txPrecio;
 	}
-	private JButton getButton_1() {
+	
+	
+	private JButton getBtAnular() {
 		if (btAnular == null) {
 			btAnular = new JButton("Anular");
+			btAnular.setMnemonic('a');
+			btAnular.addActionListener(new ActionListener() {
+				public void actionPerformed(ActionEvent e) {
+					inicializar();
+				}
+			});
+			btAnular.setEnabled(false);
 			btAnular.setToolTipText("a");
 			btAnular.setBackground(new Color(255, 0, 0));
 			btAnular.setForeground(new Color(255, 255, 255));
 		}
 		return btAnular;
 	}
-	private JButton getButton_2() {
+	private JButton getBtSiguiente() {
 		if (btSiguiente == null) {
 			btSiguiente = new JButton("Siguiente");
+			btSiguiente.setMnemonic('s');
+			btSiguiente.setEnabled(false);
+			btSiguiente.addActionListener(new ActionListener() {
+				public void actionPerformed(ActionEvent e) {
+					mostrarPn2();
+				}
+			});
 			btSiguiente.setToolTipText("s");
 			btSiguiente.setForeground(new Color(255, 255, 255));
 			btSiguiente.setBackground(new Color(0, 255, 0));
@@ -601,6 +663,17 @@ public class VentanaPrincipal extends JFrame {
 		}
 		return tabbedPane;
 	}
+	
+	private void enableButtons() {
+		getBtSiguiente().setEnabled(true);
+		getBtAnular().setEnabled(true);
+	}
+	
+	private void disableButtons() {
+		getBtSiguiente().setEnabled(false);
+		getBtAnular().setEnabled(false);
+	}
+	
 	private JScrollPane getScrComida() {
 		if (scrComida == null) {
 			scrComida = new JScrollPane();
@@ -619,6 +692,9 @@ public class VentanaPrincipal extends JFrame {
 		if (listComida == null) {
 			modeloListComida = new DefaultListModel<Articulo>();
 			listComida = new JList<Articulo>(modeloListComida);
+			listComida.setToolTipText("Sup para eliminar");
+			listComida.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
+			listComida.addKeyListener(ps);
 		}
 		return listComida;
 	}
@@ -626,14 +702,215 @@ public class VentanaPrincipal extends JFrame {
 		if (listBebida == null) {
 			modeloListBebida = new DefaultListModel<Articulo>();
 			listBebida = new JList<Articulo>(modeloListBebida);
+			listBebida.setToolTipText("Sup para eliminar");
+			listBebida.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
+			listBebida.addKeyListener(ps);
 		}
 		return listBebida;
 	}
 	
 	private void crearBotones() {
-		for(int i=0;i<mcdonalds.getArticulosCarta().length;i++) {
+		for(int i=0;i<mcdonalds.numArticulosCarta();i++) {
 			getPnArticulos().add(nuevoBoton(i));
 		}
 		validate();
+	}
+	private JButton getBtAnular2() {
+		if (btAnular2 == null) {
+			btAnular2 = new JButton("Anterior");
+			btAnular2.setMnemonic('a');
+			btAnular2.addActionListener(new ActionListener() {
+				public void actionPerformed(ActionEvent e) {
+					mostrarPn1();
+				}
+			});
+			btAnular2.setBackground(new Color(255, 0, 0));
+		}
+		return btAnular2;
+	}
+	private JButton getBtSiguiente2() {
+		if (btSiguiente2 == null) {
+			btSiguiente2 = new JButton("Siguiente");
+			btSiguiente2.setMnemonic('s');
+			btSiguiente2.addActionListener(new ActionListener() {
+				public void actionPerformed(ActionEvent e) {
+					mostrarPn3();
+				}
+			});
+			btSiguiente2.setBackground(new Color(0, 255, 0));
+		}
+		return btSiguiente2;
+	}
+	private JButton getBtnAnterior() {
+		if (btnAnterior == null) {
+			btnAnterior = new JButton("Anterior");
+			btnAnterior.addActionListener(new ActionListener() {
+				public void actionPerformed(ActionEvent e) {
+					mostrarPn2();
+				}
+			});
+			btnAnterior.setMnemonic('a');
+			btnAnterior.setBackground(new Color(255, 0, 0));
+		}
+		return btnAnterior;
+	}
+	private JButton getBtConfirmar() {
+		if (btConfirmar == null) {
+			btConfirmar = new JButton("Finalizar");
+			btConfirmar.setMnemonic('f');
+			btConfirmar.setBackground(new Color(0, 255, 0));
+			btConfirmar.addActionListener(new ActionListener() {
+				public void actionPerformed(ActionEvent e) {
+					finalizar();
+				}
+			});
+		}
+		return btConfirmar;
+	}
+	
+	private class ProcesaSupr extends KeyAdapter{
+		@Override
+		public void keyPressed(KeyEvent e) {
+			if(e.getKeyCode()==KeyEvent.VK_DELETE) {
+				eliminarArticuloPedido(e);
+			}
+		}
+	}
+	
+	private void eliminarArticuloPedido(KeyEvent e) {
+		JList<Articulo> lista=(JList<Articulo>)e.getSource();
+		Articulo art =lista.getSelectedValue();
+		mcdonalds.remove(art, 1);
+
+		mostrarEnLista();
+		showPrice();
+		checkList();
+	}
+	
+	private void checkList() {
+		if(mcdonalds.getTotalPedido()==0.0) {
+			disableButtons();
+			mostrarPn1();
+		}
+	}
+	private JPanel getPnCentroArticulos() {
+		if (pnCentroArticulos == null) {
+			pnCentroArticulos = new JPanel();
+			pnCentroArticulos.setLayout(new BorderLayout(0, 0));
+			pnCentroArticulos.add(getPnArticulos(), BorderLayout.CENTER);
+			pnCentroArticulos.add(getPnFIltro(), BorderLayout.WEST);
+		}
+		return pnCentroArticulos;
+	}
+	private JPanel getPnFIltro() {
+		if (pnFIltro == null) {
+			pnFIltro = new JPanel();
+			pnFIltro.setLayout(new GridLayout(0, 1, 0, 2));
+			pnFIltro.add(getBtHamb());
+			pnFIltro.add(getBtBebidas());
+			pnFIltro.add(getBtPostre());
+			pnFIltro.add(getBtComple());
+			pnFIltro.add(getBtTodo());
+		}
+		return pnFIltro;
+	}
+	
+	private void setImgFiltro() {
+		Component[] botones = pnFIltro.getComponents();
+		for(Component bt:botones) {
+			JButton b = (JButton) bt;
+			if(!b.getActionCommand().equals("Todo")) {
+				setImagenAdaptadaFiltro(b,"/img/"+b.getActionCommand()+".png" );
+			}
+		}
+	}
+	
+	private void setImagenAdaptadaFiltro(JButton boton,String ruta) {
+		Image imgOriginal = new ImageIcon(getClass().getResource(ruta)).getImage(); 
+		 Image imgEscalada = imgOriginal.getScaledInstance(60,60, Image.SCALE_FAST);
+		 ImageIcon icon = new ImageIcon(imgEscalada);
+		 boton.setIcon(icon);
+	}
+	
+	
+	private JButton getBtTodo() {
+		if (btTodo == null) {
+			btTodo = new JButton("Todo");
+			btTodo.setActionCommand("Todo");
+			btTodo.addActionListener(pbt);
+			btTodo.setBackground(new Color(255, 255, 255));
+			btTodo.setMnemonic('t');
+		}
+		return btTodo;
+	}
+	private JButton getBtHamb() {
+		if (btHamb == null) {
+			btHamb = new JButton("Hamburguesas");
+			btHamb.setActionCommand("Hamburguesa");
+			btHamb.addActionListener(pbt);
+			btHamb.setBackground(new Color(255, 255, 255));
+			btHamb.setVerticalTextPosition(SwingConstants.BOTTOM);
+			btHamb.setHorizontalTextPosition(SwingConstants.CENTER);
+			btHamb.setIcon(new ImageIcon(VentanaPrincipal.class.getResource("/img/Hamburguesa.png")));
+			btHamb.setMnemonic('h');
+		}
+		return btHamb;
+	}
+	private JButton getBtComple() {
+		if (btComple == null) {
+			btComple = new JButton("Complementos");
+			btComple.setActionCommand("Complemento");
+			btComple.addActionListener(pbt);
+			btComple.setBackground(new Color(255, 255, 255));
+			btComple.setIcon(new ImageIcon(VentanaPrincipal.class.getResource("/img/Complemento.png")));
+			btComple.setHorizontalTextPosition(SwingConstants.CENTER);
+			btComple.setVerticalTextPosition(SwingConstants.BOTTOM);
+			btComple.setMnemonic('c');
+		}
+		return btComple;
+	}
+	private JButton getBtPostre() {
+		if (btPostre == null) {
+			btPostre = new JButton("Postres");
+			btPostre.setActionCommand("Postre");
+			btPostre.addActionListener(pbt);
+			btPostre.setBackground(new Color(255, 255, 255));
+			btPostre.setVerticalTextPosition(SwingConstants.BOTTOM);
+			btPostre.setHorizontalTextPosition(SwingConstants.CENTER);
+			btPostre.setIcon(new ImageIcon(VentanaPrincipal.class.getResource("/img/Postre.png")));
+			btPostre.setMnemonic('p');
+		}
+		return btPostre;
+	}
+	private JButton getBtBebidas() {
+		if (btBebidas == null) {
+			btBebidas = new JButton("Bebidas");
+			btBebidas.setActionCommand("Bebida");
+			btBebidas.addActionListener(pbt);
+			btBebidas.setBackground(new Color(255, 255, 255));
+			btBebidas.setIcon(new ImageIcon(VentanaPrincipal.class.getResource("/img/Bebida.png")));
+			btBebidas.setHorizontalTextPosition(SwingConstants.CENTER);
+			btBebidas.setVerticalTextPosition(SwingConstants.BOTTOM);
+			btBebidas.setMnemonic('b');
+		}
+		return btBebidas;
+	}
+	
+	private class ProcesaBoton implements ActionListener{
+
+		@Override
+		public void actionPerformed(ActionEvent e) {
+			desabilitaBotones(e.getActionCommand());
+		}
+		
+	}
+	
+	private void desabilitaBotones(String name) {
+		int counter =0;
+		for(Component element:getPnArticulos().getComponents()) {
+			JButton elemento = (JButton)element;
+			elemento.setEnabled(mcdonalds.isArticuloTipo(name, counter));
+			counter++;
+		}
 	}
 }

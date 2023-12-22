@@ -50,4 +50,17 @@ public class McDonalds {
 	public String getTextoPedido() {
 		return pedido.toString();
 	}
+	
+	public int numArticulosCarta() {
+		return getArticulosCarta().length;
+	}
+
+	public Articulo getArticuloCarta(int value) {
+		return getArticulosCarta()[value];
+	}
+	
+	public boolean isArticuloTipo(String denominacion, int indice) {
+		if(denominacion.equals("Todo")) return true;
+		return getArticuloCarta(indice).getTipo().equals(denominacion);
+	}
 }
