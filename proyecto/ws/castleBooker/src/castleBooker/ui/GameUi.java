@@ -1,6 +1,5 @@
 package castleBooker.ui;
 
-import java.awt.EventQueue;
 import java.util.Locale;
 import java.util.ResourceBundle;
 
@@ -10,15 +9,12 @@ import java.awt.Toolkit;
 
 import javax.swing.JPanel;
 
-import javax.swing.UIManager;
-
 import castleBooker.game.Casilla;
 import castleBooker.game.Game;
 import castleBooker.sevice.App;
 import java.awt.GridLayout;
 import java.awt.Image;
 import javax.swing.JButton;
-import javax.swing.Icon;
 import javax.swing.ImageIcon;
 import java.awt.Color;
 import java.awt.Component;
@@ -45,7 +41,7 @@ public class GameUi extends JDialog {
 	private Locale location = new Locale("es");
 	private JPanel pnBoard;
 	private JPanel pnDiceValue;
-	private App app= new App();
+	private App app;
 	private JPanel PnResult;
 	private JPanel pnDic;
 	private JLabel lbResult;
@@ -56,27 +52,12 @@ public class GameUi extends JDialog {
 	private ProcesaMovimiento pM = new ProcesaMovimiento();
 
 	/**
-	 * Launch the application.
-	 */
-	public static void main(String[] args) {
-		EventQueue.invokeLater(new Runnable() {
-			public void run() {
-				try {
-					UIManager.setLookAndFeel("com.formdev.flatlaf.FlatIntelliJLaf");
-					GameUi dialog = new GameUi();
-					dialog.setDefaultCloseOperation(JDialog.DISPOSE_ON_CLOSE);
-					dialog.setVisible(true);
-				} catch (Exception e) {
-					e.printStackTrace();
-				}
-			}
-		});
-	}
-
-	/**
 	 * Create the dialog.
 	 */
-	public GameUi() {
+	public GameUi(App app,Locale location) {
+		setModal(true);
+		this.app=app;
+		this.location=location;
 		addComponentListener(new ComponentAdapter() {
 			@Override
 			public void componentResized(ComponentEvent e) {
@@ -85,6 +66,7 @@ public class GameUi extends JDialog {
 		});
 		setIconImage(Toolkit.getDefaultToolkit().getImage(GameUi.class.getResource("/img/icon.png")));
 		setBounds(100, 100, 661, 712);
+		setLocationRelativeTo(null);
 		getContentPane().setLayout(null);
 		getContentPane().add(getPnBoard());
 		getContentPane().add(getPnDiceValue());
@@ -103,8 +85,9 @@ public class GameUi extends JDialog {
 
 	private void setTextLocation() {
 		textos = ResourceBundle.getBundle("rcs/text",getLocale());
-		setTitle(textos.getString("titulo"));
+		setTitle(textos.getString("tituloJuego"));
 		((TitledBorder)pnDiceValue.getBorder()).setTitle(textos.getString("pnDice"));
+		getBtDice().setToolTipText(textos.getString("toolTipDado"));
 	}
 	private JPanel getPnBoard() {
 		if (pnBoard == null) {
@@ -187,9 +170,6 @@ public class GameUi extends JDialog {
 		 return icon;
 	}
 
-	private void disableButton(JButton boton) {
-		boton.setEnabled(false);
-	}
 
 	private void setImageButton(JButton button, Casilla casilla) {
 		String name=casilla.getImg();
@@ -199,12 +179,12 @@ public class GameUi extends JDialog {
 		
 		ImageIcon image = setImagenAdaptada(width,height, path,name);
 		button.setDisabledIcon(image);
-		
+		button.setBorderPainted(true);
 		if(path.equals("/img/wall.png")) {
-			 disableButton(button);
 			 button.setDisabledIcon(image);
 			 button.setBorderPainted(false);
 		 }
+		 
 		 button.setIcon(image);
 	}
 	private JPanel getPnResult() {
@@ -322,6 +302,22 @@ public class GameUi extends JDialog {
 	
 	private void clearResult() {
 		getLbResult().setIcon(null);
+	}
+	
+	public void inicializar() {
+		app.inicializarJuego();
+		setImages();
+		getBtDice().setEnabled(true);
+		disableButtons();
+		getLbResult().setIcon(null);
+	}
+	
+	private void disableButtons() {
+		Component[] botones = getPnBoard().getComponents();
+		for(Component bo:botones) {
+			JButton boton = (JButton)bo;
+			boton.setEnabled(false);
+		}
 	}
 	
 }

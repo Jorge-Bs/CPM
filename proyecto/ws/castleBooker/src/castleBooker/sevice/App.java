@@ -40,4 +40,8 @@ public class App {
 		return booker.getGame().getDiscount()*100;
 	}
 	
+	public void inicializarJuego() {
+		booker.getGame().inicializar();
+	}
+	
 }
