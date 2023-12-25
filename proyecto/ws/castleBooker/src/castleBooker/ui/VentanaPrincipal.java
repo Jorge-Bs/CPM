@@ -31,23 +31,26 @@ public class VentanaPrincipal extends JFrame {
 	 */
 	private static final long serialVersionUID = 1L;
 	private JPanel contentPane;
-	private Locale location = new Locale("es");
+	private Locale location;
 	private ResourceBundle textos;
 	private App app;
 	private JPanel pnInicio;
-	private JPanel pnBotones;
+	private JPanel pnBotonesInicio;
 	private JButton btnReserva;
 	private JButton btnJuego;
 	private JButton btnDescuento;
 	private JPanel pnBien;
 	private JLabel lbBienvenida;
 	private GameUi game;
+	private VentanaDescuento vd;
+	private CambiaVentanasAlPulsar vP = new CambiaVentanasAlPulsar();
 	
 
 	/**
 	 * Create the frame.
 	 */
 	public VentanaPrincipal(App app) {
+		setResizable(false);
 		addComponentListener(new ComponentAdapter() {
 			@Override
 			public void componentResized(ComponentEvent e) {
@@ -57,7 +60,9 @@ public class VentanaPrincipal extends JFrame {
 		});
 		setIconImage(Toolkit.getDefaultToolkit().getImage(VentanaPrincipal.class.getResource("/img/icon.png")));
 		this.app=app;
+		this.location=app.getLocation();
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		//setMinimumSize(new Dimension(380, 504));
 		setBounds(100, 100, 378, 566);
 		setLocationRelativeTo(null);
 		contentPane = new JPanel();
@@ -67,7 +72,6 @@ public class VentanaPrincipal extends JFrame {
 		contentPane.setLayout(new CardLayout(0, 0));
 		contentPane.add(getPnInicio(), "pnInicio");
 		//253,336 dimensions min
-		setMinimumSize(new Dimension(380, 504));
 		//622 895 dimension max
 		setTextLocation();
 	}
@@ -104,20 +108,20 @@ public class VentanaPrincipal extends JFrame {
 				}
 			});
 			pnInicio.setLayout(new BorderLayout(0, 0));
-			pnInicio.add(getPnBotones(), BorderLayout.CENTER);
+			pnInicio.add(getPnBotonesInicio(), BorderLayout.CENTER);
 			pnInicio.add(getPnBien(), BorderLayout.NORTH);
 		}
 		return pnInicio;
 	}
-	private JPanel getPnBotones() {
-		if (pnBotones == null) {
-			pnBotones = new JPanel();
-			pnBotones.setLayout(new GridLayout(0, 1, 0, 4));
-			pnBotones.add(getBtnReserva());
-			pnBotones.add(getBtnJuego());
-			pnBotones.add(getBtnDescuento());
+	private JPanel getPnBotonesInicio() {
+		if (pnBotonesInicio == null) {
+			pnBotonesInicio = new JPanel();
+			pnBotonesInicio.setLayout(new GridLayout(0, 1, 0, 4));
+			pnBotonesInicio.add(getBtnReserva());
+			pnBotonesInicio.add(getBtnJuego());
+			pnBotonesInicio.add(getBtnDescuento());
 		}
-		return pnBotones;
+		return pnBotonesInicio;
 	}
 	
 	private void changeImagesSize() {
@@ -132,17 +136,16 @@ public class VentanaPrincipal extends JFrame {
 	private JButton getBtnReserva() {
 		if (btnReserva == null) {
 			btnReserva = new JButton("New button");
+			btnReserva.addActionListener(vP);
+			btnReserva.setActionCommand("reserva");
 		}
 		return btnReserva;
 	}
 	private JButton getBtnJuego() {
 		if (btnJuego == null) {
 			btnJuego = new JButton("New button");
-			btnJuego.addActionListener(new ActionListener() {
-				public void actionPerformed(ActionEvent e) {
-					inicializarJuego();
-				}
-			});
+			btnJuego.addActionListener(vP);
+			btnJuego.setActionCommand("juego");
 		}
 		return btnJuego;
 	}
@@ -159,6 +162,8 @@ public class VentanaPrincipal extends JFrame {
 	private JButton getBtnDescuento() {
 		if (btnDescuento == null) {
 			btnDescuento = new JButton("New button");
+			btnDescuento.addActionListener(vP);
+			btnDescuento.setActionCommand("descuento");
 		}
 		return btnDescuento;
 	}
@@ -183,5 +188,34 @@ public class VentanaPrincipal extends JFrame {
 		 Image imgEscalada = imgOriginal.getScaledInstance(width,height, Image.SCALE_FAST);
 		 ImageIcon icon = new ImageIcon(imgEscalada);
 		 return icon;
+	}
+	
+	private class CambiaVentanasAlPulsar implements ActionListener{
+
+		@Override
+		public void actionPerformed(ActionEvent e) {
+			String option = e.getActionCommand();
+			switch(option) {
+			case "reserva":
+				break;
+			case "juego":
+				inicializarJuego();
+				break;
+			case "descuento":
+				changeDiscount();
+				break;
+			}
+		}
+		
+	}
+	
+	private void changeDiscount() {
+		if(vd!=null) {
+			vd.setVisible(true);
+			vd.inicializar();
+		}else {
+			vd = new VentanaDescuento(app, location);
+			vd.setVisible(true);
+		}
 	}
 }

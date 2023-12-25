@@ -1,4 +1,4 @@
-package castleBooker.booker;
+package castleBooker.model.discount;
 
 public enum Discount {
 

@@ -1,4 +1,4 @@
-package castleBooker.game;
+package castleBooker.model.game;
 
 import java.util.Random;
 

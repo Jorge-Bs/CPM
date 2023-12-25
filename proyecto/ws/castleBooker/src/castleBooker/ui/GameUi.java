@@ -9,8 +9,8 @@ import java.awt.Toolkit;
 
 import javax.swing.JPanel;
 
-import castleBooker.game.Casilla;
-import castleBooker.game.Game;
+import castleBooker.model.game.Casilla;
+import castleBooker.model.game.Game;
 import castleBooker.sevice.App;
 import java.awt.GridLayout;
 import java.awt.Image;
@@ -226,7 +226,8 @@ public class GameUi extends JDialog {
 			double discount = app.getDiscountValuePercentage();
 			String messageDiscount = textos.getString("Descuento") + discount+"%";
 			String titleDiscount = textos.getString("TituloDescuentoFinal");
-			JOptionPane.showMessageDialog(null, messageDiscount, titleDiscount , JOptionPane.INFORMATION_MESSAGE);
+			//JOptionPane.showMessageDialog(null, messageDiscount, titleDiscount , JOptionPane.INFORMATION_MESSAGE);
+			JOptionPane.showInputDialog(null, messageDiscount, titleDiscount, JOptionPane.INFORMATION_MESSAGE);
 		}else {
 			String messageNoDiscount = textos.getString("NoDescuento");
 			String titleNoDiscount = textos.getString("TituloSinDescuentoFinal");
@@ -310,6 +311,7 @@ public class GameUi extends JDialog {
 		getBtDice().setEnabled(true);
 		disableButtons();
 		getLbResult().setIcon(null);
+		setTextLocation();
 	}
 	
 	private void disableButtons() {

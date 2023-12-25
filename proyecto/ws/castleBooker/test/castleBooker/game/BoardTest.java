@@ -4,6 +4,8 @@ import static org.junit.jupiter.api.Assertions.*;
 
 import org.junit.jupiter.api.Test;
 
+import castleBooker.model.game.Game;
+
 class BoardTest {
 
 	private Game game= new Game();

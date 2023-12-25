@@ -1,4 +1,4 @@
-package castleBooker.game;
+package castleBooker.model.game;
 
 import java.util.ArrayList;
 import java.util.HashSet;
@@ -6,7 +6,7 @@ import java.util.List;
 import java.util.Random;
 import java.util.Set;
 
-import castleBooker.booker.Discount;
+import castleBooker.model.discount.Discount;
 
 public class Game {
 
