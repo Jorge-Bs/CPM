@@ -1,5 +1,6 @@
 package castleBooker.sevice;
 
+import java.util.List;
 import java.util.Locale;
 
 import castleBooker.model.booker.Booker;
@@ -56,6 +57,30 @@ public class App {
 
 	public double consultDiscount(String key) {
 		return booker.getDiscounts().consultDiscount(key);
+	}
+	
+	public int getAmountOfData() {
+		return booker.getAmountOfData();
+	}
+
+	public String getCastleImage(int index) {
+		return booker.getCastle(index).getCode();
+	}
+	
+	public String getInfo(int index) {
+		return booker.getCastleInfo(index);
+	}
+	
+	public int getAmountOfEnchantments() {
+		return booker.amountOfEnchantments();
+	}
+	
+	public String getEnchantment(int index) {
+		return booker.getEnchantment(index);
+	}
+
+	public void setCastles(List<String> filtros) {
+		booker.setCastles(filtros);
 	}
 	
 }

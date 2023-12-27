@@ -9,7 +9,7 @@ import java.util.HashMap;
 
 import castleBooker.model.discount.Discount;
 
-public abstract class DiscountFileUtil extends FileUtil{
+public class DiscountFileUtil extends FileUtil{
 	
 	public  static HashMap<String, Discount> readDiscount(String fileName){
 		try {

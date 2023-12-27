@@ -14,7 +14,6 @@ import javax.swing.JTextField;
 
 import castleBooker.sevice.App;
 import java.awt.FlowLayout;
-import java.awt.TextField;
 import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
 import javax.swing.SwingConstants;
@@ -39,10 +38,10 @@ public class VentanaDescuento extends JDialog {
 	/**
 	 * Create the dialog.
 	 */
-	public VentanaDescuento(App app,Locale location) {
+	public VentanaDescuento(App app) {
 		setDefaultCloseOperation(JDialog.DISPOSE_ON_CLOSE);
 		this.app=app;
-		this.location=location;
+		this.location=app.getLocation();
 		setModal(true);
 		setResizable(false);
 		setIconImage(Toolkit.getDefaultToolkit().getImage(VentanaDescuento.class.getResource("/img/icon.png")));
@@ -57,7 +56,7 @@ public class VentanaDescuento extends JDialog {
 	}
 	
 	private void setTextLocation() {
-		textos = ResourceBundle.getBundle("rcs/text",getLocale());
+		textos = ResourceBundle.getBundle("rcs/text",location);
 		setTitle(textos.getString("tituloDecuento"));
 	
 		getLbConsulta().setText(textos.getString("consulta"));

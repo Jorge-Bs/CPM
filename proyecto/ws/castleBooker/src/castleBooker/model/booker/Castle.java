@@ -1,7 +1,5 @@
 package castleBooker.model.booker;
 
-import java.util.Locale;
-
 public class Castle {
 	
 	private String code;
@@ -66,6 +64,14 @@ public class Castle {
 
 	public String getEnchantment() {
 		return enchantment;
+	}
+	
+	public String toString(String formato) {
+		formato=formato.replaceFirst("@", getName());
+		formato=formato.replaceFirst("@", getCountry());
+		formato=formato.replaceFirst("@", getEnchantment());
+		formato=formato.replaceFirst("@", getDescription());
+		return formato;
 	}
 	
 	
