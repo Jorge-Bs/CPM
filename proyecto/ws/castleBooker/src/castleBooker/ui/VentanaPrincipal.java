@@ -35,6 +35,7 @@ import java.awt.event.ActionEvent;
 import java.awt.FlowLayout;
 import javax.swing.JCheckBox;
 import java.awt.Font;
+import java.awt.Color;
 
 public class VentanaPrincipal extends JFrame {
 
@@ -73,6 +74,19 @@ public class VentanaPrincipal extends JFrame {
 	private JLabel lbEligeCastillo;
 	private JPanel pnBotonesFiltroAyuda;
 	private JPanel pnLabelMensa;
+	private JPanel pnCastilloInfo;
+	private JPanel pnInfo;
+	private JPanel pnImagenCastillo;
+	private JPanel pnCaracteristicasCastillo;
+	private JPanel pnDescripcionCastillo;
+	private JPanel pnBotonesCastilloInfo;
+	private JButton btnFechaCastilloInfo;
+	private JButton btnVolverCastilloInfo;
+	private JLabel lbImagenCastillo;
+	private JTextArea txDescripcion;
+	private JTextArea txInfo;
+	private JPanel pnTextosCastillos;
+	private VentanaReserva reserva;
 
 	
 
@@ -103,6 +117,7 @@ public class VentanaPrincipal extends JFrame {
 		contentPane.setLayout(new CardLayout(0, 0));
 		contentPane.add(getPnInicio(), "pnInicio");
 		contentPane.add(getPnMuestraCastillos(), "pnCastillos");
+		contentPane.add(getPnCastilloInfo(), "pnCastilloInfo");
 		//253,336 dimensions min
 		//622 895 dimension max
 		setTextLocation();
@@ -142,6 +157,12 @@ public class VentanaPrincipal extends JFrame {
 		getBtnRestaurar().setMnemonic(textos.getString("mnemonicRestaurar").charAt(0));
 		
 		getLbEligeCastillo().setText(textos.getString("eligeCastillo"));
+		
+		getBtnFechaCastilloInfo().setText(textos.getString("reservarFecha"));
+		getBtnFechaCastilloInfo().setMnemonic(textos.getString("mnemonicReservarFecha").charAt(0));
+		
+		getBtnVolverCastilloInfo().setText(textos.getString("volver"));
+		getBtnVolverCastilloInfo().setMnemonic(textos.getString("mnemonicVolver").charAt(0));
 		
 		addTextFiltro(textos);
 	}
@@ -200,7 +221,7 @@ public class VentanaPrincipal extends JFrame {
 	
 	private void inicializarJuego() {
 		if(game==null) {
-			game= new GameUi(app,location);
+			game= new GameUi(app);
 			game.setVisible(true);
 		}else {
 			game.inicializar();
@@ -270,6 +291,7 @@ public class VentanaPrincipal extends JFrame {
 	
 	private void cambiarPanelInicio() {
 		CardLayout cd = (CardLayout)getContentPane().getLayout();
+		app.inicializar();
 		cd.show(contentPane, "pnInicio");
 		disableFilter();
 		setExtendedState(JFrame.NORMAL);
@@ -322,7 +344,7 @@ public class VentanaPrincipal extends JFrame {
 			pnCastle.addComponentListener(new ComponentAdapter() {
 				@Override
 				public void componentResized(ComponentEvent e) {
-					JPanel panel =(JPanel) getPnCastle().getPanel(0);
+					JPanel panel =(JPanel) getPnCastle().getPanel(getPnCastle().getScrollPosition());
 					int width=panel.getWidth()/panel.getComponentCount();
 					int height = (int) (panel.getHeight());
 					actualizarImagenes(width,height);
@@ -341,9 +363,10 @@ public class VentanaPrincipal extends JFrame {
 	
 	private void procesarCastillo(JPanel panel) {
 		String id =((Icon)(((JLabel) panel.getComponent(0)).getIcon())).toString();
-		System.out.println(id);
+		cambiarPanelCastillo(id);
 	}
 	
+
 	private void actualizarImagenes(int width, int height) {
 		for(int i=0;i<getPnCastle().amountOfPanels();i++) {
 			JPanel panel = getPnCastle().getPanel(i);
@@ -571,5 +594,171 @@ public class VentanaPrincipal extends JFrame {
 			pnLabelMensa.add(getLbEligeCastillo());
 		}
 		return pnLabelMensa;
+	}
+	
+	private void cambiarPanelCastillos() {
+		CardLayout cd = (CardLayout)getContentPane().getLayout();
+		cd.show(contentPane, "pnCastillos");
+		setVisible(false);
+		setResizable(true);
+		setBounds(100, 100, 950, 660);
+		setLocationRelativeTo(null);
+		setVisible(true);
+	}
+	
+//-----------------------------------------------------------------------------------------------------------------------------	
+	
+	private void cambiarPanelCastillo(String id) {
+		CardLayout cd = (CardLayout)getContentPane().getLayout();
+		setExtendedState(JFrame.NORMAL);
+		setVisible(false);
+		setResizable(false);
+		setBounds(100, 100, 400, 600);
+		setLocationRelativeTo(null);
+		setVisible(true);
+		cd.show(contentPane, "pnCastilloInfo");
+		loadCastleImg(id);
+		loadCastleInfo(id);
+		loadCastleDescription(id);
+		getBtnFechaCastilloInfo().setActionCommand(id);
+	}
+	
+	
+	
+	
+	private void loadCastleDescription(String id) {
+		JTextArea area = getTxDescripcion();
+		area.setText(app.getCastleDecription(id));
+	}
+
+	private void loadCastleInfo(String id) {
+		String info = app.getCastleInfo(id);
+		getTxInfo().setText(info);
+		
+	}
+
+	private void loadCastleImg(String id) {
+		String path = "/img/"+id+".png";
+		JLabel label = (JLabel) getPnImagenCastillo().getComponent(0);
+		label.setIcon(setImagenAdaptada(300, 200, path));
+	}
+
+	private JPanel getPnCastilloInfo() {
+		if (pnCastilloInfo == null) {
+			pnCastilloInfo = new JPanel();
+			pnCastilloInfo.setLayout(new BorderLayout(0, 0));
+			pnCastilloInfo.add(getPnInfo());
+			pnCastilloInfo.add(getPnBotonesCastilloInfo(), BorderLayout.SOUTH);
+		}
+		return pnCastilloInfo;
+	}
+	private JPanel getPnInfo() {
+		if (pnInfo == null) {
+			pnInfo = new JPanel();
+			pnInfo.setLayout(new BorderLayout(0, 0));
+			pnInfo.add(getPnImagenCastillo(), BorderLayout.NORTH);
+			pnInfo.add(getPnTextosCastillos());
+		}
+		return pnInfo;
+	}
+	private JPanel getPnImagenCastillo() {
+		if (pnImagenCastillo == null) {
+			pnImagenCastillo = new JPanel();
+			pnImagenCastillo.add(getLbImagenCastillo());
+		}
+		return pnImagenCastillo;
+	}
+	private JPanel getPnCaracteristicasCastillo() {
+		if (pnCaracteristicasCastillo == null) {
+			pnCaracteristicasCastillo = new JPanel();
+			pnCaracteristicasCastillo.setLayout(new BorderLayout(0, 0));
+			pnCaracteristicasCastillo.add(getTxInfo());
+		}
+		return pnCaracteristicasCastillo;
+	}
+	private JPanel getPnDescripcionCastillo() {
+		if (pnDescripcionCastillo == null) {
+			pnDescripcionCastillo = new JPanel();
+			pnDescripcionCastillo.setLayout(new BorderLayout(0, 0));
+			pnDescripcionCastillo.add(getTxDescripcion());
+		}
+		return pnDescripcionCastillo;
+	}
+	private JPanel getPnBotonesCastilloInfo() {
+		if (pnBotonesCastilloInfo == null) {
+			pnBotonesCastilloInfo = new JPanel();
+			pnBotonesCastilloInfo.add(getBtnFechaCastilloInfo());
+			pnBotonesCastilloInfo.add(getBtnVolverCastilloInfo());
+		}
+		return pnBotonesCastilloInfo;
+	}
+	private JButton getBtnFechaCastilloInfo() {
+		if (btnFechaCastilloInfo == null) {
+			btnFechaCastilloInfo = new JButton("");
+			btnFechaCastilloInfo.addActionListener(new ActionListener() {
+				public void actionPerformed(ActionEvent e) {
+					crearReserva(e.getActionCommand());
+				}
+			});
+		}
+		return btnFechaCastilloInfo;
+	}
+	
+	private void crearReserva(String id) {
+		app.iniciarReserva(id);
+		if(reserva==null) {
+			reserva = new VentanaReserva(app);
+		}
+		reserva.setVisible(true);
+	}
+	
+	
+	private JButton getBtnVolverCastilloInfo() {
+		if (btnVolverCastilloInfo == null) {
+			btnVolverCastilloInfo = new JButton("");
+			btnVolverCastilloInfo.addActionListener(new ActionListener() {
+				public void actionPerformed(ActionEvent e) {
+					cambiarPanelCastillos();
+				}
+			});
+		}
+		return btnVolverCastilloInfo;
+	}
+	private JLabel getLbImagenCastillo() {
+		if (lbImagenCastillo == null) {
+			lbImagenCastillo = new JLabel("");
+		}
+		return lbImagenCastillo;
+	}
+	private JTextArea getTxDescripcion() {
+		if (txDescripcion == null) {
+			txDescripcion = new JTextArea();
+			txDescripcion.setEditable(false);
+			txDescripcion.setBackground(new Color(240, 240, 240));
+			txDescripcion.setFont(new Font("Calibri", Font.PLAIN, 18));
+			txDescripcion.setWrapStyleWord(true);
+			txDescripcion.setLineWrap(true);
+		}
+		return txDescripcion;
+	}
+	private JTextArea getTxInfo() {
+		if (txInfo == null) {
+			txInfo = new JTextArea();
+			txInfo.setEditable(false);
+			txInfo.setBackground(new Color(240, 240, 240));
+			txInfo.setFont(new Font("Calibri", Font.PLAIN, 18));
+			txInfo.setLineWrap(true);
+			txInfo.setWrapStyleWord(true);
+		}
+		return txInfo;
+	}
+	private JPanel getPnTextosCastillos() {
+		if (pnTextosCastillos == null) {
+			pnTextosCastillos = new JPanel();
+			pnTextosCastillos.setLayout(new BorderLayout(0, 10));
+			pnTextosCastillos.add(getPnCaracteristicasCastillo(), BorderLayout.NORTH);
+			pnTextosCastillos.add(getPnDescripcionCastillo());
+		}
+		return pnTextosCastillos;
 	}
 }

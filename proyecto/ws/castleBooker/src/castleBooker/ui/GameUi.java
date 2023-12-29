@@ -8,6 +8,7 @@ import java.awt.Toolkit;
 
 
 import javax.swing.JPanel;
+import javax.swing.UIManager;
 
 import castleBooker.model.game.Casilla;
 import castleBooker.model.game.Game;
@@ -38,7 +39,7 @@ public class GameUi extends JDialog {
 	 * 
 	 */
 	private static final long serialVersionUID = 1L;
-	private Locale location = new Locale("es");
+	private Locale location;
 	private JPanel pnBoard;
 	private JPanel pnDiceValue;
 	private App app;
@@ -54,10 +55,10 @@ public class GameUi extends JDialog {
 	/**
 	 * Create the dialog.
 	 */
-	public GameUi(App app,Locale location) {
+	public GameUi(App app) {
 		setModal(true);
 		this.app=app;
-		this.location=location;
+		this.location=app.getLocation();
 		addComponentListener(new ComponentAdapter() {
 			@Override
 			public void componentResized(ComponentEvent e) {
@@ -88,6 +89,9 @@ public class GameUi extends JDialog {
 		setTitle(textos.getString("tituloJuego"));
 		((TitledBorder)pnDiceValue.getBorder()).setTitle(textos.getString("pnDice"));
 		getBtDice().setToolTipText(textos.getString("toolTipDado"));
+		
+		UIManager.put("OptionPane.okButtonText", textos.getString("ok"));
+		UIManager.put("OptionPane.cancelButtonText", textos.getString("cancelar"));
 	}
 	private JPanel getPnBoard() {
 		if (pnBoard == null) {

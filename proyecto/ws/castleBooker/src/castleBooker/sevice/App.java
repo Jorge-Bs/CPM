@@ -67,6 +67,10 @@ public class App {
 		return booker.getCastle(index).getCode();
 	}
 	
+	public String getCastleDecription(String id) {
+		return booker.getCastle(id).getDescription();
+	}
+	
 	public String getInfo(int index) {
 		return booker.getCastleInfo(index);
 	}
@@ -82,5 +86,22 @@ public class App {
 	public void setCastles(List<String> filtros) {
 		booker.setCastles(filtros);
 	}
+
+	public String getCastleInfo(String id) {
+		return booker.getCastleInfo(id);
+	}
+
+	public void iniciarReserva(String id) {
+		booker.iniciarReserva(id);
+	}
+
+	public void inicializar() {
+		booker.inicializar();
+	}
+
+	public String getPrice() {
+		return booker.getPrice();
+	}
+	
 	
 }

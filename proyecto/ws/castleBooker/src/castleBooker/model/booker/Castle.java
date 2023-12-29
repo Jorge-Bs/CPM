@@ -66,16 +66,39 @@ public class Castle {
 		return enchantment;
 	}
 	
-	public String toString(String formato) {
-		formato=formato.replaceFirst("@", getName());
-		formato=formato.replaceFirst("@", getCountry());
-		formato=formato.replaceFirst("@", getEnchantment());
+	public String toStringDescriptionAndWithoutPrice(String formato) {
+		formato=info(formato);
 		formato=formato.replaceFirst("@", getDescription());
 		return formato;
 	}
 	
+	private String info(String formato) {
+		formato=formato.replaceFirst("@", getName());
+		formato=formato.replaceFirst("@", getCountry());
+		formato=formato.replaceFirst("@", getEnchantment());
+		return formato;
+	}
 	
+	public String toStringPriceAndWithoutDescription(String formato) {
+		formato=info(formato);
+		formato=formato.replaceFirst("@", getPrice()+"");
+		return formato;
+	}
 	
-	
+	@Override
+	public boolean equals(Object e) {
+		if(e==this) {
+			return true;
+		}else {
+			if(!(e instanceof Castle)) {
+				return false;
+			}
+			else {
+				Castle cas = (Castle)e;
+				return this.getCode().equals(cas.getCode());
+			}
+		}
+	}
+		
 
 }

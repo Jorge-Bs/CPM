@@ -1,7 +1,6 @@
 package castleBooker.model.booker;
 
 import java.util.ArrayList;
-import java.util.HashSet;
 import java.util.List;
 import java.util.Locale;
 import java.util.ResourceBundle;
@@ -14,12 +13,16 @@ import util.CastleFileUtil;
 
 public class Booker {
 
+	public static final int AMOUNT_OF_YEARS_AVAILABLES=5;
 	private static final String FILE_PATH="files/";
 	private Game game = new Game();
 	private DiscountData discountData = new DiscountData();
-	private Locale location = new Locale("en");
+	private Locale location = new Locale("es");
 	private List<Castle> castillos;
 	private List<Castle> totalCastillos;
+	private List<Reserva> reservas = new ArrayList<>();
+	private Persona usuario;
+	private Reserva reservaEnProgreso;
 	private String[] encantamientos;
 	int amountOfCastles;
 	
@@ -77,6 +80,15 @@ public class Booker {
 		return castillos.get(position);
 	}
 	
+	public Castle getCastle(String id) {
+		for(Castle castillo:castillos) {
+			 if(castillo.getCode().equals(id)) {
+				 return castillo;
+			 }
+		}
+		throw new IllegalArgumentException("El castillo con identificado: "+id+" no se ha podido encontrar");
+	}
+	
 	public int getAmountOfData() {
 		return amountOfCastles;
 	}
@@ -84,7 +96,12 @@ public class Booker {
 
 	public String getCastleInfo(int index) {
 		ResourceBundle recursos = ResourceBundle.getBundle("rcs/text",getLocation());
-		return castillos.get(index).toString(recursos.getString("castilloStringInfo"));
+		return castillos.get(index).toStringDescriptionAndWithoutPrice(recursos.getString("castilloStringInfo"));
+	}
+	
+	public String getCastleInfo(String id) {
+		ResourceBundle recursos = ResourceBundle.getBundle("rcs/text",getLocation());
+		return getCastle(id).toStringPriceAndWithoutDescription(recursos.getString("castilloPrecio"));
 	}
 	
 	public int amountOfEnchantments() {
@@ -113,4 +130,42 @@ public class Booker {
 			this.amountOfCastles=totalCastillos.size();
 		}
 	}
+
+
+	public void iniciarReserva(String id) {
+		if(reservaEnProgreso==null) {
+			reservaEnProgreso = new Reserva(getCastle(id));
+		}else {
+			reservaEnProgreso.cambiarCastillo(getCastle(id));
+		}
+	}
+	
+	public void inicializarReservaActual() {
+		if(reservaEnProgreso==null) {
+			return;
+		}else if(reservaEnProgreso.isFinished()) {
+			reservas.add(reservaEnProgreso);
+		}
+		reservaEnProgreso.inicializar();
+	}
+	
+	public void inicializarPersona() {
+		if(usuario==null) {
+			return;
+		}else {
+			usuario.inicializar();
+		}
+	}
+
+
+	public void inicializar() {
+		inicializarReservaActual();
+		inicializarPersona();
+	}
+
+
+	public String getPrice() {
+		return reservaEnProgreso.getPrice()+"";
+	}
+
 }
