@@ -38,7 +38,7 @@ public class DiscountData {
 		lines = lines.replace(" ", "");
 		lines = lines.replace("=",";");
 		lines = lines.replace(",","\n");
-		DiscountFileUtil.saveDiscounts(FILE_NAME,lines);
+		DiscountFileUtil.save(lines,FILE_NAME);
 	}
 	
 	public boolean hasDiscount(String key) {

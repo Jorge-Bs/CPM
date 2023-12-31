@@ -1,7 +1,6 @@
 package util;
 
 import java.io.BufferedReader;
-import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
@@ -33,20 +32,6 @@ public class DiscountFileUtil extends FileUtil{
 		}
 	}
 	
-	public static void saveDiscounts(String fileName,String lines) {
-		BufferedWriter writer = null;
-		try {
-			try {
-				writer = createWriter(fileName);
-				writer.write(lines);
-			}finally {
-				if(writer!=null) {
-					writer.close();
-					}
-			}
-		} catch (IOException e) {
-			throw new RuntimeException("Se ha producido un error con el fichero");
-		}
-	}
+	
 }
 

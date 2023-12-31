@@ -11,9 +11,25 @@ public abstract class FileUtil{
 		return fichero;
 	}
 
-	public static BufferedWriter createWriter(String nombreFicheroSalida) throws IOException {
+	private static BufferedWriter createWriter(String nombreFicheroSalida) throws IOException {
 		BufferedWriter fichero = new BufferedWriter(new FileWriter(nombreFicheroSalida));
 		return fichero;
 		
+	}
+	
+	public static void save(String lines,String fileName) {
+		BufferedWriter writer = null;
+		try {
+			try {
+				writer = createWriter(fileName);
+				writer.write(lines);
+			}finally {
+				if(writer!=null) {
+					writer.close();
+					}
+			}
+		} catch (IOException e) {
+			throw new RuntimeException("Se ha producido un error con el fichero");
+		}
 	}
 }

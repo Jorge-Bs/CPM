@@ -1,5 +1,8 @@
 package castleBooker.model.booker;
 
+import java.util.Date;
+import java.util.Locale;
+
 /**
  * @author jorge
  *
@@ -7,16 +10,17 @@ package castleBooker.model.booker;
 public class Reserva {
 
 	private Persona persona;
-	private int amountOfPersons;
+	private int amountOfPeople;
 	private int amountOfDays;
 	private int amountOfRooms;
 	private double price;
 	private Castle castle;
 	private boolean isFinished = false;
 	private String comment;
+	private Date arrive;
 	
-	public Reserva(Castle catillo) {
-		setCastle(catillo);
+	public Reserva() {
+		inicializar();
 	}
 
 	protected Persona getPersona() {
@@ -28,8 +32,8 @@ public class Reserva {
 	}
 
 
-	protected int getAmountOfPersons() {
-		return amountOfPersons;
+	protected int getAmountOfPeople() {
+		return amountOfPeople;
 	}
 
 	protected int getAmountOfRooms() {
@@ -40,8 +44,8 @@ public class Reserva {
 		this.amountOfRooms = amountOfRooms;
 	}
 
-	protected void setAmountOfPersons(int amountOfPersons) {
-		this.amountOfPersons = amountOfPersons;
+	protected void setAmountOfPeople(int amountOfPersons) {
+		this.amountOfPeople = amountOfPersons;
 	}
 
 	protected int getAmountOfDays() {
@@ -53,7 +57,11 @@ public class Reserva {
 	}
 
 	protected double getPrice() {
-		return price*getAmountOfDays()*getAmountOfRooms();
+		if(isFinished()) {
+			return price;
+		}else {
+			return price*getAmountOfDays()*getAmountOfRooms();
+		}
 	}
 
 	protected void setPrice(double price) {
@@ -88,11 +96,13 @@ public class Reserva {
 	public void inicializar() {
 		setCastle(null);
 		setPersona(null);
-		setAmountOfPersons(1);
+		setAmountOfPeople(1);
 		setAmountOfDays(1);
+		setAmountOfRooms(1);
 		setPrice(0);
 		setFinished(false);
 		setComment("");
+		setArrive(null);
 	}
 	
 	public void cambiarCastillo(Castle castle) {
@@ -100,6 +110,60 @@ public class Reserva {
 		setPrice(castle.getPrice());
 	}
 	
+	void updateRooms(int value) {
+		setAmountOfRooms(value);
+	}
 	
+	void updatePeople(int value) {
+		setAmountOfPeople(value);
+	}
+	
+	 void updateDays(int value) {
+		setAmountOfDays(value);
+	}
+
+	public boolean valida() {
+		if(amountOfRooms==amountOfPeople) {
+			return true;
+		}if(amountOfPeople>amountOfRooms) {
+			return (amountOfPeople/amountOfRooms)<=2;
+		}
+		else {
+			return false;
+		}
+	}
+
+	public void setArrive(Date date) {
+		this.arrive=date;
+		
+	}
+	
+	String getArrive() {
+		@SuppressWarnings("deprecation")
+		String date = arrive.toLocaleString();
+		String[] parts = date.split(" ");
+		StringBuilder sb = new StringBuilder();
+		sb.append(parts[0]+" ");
+		sb.append(parts[1]+" ");
+		if(Locale.getDefault().getISO3Language().equals("eng")) {
+			parts[2]=parts[2].replace(",", ".");
+		}
+		sb.append(parts[2]+" ");
+		return sb.toString();
+	}
+
+	String serialize() {
+		StringBuilder sb = new StringBuilder();
+		sb.append(persona.getDni()+";");
+		sb.append(persona.getFullName()+";");
+		sb.append(persona.getEmail()+";");
+		sb.append(castle.getCode()+";");
+		sb.append(getArrive()+";");
+		sb.append(getAmountOfDays()+";");
+		sb.append(getAmountOfRooms()+";");
+		sb.append(getPrice()+";");
+		sb.append(getComment());
+		return sb.toString();
+	}
 	
 }

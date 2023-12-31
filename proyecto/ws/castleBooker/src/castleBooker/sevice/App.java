@@ -1,5 +1,6 @@
 package castleBooker.sevice;
 
+import java.util.Date;
 import java.util.List;
 import java.util.Locale;
 
@@ -99,8 +100,76 @@ public class App {
 		booker.inicializar();
 	}
 
-	public String getPrice() {
+	public double getPrice() {
 		return booker.getPrice();
+	}
+
+	public Date getDate() {
+		return booker.getActualDate();
+	}
+
+	public int getRoomsInfo() {
+		return booker.getRoomsInfo();
+	}
+
+	public int getPeopleInfo() {
+		return booker.getPeopleInfo();
+	}
+
+	public int getDaysInfo() {
+		return booker.getDaysInfo();
+	}
+
+	public boolean habitacionesValidas() {
+		return booker.habitacionesValidas();
+	}
+
+	public void saveId(String id) {
+		booker.saveId(id);
+		
+	}
+
+	public String getUserId() {
+		return booker.userId();
+	}
+
+	public void updateDate(Integer rooms, Integer people, Integer days,Date date) {
+		booker.updateRooms(rooms);
+		booker.updatePeople(people);
+		booker.updateDays(days);
+		booker.updateArrive(date);
+	}
+	
+	public void updatePersonalData(String name, String id, String email, String comments) {
+		booker.updatePersonalData(name,id,email,comments);
+	}
+
+	public boolean hasActualUserDiscount() {
+		return booker.hasActualUserDiscount();
+	}
+
+	public String getCatleReserva() {
+		return booker.getCastleReserva();
+	}
+
+	public String getUserName() {
+		return booker.getUserName();
+	}
+
+	public String getUserEmail() {
+		return booker.getEmail();
+	}
+
+	public String getArriveDate() {
+		return booker.arriveDate();
+	}
+
+	public String getDiscountPrice() {
+		return booker.getDiscountPrice();
+	}
+
+	public void procesarReserva(boolean aplicarDescuento) {
+		booker.procesarReserva(aplicarDescuento);
 	}
 	
 	

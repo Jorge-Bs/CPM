@@ -1,6 +1,7 @@
 package castleBooker.model.booker;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 import java.util.Locale;
 import java.util.ResourceBundle;
@@ -10,24 +11,28 @@ import java.util.TreeSet;
 import castleBooker.model.discount.DiscountData;
 import castleBooker.model.game.Game;
 import util.CastleFileUtil;
+import util.FileUtil;
 
 public class Booker {
 
 	public static final int AMOUNT_OF_YEARS_AVAILABLES=5;
 	private static final String FILE_PATH="files/";
+	private static final String RESERVA_FILEPATH=FILE_PATH+"reservas.dat";
 	private Game game = new Game();
 	private DiscountData discountData = new DiscountData();
-	private Locale location = new Locale("es");
+	private Locale location;
 	private List<Castle> castillos;
 	private List<Castle> totalCastillos;
 	private List<Reserva> reservas = new ArrayList<>();
-	private Persona usuario;
-	private Reserva reservaEnProgreso;
+	private Persona usuario = new Persona();
+	private Reserva reservaEnProgreso = new Reserva();
 	private String[] encantamientos;
 	int amountOfCastles;
+	private Date date = new Date();
 	
 
 	public Booker() {
+		setLocation(new Locale("es"));
 		loadCastle();
 		loadEncatamientos();
 	}
@@ -55,6 +60,11 @@ public class Booker {
 	
 	public DiscountData getDiscounts() {
 		return discountData;
+	}
+	
+	public void setLocation(Locale location) {
+		Locale.setDefault(location);
+		this.location=location;
 	}
 	
 	public Locale getLocation() {
@@ -133,19 +143,10 @@ public class Booker {
 
 
 	public void iniciarReserva(String id) {
-		if(reservaEnProgreso==null) {
-			reservaEnProgreso = new Reserva(getCastle(id));
-		}else {
-			reservaEnProgreso.cambiarCastillo(getCastle(id));
-		}
+		reservaEnProgreso.cambiarCastillo(getCastle(id));
 	}
 	
 	public void inicializarReservaActual() {
-		if(reservaEnProgreso==null) {
-			return;
-		}else if(reservaEnProgreso.isFinished()) {
-			reservas.add(reservaEnProgreso);
-		}
 		reservaEnProgreso.inicializar();
 	}
 	
@@ -164,8 +165,123 @@ public class Booker {
 	}
 
 
-	public String getPrice() {
-		return reservaEnProgreso.getPrice()+"";
+	public double getPrice() {
+		return reservaEnProgreso.getPrice();
+	}
+
+
+	public Date getActualDate() {
+		return date;
+	}
+	
+	public void updateRooms(int value) {
+		reservaEnProgreso.updateRooms(value);
+	}
+	public void updatePeople(int value) {
+		reservaEnProgreso.updatePeople(value);
+	}
+	public void updateDays(int value) {
+		reservaEnProgreso.updateDays(value);
+	}
+
+
+	public int getRoomsInfo() {
+		return reservaEnProgreso.getAmountOfRooms();
+	}
+
+
+	public int getPeopleInfo() {
+		return reservaEnProgreso.getAmountOfPeople();
+	}
+
+
+	public int getDaysInfo() {
+		return reservaEnProgreso.getAmountOfDays();
+	}
+
+
+	public boolean habitacionesValidas() {
+		return reservaEnProgreso.valida();
+	}
+
+
+	public void saveId(String id) {
+		usuario.setDni(id);
+	}
+
+
+	public String userId() {
+		return usuario.getDni();
+	}
+
+
+	public void updatePersonalData(String name, String id, String email, String comments) {
+		usuario.setFullName(name);
+		usuario.setDni(id);
+		usuario.setEmail(email);
+		reservaEnProgreso.setComment(comments);
+	}
+
+
+	public boolean hasActualUserDiscount() {
+		return discountData.hasDiscount(usuario.getDni());
+	}
+
+
+	public String getCastleReserva() {
+		return reservaEnProgreso.getCastle().getName();
+	}
+
+
+	public String getUserName() {
+		return usuario.getFullName();
+	}
+
+
+	public String getEmail() {
+		return usuario.getEmail();
+	}
+
+
+	public String arriveDate() {
+		return reservaEnProgreso.getArrive();
+	}
+
+
+	public void updateArrive(Date date) {
+		reservaEnProgreso.setArrive(date);
+		
+	}
+
+
+	public String getDiscountPrice() {
+		if(hasActualUserDiscount()) {
+			double value =  (reservaEnProgreso.getPrice()*(1-discountData.getDiscount(userId()).getAmount()));
+			value = Math.round(value*100);
+			return (value/100)+"";
+		}else {
+			return reservaEnProgreso.getPrice()+"";
+		}
+	}
+
+
+	public void procesarReserva(boolean aplicarDescuento) {
+		double value;
+		if(aplicarDescuento && hasActualUserDiscount()) {
+			value = Double.parseDouble(getDiscountPrice());
+		}else {
+			value = reservaEnProgreso.getPrice();
+		}
+		reservaEnProgreso.setPrice(value);
+		reservaEnProgreso.setFinished(true);
+		reservaEnProgreso.setPersona(usuario);
+		guardar();
+		inicializar();
+	}
+	
+	private void guardar() {
+		String value = reservaEnProgreso.serialize();
+		FileUtil.save(value, RESERVA_FILEPATH);
 	}
 
 }

@@ -34,12 +34,14 @@ public class VentanaDescuento extends JDialog {
 	private ResourceBundle textos;
 	private ProcesBotones pb = new ProcesBotones();
 	private JLabel lbIndicaDescuento;
+	private VentanaPrincipal vp;
 
 	/**
 	 * Create the dialog.
 	 */
-	public VentanaDescuento(App app) {
+	public VentanaDescuento(App app,VentanaPrincipal vp) {
 		setDefaultCloseOperation(JDialog.DISPOSE_ON_CLOSE);
+		this.vp=vp;
 		this.app=app;
 		this.location=app.getLocation();
 		setModal(true);
@@ -149,6 +151,11 @@ public class VentanaDescuento extends JDialog {
 			switch(action) {
 			case "volver":
 				dispose();
+				break;
+			case "reservar":
+				app.saveId(getTxDni().getText());
+				dispose();
+				vp.changeReserva();
 				break;
 			}
 		}

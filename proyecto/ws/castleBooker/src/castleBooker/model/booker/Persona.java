@@ -9,6 +9,9 @@ public class Persona {
 	private int yearOfBirth;
 	private String email;
 	
+	public Persona() {
+		
+	}
 	
 	public Persona(String dni) {
 		setDni(dni);
@@ -81,6 +84,7 @@ public class Persona {
 		setYearOfBirth(0);
 		setEmail(null);
 	}
+	
 	
 	
 

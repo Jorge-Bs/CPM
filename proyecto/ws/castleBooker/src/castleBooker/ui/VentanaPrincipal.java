@@ -30,6 +30,9 @@ import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 
 import javax.swing.SwingConstants;
+import javax.swing.SwingUtilities;
+import javax.swing.UIManager;
+
 import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
 import java.awt.FlowLayout;
@@ -280,18 +283,14 @@ public class VentanaPrincipal extends JFrame {
 	}
 	
 	private void changeDiscount() {
-		if(vd!=null) {
-			vd.setVisible(true);
-			vd.inicializar();
-		}else {
-			vd = new VentanaDescuento(app);
-			vd.setVisible(true);
-		}
+		getVentanaDescuento().inicializar();
+		getVentanaDescuento().setVisible(true);
 	}
 	
-	private void cambiarPanelInicio() {
+	void cambiarPanelInicio() {
 		CardLayout cd = (CardLayout)getContentPane().getLayout();
 		app.inicializar();
+		getVentanaReserva().inicializar();
 		cd.show(contentPane, "pnInicio");
 		disableFilter();
 		setExtendedState(JFrame.NORMAL);
@@ -303,11 +302,46 @@ public class VentanaPrincipal extends JFrame {
 		setVisible(true);
 	}
 	
+	private VentanaReserva getVentanaReserva() {
+		if(reserva== null) {
+			reserva = new VentanaReserva(this,app);
+		}
+		return reserva;
+	}
 	
+	private VentanaDescuento  getVentanaDescuento() {
+		if(vd == null) {
+			vd = new VentanaDescuento(app,this);
+		}
+		return vd;
+	}
+	
+	private void changeDarkTheme() {
+		try {
+		    UIManager.setLookAndFeel("com.formdev.flatlaf.FlatDarkLaf");
+		    updateTheme();
+		} catch (Exception e) {
+		    e.printStackTrace();
+		}
+
+	}
+	
+	private void updateTheme() {
+		SwingUtilities.updateComponentTreeUI(this);
+		if(game!=null) {
+			SwingUtilities.updateComponentTreeUI(game);
+		}
+		if(vd!=null) {
+			SwingUtilities.updateComponentTreeUI(vd);
+		}if(reserva!=null) {
+			SwingUtilities.updateComponentTreeUI(reserva);
+		}
+
+	}
 	
 	
 //-------------------------------------------------------------------------------------------------------------------------	
-	private void changeReserva() {
+	 void changeReserva() {
 		CardLayout cd = (CardLayout)getContentPane().getLayout();
 		cd.show(contentPane, "pnCastillos");
 		setVisible(false);
@@ -706,10 +740,8 @@ public class VentanaPrincipal extends JFrame {
 	
 	private void crearReserva(String id) {
 		app.iniciarReserva(id);
-		if(reserva==null) {
-			reserva = new VentanaReserva(app);
-		}
-		reserva.setVisible(true);
+		getVentanaReserva().updateDate();
+		getVentanaReserva().setVisible(true);
 	}
 	
 	
@@ -733,6 +765,7 @@ public class VentanaPrincipal extends JFrame {
 	private JTextArea getTxDescripcion() {
 		if (txDescripcion == null) {
 			txDescripcion = new JTextArea();
+			txDescripcion.setOpaque(false);
 			txDescripcion.setEditable(false);
 			txDescripcion.setBackground(new Color(240, 240, 240));
 			txDescripcion.setFont(new Font("Calibri", Font.PLAIN, 18));
@@ -744,6 +777,7 @@ public class VentanaPrincipal extends JFrame {
 	private JTextArea getTxInfo() {
 		if (txInfo == null) {
 			txInfo = new JTextArea();
+			txInfo.setOpaque(false);
 			txInfo.setEditable(false);
 			txInfo.setBackground(new Color(240, 240, 240));
 			txInfo.setFont(new Font("Calibri", Font.PLAIN, 18));

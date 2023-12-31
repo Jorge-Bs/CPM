@@ -46,7 +46,7 @@ public class GameUi extends JDialog {
 	private JPanel PnResult;
 	private JPanel pnDic;
 	private JLabel lbResult;
-	
+	private VentanaConfirmacionEdad vEdad;
 	
 	private ResourceBundle textos;
 	private JButton btDice;
@@ -227,11 +227,8 @@ public class GameUi extends JDialog {
 	
 	private void showFinalDialog() {
 		if(app.canGetDiscount()) {
-			double discount = app.getDiscountValuePercentage();
-			String messageDiscount = textos.getString("Descuento") + discount+"%";
-			String titleDiscount = textos.getString("TituloDescuentoFinal");
-			//JOptionPane.showMessageDialog(null, messageDiscount, titleDiscount , JOptionPane.INFORMATION_MESSAGE);
-			JOptionPane.showInputDialog(null, messageDiscount, titleDiscount, JOptionPane.INFORMATION_MESSAGE);
+			getVEdad().setVisible(true);
+			
 		}else {
 			String messageNoDiscount = textos.getString("NoDescuento");
 			String titleNoDiscount = textos.getString("TituloSinDescuentoFinal");
@@ -239,6 +236,13 @@ public class GameUi extends JDialog {
 		}
 	}
 	
+	private VentanaConfirmacionEdad getVEdad() {
+		if(vEdad==null) {
+			vEdad= new VentanaConfirmacionEdad(app);
+		}
+		return vEdad;
+	}
+
 	private void pintarResultado() {
 		String path = "/img/"+app.getDiceValue()+".png";
 		getLbResult().setIcon(setImagenAdaptada(150, 150, path,"2"));
