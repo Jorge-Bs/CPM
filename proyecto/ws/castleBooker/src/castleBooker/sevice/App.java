@@ -171,6 +171,15 @@ public class App {
 	public void procesarReserva(boolean aplicarDescuento) {
 		booker.procesarReserva(aplicarDescuento);
 	}
+
+	public void saveAge(Date date) {
+		booker.saveDate(date);
+		
+	}
+
+	public boolean isAgeValid() {
+		return booker.isAgeValid();
+	}
 	
 	
 }

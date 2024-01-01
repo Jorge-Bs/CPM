@@ -90,8 +90,9 @@ public class GameUi extends JDialog {
 		((TitledBorder)pnDiceValue.getBorder()).setTitle(textos.getString("pnDice"));
 		getBtDice().setToolTipText(textos.getString("toolTipDado"));
 		
-		UIManager.put("OptionPane.okButtonText", textos.getString("ok"));
-		UIManager.put("OptionPane.cancelButtonText", textos.getString("cancelar"));
+//		UIManager.put("OptionPane.okButtonText", textos.getString("guardar"));
+//		UIManager.put("OptionPane.cancelButtonText", textos.getString("salir"));
+//		UIManager.put("OptionPane.noButtonText", "pp");
 	}
 	private JPanel getPnBoard() {
 		if (pnBoard == null) {
@@ -227,7 +228,13 @@ public class GameUi extends JDialog {
 	
 	private void showFinalDialog() {
 		if(app.canGetDiscount()) {
-			getVEdad().setVisible(true);
+			Object[] options = { textos.getString("guardar"), textos.getString("intentar"),
+					textos.getString("salir"),textos.getString("reservar") };
+			int value=JOptionPane.showOptionDialog(null, textos.getString("Descuento")+app.getDiscountValuePercentage()+"%", 
+					textos.getString("TituloDescuentoFinal"),JOptionPane.DEFAULT_OPTION, JOptionPane.INFORMATION_MESSAGE,null,options,options[0]);
+			if(value==JOptionPane.OK_OPTION) {
+				getVEdad().setVisible(true);
+			}
 			
 		}else {
 			String messageNoDiscount = textos.getString("NoDescuento");
@@ -238,7 +245,7 @@ public class GameUi extends JDialog {
 	
 	private VentanaConfirmacionEdad getVEdad() {
 		if(vEdad==null) {
-			vEdad= new VentanaConfirmacionEdad(app);
+			vEdad= new VentanaConfirmacionEdad(app,this);
 		}
 		return vEdad;
 	}

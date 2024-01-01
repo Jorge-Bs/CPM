@@ -284,4 +284,19 @@ public class Booker {
 		FileUtil.save(value, RESERVA_FILEPATH);
 	}
 
+
+	public void saveDate(Date date) {
+		usuario.saveDate(date);
+	}
+
+
+	public boolean isAgeValid() {
+		Date adult = new Date();
+		adult.setYear(date.getYear()-18);
+		if(usuario.getAge().before(adult)){
+			System.out.println("true");
+		}
+		return true;
+	}
+
 }

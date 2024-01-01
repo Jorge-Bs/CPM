@@ -1,5 +1,7 @@
 package castleBooker.model.booker;
 
+import java.util.Date;
+
 public class Persona {
 	
 	private String dni;
@@ -8,6 +10,7 @@ public class Persona {
 	private int monthOfBirth;
 	private int yearOfBirth;
 	private String email;
+	private Date age;
 	
 	public Persona() {
 		
@@ -83,6 +86,14 @@ public class Persona {
 		setMonthOfBirth(0);
 		setYearOfBirth(0);
 		setEmail(null);
+	}
+	
+	void saveDate(Date age) {
+		this.age=age;
+	}
+
+	Date getAge() {
+		return age;
 	}
 	
 	
