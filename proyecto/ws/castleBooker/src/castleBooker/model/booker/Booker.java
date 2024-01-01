@@ -8,10 +8,12 @@ import java.util.ResourceBundle;
 import java.util.Set;
 import java.util.TreeSet;
 
+import castleBooker.model.discount.Discount;
 import castleBooker.model.discount.DiscountData;
 import castleBooker.model.game.Game;
 import util.CastleFileUtil;
 import util.FileUtil;
+
 
 public class Booker {
 
@@ -290,13 +292,30 @@ public class Booker {
 	}
 
 
+	@SuppressWarnings("deprecation")
 	public boolean isAgeValid() {
 		Date adult = new Date();
 		adult.setYear(date.getYear()-18);
-		if(usuario.getAge().before(adult)){
-			System.out.println("true");
+		return usuario.getAge().before(adult);
+	}
+
+
+	public boolean isMaxDiscount() {
+		return game.getDiscount()==0.25;
+	}
+
+
+	public boolean camposValidos(String text) {
+		if(text.isEmpty() || text.isBlank()) {
+			return false;
 		}
 		return true;
+	}
+
+
+	public boolean guardarDescuento(String id) {
+		Discount type = Discount.getDiscountType(game.getDiscount());
+		return (discountData.addDiscount(id, type));
 	}
 
 }

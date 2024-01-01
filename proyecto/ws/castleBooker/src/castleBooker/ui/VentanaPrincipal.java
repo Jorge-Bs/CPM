@@ -224,7 +224,7 @@ public class VentanaPrincipal extends JFrame {
 	
 	private void inicializarJuego() {
 		if(game==null) {
-			game= new GameUi(app);
+			game= new GameUi(app,this);
 			game.setVisible(true);
 		}else {
 			game.inicializar();

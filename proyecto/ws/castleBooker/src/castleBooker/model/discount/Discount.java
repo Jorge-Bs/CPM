@@ -12,7 +12,15 @@ public enum Discount {
 		this.code=code;
 	}
 	
-	
+	public static Discount getDiscountType(double value) {
+		Discount[] tipos = values();
+		for(Discount tipo:tipos) {
+			if(tipo.getAmount()==value) {
+				return tipo;
+			}
+		}
+		return null;
+	}
 	
 	public double getAmount() {
 		return value;

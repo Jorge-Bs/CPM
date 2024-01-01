@@ -51,12 +51,14 @@ public class GameUi extends JDialog {
 	private ResourceBundle textos;
 	private JButton btDice;
 	private ProcesaMovimiento pM = new ProcesaMovimiento();
+	private VentanaPrincipal vp;
 
 	/**
 	 * Create the dialog.
 	 */
-	public GameUi(App app) {
+	public GameUi(App app,VentanaPrincipal vp) {
 		setModal(true);
+		this.vp=vp;
 		this.app=app;
 		this.location=app.getLocation();
 		addComponentListener(new ComponentAdapter() {
@@ -228,14 +230,8 @@ public class GameUi extends JDialog {
 	
 	private void showFinalDialog() {
 		if(app.canGetDiscount()) {
-			Object[] options = { textos.getString("guardar"), textos.getString("intentar"),
-					textos.getString("salir"),textos.getString("reservar") };
-			int value=JOptionPane.showOptionDialog(null, textos.getString("Descuento")+app.getDiscountValuePercentage()+"%", 
-					textos.getString("TituloDescuentoFinal"),JOptionPane.DEFAULT_OPTION, JOptionPane.INFORMATION_MESSAGE,null,options,options[0]);
-			if(value==JOptionPane.OK_OPTION) {
-				getVEdad().setVisible(true);
-			}
-			
+			getVEdad().muestraMaxLabel();
+			getVEdad().setVisible(true);
 		}else {
 			String messageNoDiscount = textos.getString("NoDescuento");
 			String titleNoDiscount = textos.getString("TituloSinDescuentoFinal");
@@ -327,6 +323,9 @@ public class GameUi extends JDialog {
 		disableButtons();
 		getLbResult().setIcon(null);
 		setTextLocation();
+		if(vEdad!=null) {
+			vEdad.inicializar();
+		}
 	}
 	
 	private void disableButtons() {
@@ -335,6 +334,17 @@ public class GameUi extends JDialog {
 			JButton boton = (JButton)bo;
 			boton.setEnabled(false);
 		}
+	}
+	
+	void salir() {
+		dispose();
+		vp.cambiarPanelInicio();
+	}
+	
+	void salirReserva() {
+		inicializar();
+		dispose();
+		vp.changeReserva();
 	}
 	
 }

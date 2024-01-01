@@ -180,6 +180,18 @@ public class App {
 	public boolean isAgeValid() {
 		return booker.isAgeValid();
 	}
+
+	public boolean isMaxDiscount() {
+		return booker.isMaxDiscount();
+	}
+
+	public boolean camposValidos(String text) {
+		return booker.camposValidos(text);
+	}
+
+	public boolean guardarDescuento(String id) {
+		return booker.guardarDescuento(id);
+	}
 	
 	
 }

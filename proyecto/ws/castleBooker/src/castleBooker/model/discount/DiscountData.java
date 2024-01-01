@@ -18,6 +18,7 @@ public class DiscountData {
 	public boolean addDiscount(String key,Discount type) {
 		if(!descuentos.containsKey(key)) {
 			descuentos.put(key, type);
+			saveFile();
 			return true;
 		}
 		return false;

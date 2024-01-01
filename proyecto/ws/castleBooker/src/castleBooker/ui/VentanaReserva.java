@@ -162,7 +162,7 @@ public class VentanaReserva extends JDialog {
 		JButton boton = (JButton) getCalendario().getComponent(0);
 		boton.setToolTipText(textos.getString("tooltipCalendario"));
 		
-		calendario.setLocale(location);
+		//calendario.setLocale(location);
 		
 		
 		getLbFullName().setText(textos.getString("fullName"));
@@ -355,7 +355,7 @@ public class VentanaReserva extends JDialog {
 	public void inicializar() {
 		CardLayout cd = (CardLayout) getContentPane().getLayout();
 		cd.show(getContentPane(), "fecha");
-		getPnFechas().add(getLbPrice());
+		getPnPrecio().add(getLbPrice());
 		updateDate();
 		updatePersonalData();
 	}
@@ -921,8 +921,12 @@ public class VentanaReserva extends JDialog {
 	}
 	
 	private void terminar() {
-		app.procesarReserva(getRdbSi().isSelected());
-		vp.cambiarPanelInicio();
-		dispose();
+		if(app.isAgeValid()) {
+			app.procesarReserva(getRdbSi().isSelected());
+			vp.cambiarPanelInicio();
+			dispose();
+		}else {
+			
+		}
 	}
 }
