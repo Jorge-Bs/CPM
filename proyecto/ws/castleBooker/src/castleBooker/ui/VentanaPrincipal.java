@@ -42,6 +42,13 @@ import java.awt.Color;
 import javax.swing.JSlider;
 import javax.swing.event.ChangeListener;
 import javax.swing.event.ChangeEvent;
+import javax.swing.JMenuBar;
+import javax.swing.JMenu;
+import javax.swing.JMenuItem;
+import javax.swing.JOptionPane;
+import javax.swing.JSeparator;
+import javax.swing.KeyStroke;
+import java.awt.event.KeyEvent;
 
 public class VentanaPrincipal extends JFrame {
 
@@ -65,6 +72,7 @@ public class VentanaPrincipal extends JFrame {
 	private GameUi game;
 	private VentanaDescuento vd;
 	private CambiaVentanasAlPulsar vP = new CambiaVentanasAlPulsar();	
+	private MenuProcesaBotones pbM = new MenuProcesaBotones();
 	private JPanel pnMuestraCastillos;
 	private JScrollPanelWithPanel pnCastle;
 	private JPanel pnBotonVolver;
@@ -96,6 +104,21 @@ public class VentanaPrincipal extends JFrame {
 	private JLabel lbPrecioMax;
 	private JPanel pnBotonIdioma;
 	private JButton btnIdioma;
+	private JMenuBar menuBar;
+	private JMenu mmBtnBooker;
+	private JMenu mmBtnOptions;
+	private JMenu mmBtnHelp;
+	private JMenuItem mmItemReserva;
+	private JMenuItem mmItemJuego;
+	private JMenuItem mmItemSalir;
+	private JSeparator separator;
+	private JMenuItem mmItemDescuento;
+	private JMenuItem mmItemThemeDark;
+	private JMenuItem mmItemIdiomaEn;
+	private JMenuItem mmItemThemeLight;
+	private JMenuItem mmItemContenidos;
+	private JMenuItem mmItemSobre;
+	private JSeparator separator_1;
 
 	
 
@@ -115,9 +138,11 @@ public class VentanaPrincipal extends JFrame {
 		this.app=app;
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		//setMinimumSize(new Dimension(380, 504));
-		setBounds(100, 100, 378, 566);
+		//setBounds(100, 100, 378, 566);
 		//setBounds(100, 100, 950, 660);
+		setBounds(100, 100, 530, 722);
 		setLocationRelativeTo(null);
+		setJMenuBar(getMenuBar_1());
 		contentPane = new JPanel();
 		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
 
@@ -169,6 +194,48 @@ public class VentanaPrincipal extends JFrame {
 		getBtnVolverCastilloInfo().setMnemonic(textos.getString("mnemonicVolver").charAt(0));
 		
 		getLbPrecioMax().setText(textos.getString("max")+getSlDinero().getValue());
+		
+		getMmBtnBooker().setText(textos.getString("reservaMenu"));
+		getMmBtnBooker().setMnemonic(textos.getString("mnemonicReservaMenu").charAt(0));
+		
+		getMmBtnOptions().setText(textos.getString("options"));
+		getMmBtnOptions().setMnemonic(textos.getString("mnemonicOptions").charAt(0));
+		
+		getMmBtnHelp().setText(textos.getString("ayuda"));
+		getMmBtnHelp().setMnemonic(textos.getString("mnemonicAyuda").charAt(0));
+		
+		getMmItemReserva().setText(textos.getString("reserva"));
+		getMmItemReserva().setMnemonic(textos.getString("mnemonicReserva").charAt(0));
+		
+		getMmItemJuego().setText(textos.getString("juego"));
+		getMmItemJuego().setMnemonic(textos.getString("mnemonicJuego").charAt(0));
+		
+		getMmItemDescuento().setText(textos.getString("descuento"));
+		getMmItemDescuento().setMnemonic(textos.getString("mnemonicDescuento").charAt(0));
+		
+		getMmItemSalir().setText(textos.getString("salir"));
+		getMmItemSalir().setMnemonic(textos.getString("mnemonicSalir").charAt(0));
+		
+		getMmItemThemeDark().setText(textos.getString("oscuro"));
+		getMmItemThemeDark().setMnemonic(textos.getString("mnemonicOscuro").charAt(0));
+		
+		getMmItemIdiomaEn().setText(textos.getString("idioma"));
+		getMmItemIdiomaEn().setMnemonic(textos.getString("mnemonicIdioma").charAt(0));
+		
+		getMmItemThemeLight().setText(textos.getString("claro"));
+		getMmItemThemeLight().setMnemonic(textos.getString("mnemonicClaro").charAt(0));
+		
+		getMmItemContenidos().setText(textos.getString("contenidos"));
+		getMmItemContenidos().setMnemonic(textos.getString("mnemonicContenidos").charAt(0));
+		
+		getMmItemSobre().setText(textos.getString("sobre"));
+		getMmItemSobre().setMnemonic(textos.getString("mnemonicSobre").charAt(0));
+		
+		getBtnIdioma().setToolTipText(textos.getString("toolTipIdioma"));
+		
+		UIManager.put("OptionPane.okButtonText", textos.getString("ok"));
+		UIManager.put("OptionPane.cancelButtonText", textos.getString("cancelar"));
+		//UIManager.put("OptionPane.noButtonText", "pp");
 		
 		addTextFiltro(textos);
 	}
@@ -289,21 +356,28 @@ public class VentanaPrincipal extends JFrame {
 	private void changeDiscount() {
 		getVentanaDescuento().inicializar();
 		getVentanaDescuento().setVisible(true);
+		if(getPnInicio().isVisible()) {
+			inicializarDatos();
+		}
 	}
 	
 	void cambiarPanelInicio() {
 		CardLayout cd = (CardLayout)getContentPane().getLayout();
-		app.inicializar();
-		getVentanaReserva().inicializar();
+		inicializarDatos();
 		cd.show(contentPane, "pnInicio");
-		disableFilter();
 		setExtendedState(JFrame.NORMAL);
 		getPnConFiltros().setVisible(false);
 		setVisible(false);
 		setResizable(false);
-		setBounds(100, 100, 378, 566);
+		setBounds(100, 100, 530, 722);
 		setLocationRelativeTo(null);
 		setVisible(true);
+	}
+	
+	void inicializarDatos() {
+		app.inicializar();
+		getVentanaReserva().inicializar();
+		disableFilter();
 	}
 	
 	private VentanaReserva getVentanaReserva() {
@@ -321,13 +395,28 @@ public class VentanaPrincipal extends JFrame {
 	}
 	
 	private void changeDarkTheme() {
+		getMmItemThemeDark().setVisible(false);
+		getMmItemThemeLight().setVisible(true);
 		try {
 		    UIManager.setLookAndFeel("com.formdev.flatlaf.FlatDarkLaf");
 		    updateTheme();
 		} catch (Exception e) {
 		    e.printStackTrace();
 		}
+		disableFilter();
 
+	}
+	
+	private void changeLightTheme() {
+		getMmItemThemeDark().setVisible(true);
+		getMmItemThemeLight().setVisible(false);
+		try {
+		    UIManager.setLookAndFeel("com.formdev.flatlaf.FlatIntelliJLaf");
+		    updateTheme();
+		} catch (Exception e) {
+		    e.printStackTrace();
+		}
+		disableFilter();
 	}
 	
 	private void updateTheme() {
@@ -339,6 +428,8 @@ public class VentanaPrincipal extends JFrame {
 			SwingUtilities.updateComponentTreeUI(vd);
 		}if(reserva!=null) {
 			SwingUtilities.updateComponentTreeUI(reserva);
+		}if(pnCastle!=null){
+			SwingUtilities.updateComponentTreeUI(pnCastle);
 		}
 
 	}
@@ -378,25 +469,33 @@ public class VentanaPrincipal extends JFrame {
 	private JScrollPanelWithPanel getPnCastle() {
 		if (pnCastle == null) {
 			pnCastle= new JScrollPanelWithPanel(app.getAmountOfData(), AMOUNT_OF_VISIBLE_PANELS);
-			loadImagesAndDescription();
-			pnCastle.addComponentListener(new ComponentAdapter() {
-				@Override
-				public void componentResized(ComponentEvent e) {
-					JPanel panel =(JPanel) getPnCastle().getPanel(getPnCastle().getScrollPosition());
-					int width=panel.getWidth()/panel.getComponentCount();
-					int height = (int) (panel.getHeight());
-					actualizarImagenes(width,height);
-				}
-			});
-			pnCastle.addMouseListener(new MouseAdapter() {
-				@Override
-				public void mouseClicked(MouseEvent e) {
-					JPanel panel = (JPanel) e.getSource();
-					procesarCastillo(panel);
-				}
-			});
+			if(app.getAmountOfData()!=0) {
+				loadImagesAndDescription();
+				pnCastle.addComponentListener(new ComponentAdapter() {
+					@Override
+					public void componentResized(ComponentEvent e) {
+						JPanel panel =(JPanel) getPnCastle().getPanel(getPnCastle().getScrollPosition());
+						int width=panel.getWidth()/panel.getComponentCount();
+						int height = (int) (panel.getHeight());
+						actualizarImagenes(width,height);
+					}
+				});
+				pnCastle.addMouseListener(new MouseAdapter() {
+					@Override
+					public void mouseClicked(MouseEvent e) {
+						JPanel panel = (JPanel) e.getSource();
+						procesarCastillo(panel);
+					}
+				});
+			}else {
+				addNoFound();
+			}
 		}
 		return pnCastle;
+	}
+	
+	private void addNoFound() {
+		JOptionPane.showMessageDialog(null, textos.getString("sinDatos"));
 	}
 	
 	private void procesarCastillo(JPanel panel) {
@@ -653,7 +752,7 @@ public class VentanaPrincipal extends JFrame {
 		setExtendedState(JFrame.NORMAL);
 		setVisible(false);
 		setResizable(false);
-		setBounds(100, 100, 400, 600);
+		setBounds(100, 100, 530, 600);
 		setLocationRelativeTo(null);
 		setVisible(true);
 		cd.show(contentPane, "pnCastilloInfo");
@@ -680,7 +779,9 @@ public class VentanaPrincipal extends JFrame {
 	private void loadCastleImg(String id) {
 		String path = "/img/"+id+".png";
 		JLabel label = (JLabel) getPnImagenCastillo().getComponent(0);
-		label.setIcon(setImagenAdaptada(300, 200, path));
+		ImageIcon icon =setImagenAdaptada(300, 200, path);
+		icon.setDescription(id);
+		label.setIcon(icon);
 	}
 
 	private JPanel getPnCastilloInfo() {
@@ -743,7 +844,7 @@ public class VentanaPrincipal extends JFrame {
 		}
 		return btnFechaCastilloInfo;
 	}
-	
+
 	private void crearReserva(String id) {
 		app.iniciarReserva(id);
 		getVentanaReserva().updateDate();
@@ -811,8 +912,10 @@ public class VentanaPrincipal extends JFrame {
 					}
 				}
 			});
-			slDinero.setMaximum(app.getMaxPrice());
+			int value = app.getMaxPrice();
+			slDinero.setMaximum(value);
 			slDinero.setMinimum(app.getMinPrice());
+			slDinero.setValue(value);
 		}
 		return slDinero;
 	}
@@ -839,19 +942,197 @@ public class VentanaPrincipal extends JFrame {
 	private JButton getBtnIdioma() {
 		if (btnIdioma == null) {
 			btnIdioma = new JButton("");
+			ImageIcon icon =setImagenAdaptada(20, 20, "/img/en.png");
+			icon.setDescription("en");
+			btnIdioma.setIcon(icon);
 			btnIdioma.addActionListener(new ActionListener() {
 				public void actionPerformed(ActionEvent e) {
-					app.setLocation(new Locale("en"));
-					setTextLocation();
+					modificarIdioma();
 				}
 			});
 		}
 		return btnIdioma;
 	}
 	
+	void modificarIdioma() {
+		app.setLocation(new Locale(btnIdioma.getIcon().toString()));
+		setTextLocation();
+		changeFlag();
+		cambiarIdioma();
+		if(getContentPane().getComponent(2).isVisible()) {
+			cambiarPanelCastillo(getLbImagenCastillo().getIcon().toString());
+		}
+	}
+	
+	private void changeFlag() {
+		if(getBtnIdioma().getIcon().toString().equals("en")){
+			ImageIcon icon =setImagenAdaptada(20, 20, "/img/es.png");
+			icon.setDescription("es");
+			getBtnIdioma().setIcon(icon);
+		}else {
+			ImageIcon icon =setImagenAdaptada(20, 20, "/img/en.png");
+			icon.setDescription("en");
+			getBtnIdioma().setIcon(icon);
+		}
+	}
+	
 	void cambiarIdioma() {
 		setTextLocation();
+		disableFilter();
 		if(reserva!=null) reserva.cambiarIdioma();
 		if(game!=null) game.cambiarIdioma();
+	}
+	private JMenuBar getMenuBar_1() {
+		if (menuBar == null) {
+			menuBar = new JMenuBar();
+			menuBar.add(getMmBtnBooker());
+			menuBar.add(getMmBtnOptions());
+			menuBar.add(getMmBtnHelp());
+		}
+		return menuBar;
+	}
+	private JMenu getMmBtnBooker() {
+		if (mmBtnBooker == null) {
+			mmBtnBooker = new JMenu("New menu");
+			mmBtnBooker.add(getMmItemReserva());
+			mmBtnBooker.add(getMmItemJuego());
+			mmBtnBooker.add(getMmItemDescuento());
+			mmBtnBooker.add(getSeparator());
+			mmBtnBooker.add(getMmItemSalir());
+		}
+		return mmBtnBooker;
+	}
+	private JMenu getMmBtnOptions() {
+		if (mmBtnOptions == null) {
+			mmBtnOptions = new JMenu("New menu");
+			mmBtnOptions.add(getMmItemThemeDark());
+			mmBtnOptions.add(getMmItemThemeLight());
+			mmBtnOptions.add(getMmItemIdiomaEn());
+		}
+		return mmBtnOptions;
+	}
+	private JMenu getMmBtnHelp() {
+		if (mmBtnHelp == null) {
+			mmBtnHelp = new JMenu("New menu");
+			mmBtnHelp.add(getMmItemContenidos());
+			mmBtnHelp.add(getSeparator_1());
+			mmBtnHelp.add(getMmItemSobre());
+		}
+		return mmBtnHelp;
+	}
+	private JMenuItem getMmItemReserva() {
+		if (mmItemReserva == null) {
+			mmItemReserva = new JMenuItem("New menu item");
+			mmItemReserva.setActionCommand("reservaMenu");
+			mmItemReserva.addActionListener(pbM);
+		}
+		return mmItemReserva;
+	}
+	private JMenuItem getMmItemJuego() {
+		if (mmItemJuego == null) {
+			mmItemJuego = new JMenuItem("New menu item");
+			mmItemJuego.setActionCommand("juegoMenu");
+			mmItemJuego.addActionListener(pbM);
+		}
+		return mmItemJuego;
+	}
+	private JMenuItem getMmItemSalir() {
+		if (mmItemSalir == null) {
+			mmItemSalir = new JMenuItem("New menu item");
+		}
+		return mmItemSalir;
+	}
+	private JSeparator getSeparator() {
+		if (separator == null) {
+			separator = new JSeparator();
+		}
+		return separator;
+	}
+	private JMenuItem getMmItemDescuento() {
+		if (mmItemDescuento == null) {
+			mmItemDescuento = new JMenuItem("New menu item");
+			mmItemDescuento.setActionCommand("descuentoMenu");
+			mmItemDescuento.addActionListener(pbM);
+		}
+		return mmItemDescuento;
+	}
+	
+	private class MenuProcesaBotones implements ActionListener{
+
+		@Override
+		public void actionPerformed(ActionEvent e) {
+			String id = e.getActionCommand();
+			procesaCambios(id);
+		}
+		
+	}
+	
+	private void procesaCambios(String id) {
+		switch(id) {
+		case "reservaMenu":
+			cambiarPanelCastillos();
+			break;
+		case "juegoMenu":
+			inicializarJuego();
+			break;
+		case "descuentoMenu":
+			changeDiscount();
+			break;
+		case "temaOscuro":
+			changeDarkTheme();
+			break;
+		case "idioma":
+			modificarIdioma();
+			break;
+		case "temaClaro":
+			changeLightTheme();
+			break;
+		}
+	}
+	private JMenuItem getMmItemThemeDark() {
+		if (mmItemThemeDark == null) {
+			mmItemThemeDark = new JMenuItem("New menu item");
+			mmItemThemeDark.addActionListener(pbM);
+			mmItemThemeDark.setActionCommand("temaOscuro");
+		}
+		return mmItemThemeDark;
+	}
+	private JMenuItem getMmItemIdiomaEn() {
+		if (mmItemIdiomaEn == null) {
+			mmItemIdiomaEn = new JMenuItem("New menu item");
+			mmItemIdiomaEn.addActionListener(pbM);
+			mmItemIdiomaEn.setActionCommand("idioma");
+		}
+		return mmItemIdiomaEn;
+	}
+	private JMenuItem getMmItemThemeLight() {
+		if (mmItemThemeLight == null) {
+			mmItemThemeLight = new JMenuItem("New menu item");
+			mmItemThemeLight.addActionListener(pbM);
+			mmItemThemeLight.setActionCommand("temaClaro");
+			mmItemThemeLight.setVisible(false);
+		}
+		return mmItemThemeLight;
+	}
+	private JMenuItem getMmItemContenidos() {
+		if (mmItemContenidos == null) {
+			mmItemContenidos = new JMenuItem("New menu item");
+			mmItemContenidos.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_F1, 0));
+		}
+		return mmItemContenidos;
+	}
+	private JMenuItem getMmItemSobre() {
+		if (mmItemSobre == null) {
+			mmItemSobre = new JMenuItem("New menu item");
+			mmItemSobre.addActionListener(pbM);
+			mmItemSobre.setActionCommand("about");
+		}
+		return mmItemSobre;
+	}
+	private JSeparator getSeparator_1() {
+		if (separator_1 == null) {
+			separator_1 = new JSeparator();
+		}
+		return separator_1;
 	}
 }

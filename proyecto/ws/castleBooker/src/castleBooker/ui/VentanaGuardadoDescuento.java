@@ -245,14 +245,15 @@ public class VentanaGuardadoDescuento extends JDialog {
 		case "volverEdad":
 			cambiarPanelDescuento();
 			break;
+		case "volverGuardar":
+			cambiarPanelDescuento();
+			break;
 		case "aceptarEdad":
 			app.saveAge(getCalendario().getDate());
 			if(app.isAgeValid()) {
 				cambiarPanelGuardado();
 			}else {
-				JOptionPane.showMessageDialog(null, "");
-				game.inicializar();
-				dispose();
+				JOptionPane.showMessageDialog(null, textos.getString("menor"));
 			}
 		}
 	}
@@ -266,8 +267,12 @@ public class VentanaGuardadoDescuento extends JDialog {
 	}
 	
 	private void cambiarPanelEdad() {
-		CardLayout cd = (CardLayout) getContentPane().getLayout();
-		cd.show(getContentPane(),"edad");
+		if(app.isAgeValid()) {
+			cambiarPanelGuardado();
+		}else {
+			CardLayout cd = (CardLayout) getContentPane().getLayout();
+			cd.show(getContentPane(),"edad");
+		}
 	}
 	
 	private void cambiarPanelDescuento() {

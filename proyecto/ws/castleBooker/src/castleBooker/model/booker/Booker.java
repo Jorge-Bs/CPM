@@ -67,6 +67,7 @@ public class Booker {
 	public void setLocation(Locale location) {
 		Locale.setDefault(location);
 		this.location=location;
+		loadCastle();
 	}
 	
 	public Locale getLocation() {
@@ -134,10 +135,11 @@ public class Booker {
 		}
 		if(filtros!=null && filtros.size()!=0) {
 			List<Castle> filtro=new ArrayList<>();
-			for(String tipo:filtros) {
-				for(Castle castillo:filtroMoney) {
+			for(Castle castillo:filtroMoney) {
+				for(String tipo:filtros) {
 					if(castillo.getEnchantment().contains(tipo)) {
 						filtro.add(castillo);
+						break;
 					}
 				}
 			}
@@ -262,13 +264,13 @@ public class Booker {
 	}
 
 
-	public String getDiscountPrice() {
+	public double getDiscountPrice() {
 		if(hasActualUserDiscount()) {
 			double value =  (reservaEnProgreso.getPrice()*(1-discountData.getDiscount(userId()).getAmount()));
 			value = Math.round(value*100);
-			return (value/100)+"";
+			return (value/100);
 		}else {
-			return reservaEnProgreso.getPrice()+"";
+			return reservaEnProgreso.getPrice();
 		}
 	}
 
@@ -276,7 +278,7 @@ public class Booker {
 	public void procesarReserva(boolean aplicarDescuento) {
 		double value;
 		if(aplicarDescuento && hasActualUserDiscount()) {
-			value = Double.parseDouble(getDiscountPrice());
+			value = getDiscountPrice();
 		}else {
 			value = reservaEnProgreso.getPrice();
 		}

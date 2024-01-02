@@ -168,7 +168,7 @@ public class App {
 		return booker.arriveDate();
 	}
 
-	public String getDiscountPrice() {
+	public double getDiscountPrice() {
 		return booker.getDiscountPrice();
 	}
 

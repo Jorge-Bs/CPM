@@ -61,6 +61,8 @@ public class VentanaEdad extends JDialog {
 		
 		getBtnCancelar().setText(textos.getString("volver"));
 		getBtnCancelar().setMnemonic(textos.getString("mnemonicVolver").charAt(0));
+		
+		calendario.setLocale(app.getLocation());
 	}
 	
 	private JPanel getPnComprobarEdad() {

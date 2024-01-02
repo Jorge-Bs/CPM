@@ -8,9 +8,11 @@ import castleBooker.sevice.App;
 import java.awt.Toolkit;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.text.DecimalFormat;
+import java.text.DecimalFormatSymbols;
 import java.text.NumberFormat;
 import java.text.NumberFormat.Style;
-import java.util.Locale;
+import java.util.Currency;
 import java.util.ResourceBundle;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
@@ -43,7 +45,6 @@ public class VentanaReserva extends JDialog {
 	 */
 	private static final long serialVersionUID = 1L;
 	private App app;
-	private Locale location;
 	private JLabel lbAmountOfRooms;
 	private JLabel lbAmountOfPeople;
 	private JLabel lbAmountOfDays;
@@ -118,12 +119,11 @@ public class VentanaReserva extends JDialog {
 	public VentanaReserva(VentanaPrincipal vp,App app) {
 		this.vp=vp;
 		setDefaultCloseOperation(JDialog.DISPOSE_ON_CLOSE);
-		this.location=app.getLocation();
 		setResizable(false);
 		setModal(true);
 		this.app=app;
 		setIconImage(Toolkit.getDefaultToolkit().getImage(VentanaReserva.class.getResource("/img/icon.png")));
-		setBounds(100, 100, 499, 478);
+		setBounds(100, 100, 499, 499);
 		setLocationRelativeTo(null);
 		getContentPane().setLayout(new CardLayout(0, 0));
 		getContentPane().add(getPnFechas(), "fecha");
@@ -163,7 +163,8 @@ public class VentanaReserva extends JDialog {
 		JButton boton = (JButton) getCalendario().getComponent(0);
 		boton.setToolTipText(textos.getString("tooltipCalendario"));
 		
-		//calendario.setLocale(location);
+		
+		
 		
 		
 		getLbFullName().setText(textos.getString("fullName"));
@@ -213,8 +214,10 @@ public class VentanaReserva extends JDialog {
 		
 	}
 	private void setTextLabelPrice() {
-		NumberFormat precio = NumberFormat.getCompactNumberInstance(location, Style.LONG);
-		getLbPrice().setText(textos.getString("precio")+precio.format(app.getPrice())+textos.getString("moneda"));
+		NumberFormat precio = NumberFormat.getCurrencyInstance(app.getLocation());
+		precio.setCurrency(Currency.getInstance(textos.getString("moneda")));
+		
+		getLbPrice().setText(textos.getString("precio")+precio.format(app.getPrice())+"   ");
 	}
 
 	private JLabel getLbAmountOfRooms() {
@@ -352,7 +355,6 @@ public class VentanaReserva extends JDialog {
 	}
 	
 	
-	//TODO:Inicializar los datos de la labels
 	public void inicializar() {
 		CardLayout cd = (CardLayout) getContentPane().getLayout();
 		cd.show(getContentPane(), "fecha");
@@ -397,18 +399,19 @@ public class VentanaReserva extends JDialog {
 		cd.show(getContentPane(), "confirmar");
 		getPnPreciosFinal().add(getLbPrice());
 		updateFinalFields();
+		NumberFormat precio = NumberFormat.getCurrencyInstance(app.getLocation());
+		precio.setCurrency(Currency.getInstance(textos.getString("moneda")));
+		String value = textos.getString("Preciodescuento")+ precio.format(app.getDiscountPrice());
+		getLbPrecioDescuento().setText(value);
 		if(app.hasActualUserDiscount()) {
 			getPnDescuento().setVisible(true);
 			if(getRdbSi().isSelected()) {
 				getLbPrecioDescuento().setVisible(true);
-				String value = textos.getString("Preciodescuento")+ app.getDiscountPrice() + textos.getString("moneda");
-				getLbPrecioDescuento().setText(value);
+				
 			}
 		}else {
 			getPnDescuento().setVisible(false);
 			getLbPrecioDescuento().setVisible(false);
-			String value = textos.getString("Preciodescuento")+ app.getDiscountPrice() + textos.getString("moneda");
-			getLbPrecioDescuento().setText(value);
 		}
 	}
 	
@@ -443,9 +446,11 @@ public class VentanaReserva extends JDialog {
 	}
 	
 	private void cambiarPanelInfoPersonal() {
+		fillFields();
 		getPnPrecioDatos().add(getLbPrice(), 0);
 		CardLayout cd = (CardLayout) getContentPane().getLayout();
 		cd.show(getContentPane(), "info");
+		fillFields();
 	}
 	
 	private void cambiarPanelFechas() {
@@ -506,8 +511,8 @@ public class VentanaReserva extends JDialog {
 		}
 		return pnPersonalData;
 	}
-	
-	private void fillFields() {
+
+	 void fillFields() {
 		getTxId().setText(app.getUserId());
 	}
 	private JLabel getLbFullName() {
@@ -840,7 +845,7 @@ public class VentanaReserva extends JDialog {
 	private JPanel getPnConfirmacionFinal() {
 		if (pnConfirmacionFinal == null) {
 			pnConfirmacionFinal = new JPanel();
-			pnConfirmacionFinal.setBounds(69, 362, 356, 68);
+			pnConfirmacionFinal.setBounds(30, 362, 430, 89);
 			pnConfirmacionFinal.setLayout(new GridLayout(2, 0, 0, 0));
 			pnConfirmacionFinal.add(getPnPreciosFinal());
 			pnConfirmacionFinal.add(getPnBotonesFinales());

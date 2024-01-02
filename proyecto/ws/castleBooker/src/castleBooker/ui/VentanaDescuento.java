@@ -147,6 +147,7 @@ public class VentanaDescuento extends JDialog {
 			String action = e.getActionCommand();
 			switch(action) {
 			case "volver":
+				app.saveId(getTxDni().getText());
 				dispose();
 				break;
 			case "reservar":

@@ -52,10 +52,15 @@ public class JScrollPanelWithPanel extends JPanel{
 	}
 
 	private void addPanels(int amountOfPanels) {
-		for(int i=0;i<amountOfPanels;i++) {
+		if(amountOfPanels==0) {
 			JPanel panel=new JPanel();
-			panel.setBorder(new LineBorder(Color.BLACK));
 			paneles.add(panel);
+		}else {
+			for(int i=0;i<amountOfPanels;i++) {
+				JPanel panel=new JPanel();
+				panel.setBorder(new LineBorder(Color.BLACK));
+				paneles.add(panel);
+			}
 		}
 		this.amountOfPanels=paneles.size();
 		scrollBar.setMaximum(amountOfPanels);
