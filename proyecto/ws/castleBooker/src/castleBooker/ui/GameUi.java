@@ -8,7 +8,6 @@ import java.awt.Toolkit;
 
 
 import javax.swing.JPanel;
-import javax.swing.UIManager;
 
 import castleBooker.model.game.Casilla;
 import castleBooker.model.game.Game;
@@ -39,14 +38,13 @@ public class GameUi extends JDialog {
 	 * 
 	 */
 	private static final long serialVersionUID = 1L;
-	private Locale location;
 	private JPanel pnBoard;
 	private JPanel pnDiceValue;
 	private App app;
 	private JPanel PnResult;
 	private JPanel pnDic;
 	private JLabel lbResult;
-	private VentanaConfirmacionEdad vEdad;
+	private VentanaGuardadoDescuento vGuardadoDescuento;
 	
 	private ResourceBundle textos;
 	private JButton btDice;
@@ -60,7 +58,6 @@ public class GameUi extends JDialog {
 		setModal(true);
 		this.vp=vp;
 		this.app=app;
-		this.location=app.getLocation();
 		addComponentListener(new ComponentAdapter() {
 			@Override
 			public void componentResized(ComponentEvent e) {
@@ -79,12 +76,9 @@ public class GameUi extends JDialog {
 	}
 	
 	public Locale getLocale() {
-		return this.location;
+		return app.getLocation();
 	}
 
-	protected void setLocation(Locale location) {
-		this.location = location;
-	}
 
 	private void setTextLocation() {
 		textos = ResourceBundle.getBundle("rcs/text",getLocale());
@@ -239,11 +233,11 @@ public class GameUi extends JDialog {
 		}
 	}
 	
-	private VentanaConfirmacionEdad getVEdad() {
-		if(vEdad==null) {
-			vEdad= new VentanaConfirmacionEdad(app,this);
+	private VentanaGuardadoDescuento getVEdad() {
+		if(vGuardadoDescuento==null) {
+			vGuardadoDescuento= new VentanaGuardadoDescuento(app,this);
 		}
-		return vEdad;
+		return vGuardadoDescuento;
 	}
 
 	private void pintarResultado() {
@@ -323,8 +317,8 @@ public class GameUi extends JDialog {
 		disableButtons();
 		getLbResult().setIcon(null);
 		setTextLocation();
-		if(vEdad!=null) {
-			vEdad.inicializar();
+		if(vGuardadoDescuento!=null) {
+			vGuardadoDescuento.inicializar();
 		}
 	}
 	
@@ -345,6 +339,11 @@ public class GameUi extends JDialog {
 		inicializar();
 		dispose();
 		vp.changeReserva();
+	}
+	
+	void cambiarIdioma() {
+		setTextLocation();
+		if(vGuardadoDescuento!=null) vGuardadoDescuento.cambiarIdioma();
 	}
 	
 }

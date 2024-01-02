@@ -4,7 +4,6 @@ import javax.swing.JDialog;
 import java.awt.Toolkit;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.util.Locale;
 import java.util.ResourceBundle;
 
 import javax.swing.JPanel;
@@ -30,7 +29,6 @@ public class VentanaDescuento extends JDialog {
 	private JLabel lbConsulta;
 	private JTextField txDni;
 	private App app;
-	private Locale location;
 	private ResourceBundle textos;
 	private ProcesBotones pb = new ProcesBotones();
 	private JLabel lbIndicaDescuento;
@@ -43,7 +41,6 @@ public class VentanaDescuento extends JDialog {
 		setDefaultCloseOperation(JDialog.DISPOSE_ON_CLOSE);
 		this.vp=vp;
 		this.app=app;
-		this.location=app.getLocation();
 		setModal(true);
 		setResizable(false);
 		setIconImage(Toolkit.getDefaultToolkit().getImage(VentanaDescuento.class.getResource("/img/icon.png")));
@@ -58,7 +55,7 @@ public class VentanaDescuento extends JDialog {
 	}
 	
 	private void setTextLocation() {
-		textos = ResourceBundle.getBundle("rcs/text",location);
+		textos = ResourceBundle.getBundle("rcs/text",app.getLocation());
 		setTitle(textos.getString("tituloDecuento"));
 	
 		getLbConsulta().setText(textos.getString("consulta"));

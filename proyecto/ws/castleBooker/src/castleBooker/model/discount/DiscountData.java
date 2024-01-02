@@ -18,10 +18,14 @@ public class DiscountData {
 	public boolean addDiscount(String key,Discount type) {
 		if(!descuentos.containsKey(key)) {
 			descuentos.put(key, type);
-			saveFile();
+			saveDiscount(key+";"+type);
 			return true;
 		}
 		return false;
+	}
+	
+	private void saveDiscount(String line) {
+		DiscountFileUtil.save(line, FILE_NAME,true);
 	}
 	
 	public Discount getDiscount(String key) {
@@ -39,7 +43,7 @@ public class DiscountData {
 		lines = lines.replace(" ", "");
 		lines = lines.replace("=",";");
 		lines = lines.replace(",","\n");
-		DiscountFileUtil.save(lines,FILE_NAME);
+		DiscountFileUtil.save(lines,FILE_NAME,false);
 	}
 	
 	public boolean hasDiscount(String key) {

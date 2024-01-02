@@ -110,6 +110,7 @@ public class VentanaReserva extends JDialog {
 	private JButton btnVolverADatos;
 	private JPanel pnPrecioDatos;
 	private VentanaPrincipal vp;
+	private VentanaEdad vd;
 
 	/**
 	 * Create the dialog.
@@ -136,7 +137,7 @@ public class VentanaReserva extends JDialog {
 	}
 	
 	private void setTextLocation() {
-		textos = ResourceBundle.getBundle("rcs/text",location);
+		textos = ResourceBundle.getBundle("rcs/text",app.getLocation());
 		setTitle(textos.getString("tituloReserva"));
 		
 		getLbAmountOfRooms().setText(textos.getString("habitaciones"));
@@ -923,10 +924,29 @@ public class VentanaReserva extends JDialog {
 	private void terminar() {
 		if(app.isAgeValid()) {
 			app.procesarReserva(getRdbSi().isSelected());
+			JOptionPane.showMessageDialog(null, textos.getString("guardadoFinal"));
 			vp.cambiarPanelInicio();
 			dispose();
 		}else {
-			
+			getVentanaEdad();
+			if(!app.isAgeValid()) {
+				JOptionPane.showMessageDialog(null, textos.getString("menor"));
+			}
+			terminar();
+		}
+	}
+	
+	private void getVentanaEdad() {
+		if(vd==null) {
+			vd = new VentanaEdad(app);
+		}
+		vd.setVisible(true);
+	}
+	
+	void cambiarIdioma() {
+		setTextLocation();
+		if(vd!=null) {
+			vd.cambiarIdioma();
 		}
 	}
 }

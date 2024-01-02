@@ -86,6 +86,7 @@ public class Persona {
 		setMonthOfBirth(0);
 		setYearOfBirth(0);
 		setEmail(null);
+		saveDate(null);
 	}
 	
 	void saveDate(Date age) {

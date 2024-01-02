@@ -58,12 +58,13 @@ public class JScrollPanelWithPanel extends JPanel{
 			paneles.add(panel);
 		}
 		this.amountOfPanels=paneles.size();
-		scrollBar.setMaximum(((amountOfPanels)*2)-(amountOfPanels/amountOfVisiblePanels));
+		scrollBar.setMaximum(amountOfPanels);
 	}
 	
 	private JScrollBar getScrollBar() {
 		if(scrollBar==null) {
 			scrollBar= new JScrollBar();
+			scrollBar.setVisibleAmount(amountOfVisiblePanels);
 			scrollBar.addMouseWheelListener(scM);
 			scrollBar.addAdjustmentListener(new AdjustmentListener() {
 				public void adjustmentValueChanged(AdjustmentEvent e) {
@@ -78,8 +79,15 @@ public class JScrollPanelWithPanel extends JPanel{
 		panelContenedor.removeAll();
 		if(value>=(amountOfPanels-amountOfVisiblePanels)) {
 			value=amountOfPanels-amountOfVisiblePanels;
+			if(value<0) {
+				value=0;
+			}
 		}
-		for(int i=0;i<amountOfVisiblePanels;i++) {
+		int bucle=amountOfVisiblePanels;
+		if(bucle>(amountOfPanels)) {
+			bucle=amountOfPanels;
+		}
+		for(int i=0;i<bucle;i++) {
 			panelContenedor.add(paneles.get(i+value));
 			panelContenedor.repaint();
 			panelContenedor.validate();

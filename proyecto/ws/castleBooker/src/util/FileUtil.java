@@ -11,18 +11,22 @@ public abstract class FileUtil{
 		return fichero;
 	}
 
-	private static BufferedWriter createWriter(String nombreFicheroSalida) throws IOException {
-		BufferedWriter fichero = new BufferedWriter(new FileWriter(nombreFicheroSalida));
+	private static BufferedWriter createWriter(String nombreFicheroSalida,boolean option) throws IOException {
+		BufferedWriter fichero = new BufferedWriter(new FileWriter(nombreFicheroSalida,option));
 		return fichero;
 		
 	}
 	
-	public static void save(String lines,String fileName) {
+	public static void save(String lines,String fileName,boolean option) {
 		BufferedWriter writer = null;
+		File file = new File(fileName);
 		try {
 			try {
-				writer = createWriter(fileName);
-				writer.write(lines);
+				writer = createWriter(fileName,option);
+				if (file.length() != 0) {
+	                lines = "\n" + lines;
+	            }
+				writer.append(lines);
 			}finally {
 				if(writer!=null) {
 					writer.close();

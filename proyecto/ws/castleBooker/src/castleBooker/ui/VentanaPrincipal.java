@@ -39,6 +39,9 @@ import java.awt.FlowLayout;
 import javax.swing.JCheckBox;
 import java.awt.Font;
 import java.awt.Color;
+import javax.swing.JSlider;
+import javax.swing.event.ChangeListener;
+import javax.swing.event.ChangeEvent;
 
 public class VentanaPrincipal extends JFrame {
 
@@ -50,7 +53,6 @@ public class VentanaPrincipal extends JFrame {
 	
 	private static final long serialVersionUID = 1L;
 	private JPanel contentPane;
-	private Locale location;
 	private ResourceBundle textos;
 	private App app;
 	private JPanel pnInicio;
@@ -90,6 +92,10 @@ public class VentanaPrincipal extends JFrame {
 	private JTextArea txInfo;
 	private JPanel pnTextosCastillos;
 	private VentanaReserva reserva;
+	private JSlider slDinero;
+	private JLabel lbPrecioMax;
+	private JPanel pnBotonIdioma;
+	private JButton btnIdioma;
 
 	
 
@@ -107,7 +113,6 @@ public class VentanaPrincipal extends JFrame {
 		});
 		setIconImage(Toolkit.getDefaultToolkit().getImage(VentanaPrincipal.class.getResource("/img/icon.png")));
 		this.app=app;
-		this.location=app.getLocation();
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		//setMinimumSize(new Dimension(380, 504));
 		setBounds(100, 100, 378, 566);
@@ -127,11 +132,7 @@ public class VentanaPrincipal extends JFrame {
 	}
 	
 	public Locale getLocale() {
-		return this.location;
-	}
-
-	protected void setLocation(Locale location) {
-		this.location = location;
+		return app.getLocation();
 	}
 
 	private void setTextLocation() {
@@ -166,6 +167,8 @@ public class VentanaPrincipal extends JFrame {
 		
 		getBtnVolverCastilloInfo().setText(textos.getString("volver"));
 		getBtnVolverCastilloInfo().setMnemonic(textos.getString("mnemonicVolver").charAt(0));
+		
+		getLbPrecioMax().setText(textos.getString("max")+getSlDinero().getValue());
 		
 		addTextFiltro(textos);
 	}
@@ -244,6 +247,7 @@ public class VentanaPrincipal extends JFrame {
 			pnBien = new JPanel();
 			pnBien.setLayout(new BorderLayout(0, 0));
 			pnBien.add(getLbBienvenida());
+			pnBien.add(getPnBotonIdioma(), BorderLayout.NORTH);
 		}
 		return pnBien;
 	}
@@ -511,6 +515,8 @@ public class VentanaPrincipal extends JFrame {
 			pnConFiltros.setVisible(false);
 			pnConFiltros.setLayout(new GridLayout(0, 1, 0, 0));
 			addCheckBox();
+			pnConFiltros.add(getLbPrecioMax());
+			pnConFiltros.add(getSlDinero());
 			pnConFiltros.add(getPanelBtnAplicar());
 		}
 		return pnConFiltros;
@@ -547,12 +553,12 @@ public class VentanaPrincipal extends JFrame {
 				filtros.add(box.getActionCommand());
 			}
 		}
-		cambiar(filtros);
+		cambiar(filtros,getSlDinero().getValue());
 	}
 	
 	
-	private void cambiar(List<String> filtros) {
-		app.setCastles(filtros);
+	private void cambiar(List<String> filtros,int dinero) {
+		app.setCastles(filtros,dinero);
 		pnMuestraCastillos.remove(getPnCastle());
 		repaint();
 		pnCastle=null;
@@ -594,7 +600,7 @@ public class VentanaPrincipal extends JFrame {
 	}
 	
 	private void disableFilter() {
-		cambiar(null);
+		cambiar(null,app.getMaxPrice());
 		JPanel pnInfo = getPnConFiltros();
 		for(int i=0;i<app.getAmountOfEnchantments();i++) {
 			JCheckBox box =(JCheckBox) pnInfo.getComponent(i);
@@ -794,5 +800,58 @@ public class VentanaPrincipal extends JFrame {
 			pnTextosCastillos.add(getPnDescripcionCastillo());
 		}
 		return pnTextosCastillos;
+	}
+	private JSlider getSlDinero() {
+		if (slDinero == null) {
+			slDinero = new JSlider();
+			slDinero.addChangeListener(new ChangeListener() {
+				public void stateChanged(ChangeEvent e) {
+					if(textos!=null) {
+						cambiarTextos();
+					}
+				}
+			});
+			slDinero.setMaximum(app.getMaxPrice());
+			slDinero.setMinimum(app.getMinPrice());
+		}
+		return slDinero;
+	}
+	
+	private void cambiarTextos() {
+		getLbPrecioMax().setText(textos.getString("max")+getSlDinero().getValue());
+	}
+	
+	private JLabel getLbPrecioMax() {
+		if (lbPrecioMax == null) {
+			lbPrecioMax = new JLabel("New label");
+		}
+		return lbPrecioMax;
+	}
+	private JPanel getPnBotonIdioma() {
+		if (pnBotonIdioma == null) {
+			pnBotonIdioma = new JPanel();
+			FlowLayout flowLayout = (FlowLayout) pnBotonIdioma.getLayout();
+			flowLayout.setAlignment(FlowLayout.RIGHT);
+			pnBotonIdioma.add(getBtnIdioma());
+		}
+		return pnBotonIdioma;
+	}
+	private JButton getBtnIdioma() {
+		if (btnIdioma == null) {
+			btnIdioma = new JButton("");
+			btnIdioma.addActionListener(new ActionListener() {
+				public void actionPerformed(ActionEvent e) {
+					app.setLocation(new Locale("en"));
+					setTextLocation();
+				}
+			});
+		}
+		return btnIdioma;
+	}
+	
+	void cambiarIdioma() {
+		setTextLocation();
+		if(reserva!=null) reserva.cambiarIdioma();
+		if(game!=null) game.cambiarIdioma();
 	}
 }

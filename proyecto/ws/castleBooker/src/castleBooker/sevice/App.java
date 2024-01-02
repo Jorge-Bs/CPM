@@ -16,6 +16,10 @@ public class App {
 		return booker.getLocation();
 	}
 	
+	public void setLocation(Locale location) {
+		booker.setLocation(location);
+	}
+	
 	public Casilla getCasilla(int fila,int columna) {
 		return booker.getGame().getCasilla(fila, columna);
 	}
@@ -84,8 +88,8 @@ public class App {
 		return booker.getEnchantment(index);
 	}
 
-	public void setCastles(List<String> filtros) {
-		booker.setCastles(filtros);
+	public void setCastles(List<String> filtros,int dinero) {
+		booker.setCastles(filtros,dinero);
 	}
 
 	public String getCastleInfo(String id) {
@@ -191,6 +195,14 @@ public class App {
 
 	public boolean guardarDescuento(String id) {
 		return booker.guardarDescuento(id);
+	}
+
+	public int getMaxPrice() {
+		return booker.maxPrice();
+	}
+
+	public int getMinPrice() {
+		return booker.minPrice();
 	}
 	
 	

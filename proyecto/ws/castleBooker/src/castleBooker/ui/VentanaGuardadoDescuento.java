@@ -14,19 +14,17 @@ import castleBooker.sevice.App;
 import java.awt.Toolkit;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.util.Locale;
 import java.util.ResourceBundle;
 import javax.swing.JPanel;
 import javax.swing.JButton;
 import java.awt.Font;
 import java.awt.CardLayout;
-import java.awt.GridLayout;
 import java.awt.GridBagLayout;
 import java.awt.GridBagConstraints;
 import java.awt.Insets;
 import javax.swing.JTextField;
 
-public class VentanaConfirmacionEdad extends JDialog {
+public class VentanaGuardadoDescuento extends JDialog {
 	
 	/**
 	 * 
@@ -34,7 +32,6 @@ public class VentanaConfirmacionEdad extends JDialog {
 	private static final long serialVersionUID = 1L;
 	private JLabel lbMessageEdad;
 	private App app;
-	private Locale location;
 	private ResourceBundle textos;
 	private JLabel lbEdad;
 	private JDateChooser calendario;
@@ -64,12 +61,11 @@ public class VentanaConfirmacionEdad extends JDialog {
 	/**
 	 * Create the dialog.
 	 */
-	public VentanaConfirmacionEdad(App app,GameUi game) {
+	public VentanaGuardadoDescuento(App app,GameUi game) {
 		setResizable(false);
 		this.app=app;
 		this.game=game;
-		this.location=app.getLocation();
-		setIconImage(Toolkit.getDefaultToolkit().getImage(VentanaConfirmacionEdad.class.getResource("/img/icon.png")));
+		setIconImage(Toolkit.getDefaultToolkit().getImage(VentanaGuardadoDescuento.class.getResource("/img/icon.png")));
 		setModal(true);
 		setBounds(100, 100, 509, 210);
 		setLocationRelativeTo(null);
@@ -83,7 +79,7 @@ public class VentanaConfirmacionEdad extends JDialog {
 	}
 	
 	public void setTextLocation() {
-		textos = ResourceBundle.getBundle("rcs/text",location);
+		textos = ResourceBundle.getBundle("rcs/text",app.getLocation());
 		setTitle(textos.getString("tituloEdad"));
 		
 		getLbMessageEdad().setText(textos.getString("edad"));
@@ -505,5 +501,9 @@ public class VentanaConfirmacionEdad extends JDialog {
 			lbDescuentoAGuardar.setBounds(10, 71, 475, 31);
 		}
 		return lbDescuentoAGuardar;
+	}
+	
+	void cambiarIdioma() {
+		setTextLocation();
 	}
 }

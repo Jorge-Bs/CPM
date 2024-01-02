@@ -125,11 +125,17 @@ public class Booker {
 	}
 
 
-	public void setCastles(List<String> filtros) {
+	public void setCastles(List<String> filtros,int dinero) {
+		List<Castle> filtroMoney=new ArrayList<>();
+		for(Castle castillo:totalCastillos) {
+			if(castillo.getPrice()<=dinero) {
+				filtroMoney.add(castillo);
+			}
+		}
 		if(filtros!=null && filtros.size()!=0) {
 			List<Castle> filtro=new ArrayList<>();
 			for(String tipo:filtros) {
-				for(Castle castillo:totalCastillos) {
+				for(Castle castillo:filtroMoney) {
 					if(castillo.getEnchantment().contains(tipo)) {
 						filtro.add(castillo);
 					}
@@ -138,8 +144,8 @@ public class Booker {
 			this.castillos=filtro;
 			this.amountOfCastles=filtro.size();
 		}else {
-			this.castillos=totalCastillos;
-			this.amountOfCastles=totalCastillos.size();
+			this.castillos=filtroMoney;
+			this.amountOfCastles=filtroMoney.size();
 		}
 	}
 
@@ -283,7 +289,7 @@ public class Booker {
 	
 	private void guardar() {
 		String value = reservaEnProgreso.serialize();
-		FileUtil.save(value, RESERVA_FILEPATH);
+		FileUtil.save(value, RESERVA_FILEPATH,true);
 	}
 
 
@@ -296,6 +302,9 @@ public class Booker {
 	public boolean isAgeValid() {
 		Date adult = new Date();
 		adult.setYear(date.getYear()-18);
+		if(usuario.getAge()==null) {
+			return false;
+		}
 		return usuario.getAge().before(adult);
 	}
 
@@ -316,6 +325,28 @@ public class Booker {
 	public boolean guardarDescuento(String id) {
 		Discount type = Discount.getDiscountType(game.getDiscount());
 		return (discountData.addDiscount(id, type));
+	}
+
+
+	public int maxPrice() {
+		double value=0;
+		for(Castle castillo:totalCastillos) {
+			if(castillo.getPrice()>value) {
+				value = castillo.getPrice();
+			}
+		}
+		return (int) value;
+	}
+
+
+	public int minPrice() {
+		double value=1000000;
+		for(Castle castillo:totalCastillos) {
+			if(castillo.getPrice()<value) {
+				value = castillo.getPrice();
+			}
+		}
+		return (int) value;
 	}
 
 }
