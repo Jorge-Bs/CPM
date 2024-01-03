@@ -1,6 +1,8 @@
 package castleBooker.model.booker;
 
+import java.text.NumberFormat;
 import java.util.ArrayList;
+import java.util.Currency;
 import java.util.Date;
 import java.util.List;
 import java.util.Locale;
@@ -22,7 +24,7 @@ public class Booker {
 	private static final String RESERVA_FILEPATH=FILE_PATH+"reservas.dat";
 	private Game game = new Game();
 	private DiscountData discountData = new DiscountData();
-	private Locale location;
+	private static Locale location;
 	private List<Castle> castillos;
 	private List<Castle> totalCastillos;
 	private List<Reserva> reservas = new ArrayList<>();
@@ -70,8 +72,8 @@ public class Booker {
 		loadCastle();
 	}
 	
-	public Locale getLocation() {
-		return this.location;
+	public static Locale getLocation() {
+		return location;
 	}
 	
 	public void loadCastle() {
@@ -109,12 +111,12 @@ public class Booker {
 
 	public String getCastleInfo(int index) {
 		ResourceBundle recursos = ResourceBundle.getBundle("rcs/text",getLocation());
-		return castillos.get(index).toStringDescriptionAndWithoutPrice(recursos.getString("castilloStringInfo"));
+		return castillos.get(index).info(recursos.getString("castilloStringInfo"));
 	}
 	
 	public String getCastleInfo(String id) {
 		ResourceBundle recursos = ResourceBundle.getBundle("rcs/text",getLocation());
-		return getCastle(id).toStringPriceAndWithoutDescription(recursos.getString("castilloPrecio"));
+		return getCastle(id).info(recursos.getString("castilloPrecio"));
 	}
 	
 	public int amountOfEnchantments() {
@@ -262,9 +264,8 @@ public class Booker {
 		reservaEnProgreso.setArrive(date);
 		
 	}
-
-
-	public double getDiscountPrice() {
+	
+	private double getDiscountPriceDouble() {
 		if(hasActualUserDiscount()) {
 			double value =  (reservaEnProgreso.getPrice()*(1-discountData.getDiscount(userId()).getAmount()));
 			value = Math.round(value*100);
@@ -275,10 +276,24 @@ public class Booker {
 	}
 
 
+	public String getDiscountPrice() {
+		double value = getDiscountPriceDouble();
+		return formateo(value);
+	}
+	
+	static String formateo(double value) {
+		ResourceBundle textos = ResourceBundle.getBundle("rcs/text", Booker.getLocation());
+		NumberFormat precio = NumberFormat.getCurrencyInstance(Booker.getLocation());
+		precio.setCurrency(Currency.getInstance(textos.getString("moneda")));
+		return precio.format(value);
+	}
+
+
 	public void procesarReserva(boolean aplicarDescuento) {
 		double value;
 		if(aplicarDescuento && hasActualUserDiscount()) {
-			value = getDiscountPrice();
+			value = getDiscountPriceDouble();
+			discountData.remove(usuario.getDni());
 		}else {
 			value = reservaEnProgreso.getPrice();
 		}
@@ -349,6 +364,11 @@ public class Booker {
 			}
 		}
 		return (int) value;
+	}
+
+
+	public String getPriceLocation() {
+		return formateo(reservaEnProgreso.getPrice());
 	}
 
 }

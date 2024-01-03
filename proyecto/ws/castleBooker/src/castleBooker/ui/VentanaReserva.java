@@ -8,10 +8,8 @@ import castleBooker.sevice.App;
 import java.awt.Toolkit;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.text.DecimalFormat;
-import java.text.DecimalFormatSymbols;
-import java.text.NumberFormat;
-import java.text.NumberFormat.Style;
+import java.io.File;
+import java.net.URL;
 import java.util.Currency;
 import java.util.ResourceBundle;
 import javax.swing.JLabel;
@@ -34,6 +32,8 @@ import javax.swing.SwingConstants;
 import java.awt.Font;
 import java.awt.BorderLayout;
 import javax.swing.JRadioButton;
+import javax.help.HelpBroker;
+import javax.help.HelpSet;
 import javax.swing.ButtonGroup;
 import java.awt.FlowLayout;
 
@@ -132,6 +132,7 @@ public class VentanaReserva extends JDialog {
 		
 		
 		setTextLocation();
+		crearAyuda();
 		
 		
 	}
@@ -214,10 +215,7 @@ public class VentanaReserva extends JDialog {
 		
 	}
 	private void setTextLabelPrice() {
-		NumberFormat precio = NumberFormat.getCurrencyInstance(app.getLocation());
-		precio.setCurrency(Currency.getInstance(textos.getString("moneda")));
-		
-		getLbPrice().setText(textos.getString("precio")+precio.format(app.getPrice())+"   ");
+		getLbPrice().setText(textos.getString("precio")+app.getPriceLocaion()+"   ");
 	}
 
 	private JLabel getLbAmountOfRooms() {
@@ -361,6 +359,9 @@ public class VentanaReserva extends JDialog {
 		getPnPrecio().add(getLbPrice());
 		updateDate();
 		updatePersonalData();
+		if(vd!=null) {
+			vd.inicializar();
+		}
 	}
 	
 	private class ProcesaBotones implements ActionListener{
@@ -399,9 +400,7 @@ public class VentanaReserva extends JDialog {
 		cd.show(getContentPane(), "confirmar");
 		getPnPreciosFinal().add(getLbPrice());
 		updateFinalFields();
-		NumberFormat precio = NumberFormat.getCurrencyInstance(app.getLocation());
-		precio.setCurrency(Currency.getInstance(textos.getString("moneda")));
-		String value = textos.getString("Preciodescuento")+ precio.format(app.getDiscountPrice());
+		String value = textos.getString("Preciodescuento")+app.getDiscountPrice();
 		getLbPrecioDescuento().setText(value);
 		if(app.hasActualUserDiscount()) {
 			getPnDescuento().setVisible(true);
@@ -926,7 +925,7 @@ public class VentanaReserva extends JDialog {
 		return pnPrecioDatos;
 	}
 	
-	private void terminar() {
+	 void terminar() {
 		if(app.isAgeValid()) {
 			app.procesarReserva(getRdbSi().isSelected());
 			JOptionPane.showMessageDialog(null, textos.getString("guardadoFinal"));
@@ -934,16 +933,12 @@ public class VentanaReserva extends JDialog {
 			dispose();
 		}else {
 			getVentanaEdad();
-			if(!app.isAgeValid()) {
-				JOptionPane.showMessageDialog(null, textos.getString("menor"));
-			}
-			terminar();
 		}
 	}
 	
 	private void getVentanaEdad() {
 		if(vd==null) {
-			vd = new VentanaEdad(app);
+			vd = new VentanaEdad(app,this);
 		}
 		vd.setVisible(true);
 	}
@@ -953,5 +948,29 @@ public class VentanaReserva extends JDialog {
 		if(vd!=null) {
 			vd.cambiarIdioma();
 		}
+	}
+	
+	private void crearAyuda() {
+		 URL hsURL;
+		   HelpSet hs;
+
+		    try {
+			    	File fichero = new File("help/ayuda.hs");
+			    	hsURL = fichero.toURI().toURL();
+			        hs = new HelpSet(null, hsURL);
+			      }
+
+		    catch (Exception e){
+		      System.out.println("Ayuda no encontrada");
+		      return;
+		   }
+
+		   HelpBroker hb = hs.createHelpBroker();
+		   hb.initPresentation();
+
+		   hb.enableHelpKey(getRootPane(),"datos", hs);//habilita la tecla f1
+		   //getRootPane incluye todos los paneles de la app
+		   
+		   
 	}
 }

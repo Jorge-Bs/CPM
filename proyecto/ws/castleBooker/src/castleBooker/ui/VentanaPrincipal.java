@@ -22,6 +22,8 @@ import java.awt.Image;
 
 import javax.swing.JButton;
 import javax.swing.JLabel;
+import javax.help.HelpBroker;
+import javax.help.HelpSet;
 import javax.swing.Icon;
 import javax.swing.ImageIcon;
 import java.awt.event.ComponentAdapter;
@@ -49,6 +51,10 @@ import javax.swing.JOptionPane;
 import javax.swing.JSeparator;
 import javax.swing.KeyStroke;
 import java.awt.event.KeyEvent;
+import java.awt.event.WindowAdapter;
+import java.awt.event.WindowEvent;
+import java.io.File;
+import java.net.URL;
 
 public class VentanaPrincipal extends JFrame {
 
@@ -126,17 +132,23 @@ public class VentanaPrincipal extends JFrame {
 	 * Create the frame.
 	 */
 	public VentanaPrincipal(App app) {
-		setResizable(false);
-		addComponentListener(new ComponentAdapter() {
+		addWindowListener(new WindowAdapter() {
 			@Override
-			public void componentResized(ComponentEvent e) {
-				Dimension d = getSize();
-				System.out.println(d);
+			public void windowClosing(WindowEvent e) {
+				exit();
 			}
 		});
+		setResizable(false);
+//		addComponentListener(new ComponentAdapter() {
+//			@Override
+//			public void componentResized(ComponentEvent e) {
+//				Dimension d = getSize();
+//				System.out.println(d);
+//			}
+//		});
 		setIconImage(Toolkit.getDefaultToolkit().getImage(VentanaPrincipal.class.getResource("/img/icon.png")));
 		this.app=app;
-		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		setDefaultCloseOperation(JFrame.DO_NOTHING_ON_CLOSE);
 		//setMinimumSize(new Dimension(380, 504));
 		//setBounds(100, 100, 378, 566);
 		//setBounds(100, 100, 950, 660);
@@ -154,6 +166,15 @@ public class VentanaPrincipal extends JFrame {
 		//253,336 dimensions min
 		//622 895 dimension max
 		setTextLocation();
+		crearAyuda();
+	}
+	
+	private void exit() {
+		String mesage = textos.getString("salida");
+		String titulo = textos.getString("salidaTitulo");
+		if(JOptionPane.showConfirmDialog(null,mesage,titulo,JOptionPane.YES_NO_OPTION)==JOptionPane.YES_OPTION) {
+			System.exit(0);
+		}
 	}
 	
 	public Locale getLocale() {
@@ -235,7 +256,8 @@ public class VentanaPrincipal extends JFrame {
 		
 		UIManager.put("OptionPane.okButtonText", textos.getString("ok"));
 		UIManager.put("OptionPane.cancelButtonText", textos.getString("cancelar"));
-		//UIManager.put("OptionPane.noButtonText", "pp");
+		UIManager.put("OptionPane.yesButtonText", textos.getString("si"));
+		UIManager.put("OptionPane.noButtonText", textos.getString("no"));
 		
 		addTextFiltro(textos);
 	}
@@ -1039,6 +1061,8 @@ public class VentanaPrincipal extends JFrame {
 	private JMenuItem getMmItemSalir() {
 		if (mmItemSalir == null) {
 			mmItemSalir = new JMenuItem("New menu item");
+			mmItemSalir.addActionListener(pbM);
+			mmItemSalir.setActionCommand("salir");
 		}
 		return mmItemSalir;
 	}
@@ -1087,6 +1111,12 @@ public class VentanaPrincipal extends JFrame {
 		case "temaClaro":
 			changeLightTheme();
 			break;
+		case "about":
+			JOptionPane.showMessageDialog(null, textos.getString("about"));
+			break;
+		case "salir":
+			exit();
+			break;
 		}
 	}
 	private JMenuItem getMmItemThemeDark() {
@@ -1134,5 +1164,36 @@ public class VentanaPrincipal extends JFrame {
 			separator_1 = new JSeparator();
 		}
 		return separator_1;
+	}
+	
+	private void crearAyuda() {
+		 URL hsURL;
+		   HelpSet hs;
+
+		    try {
+			    	File fichero = new File("help/ayuda.hs");
+			    	hsURL = fichero.toURI().toURL();
+			        hs = new HelpSet(null, hsURL);
+			      }
+
+		    catch (Exception e){
+		      System.out.println("Ayuda no encontrada");
+		      return;
+		   }
+
+		   HelpBroker hb = hs.createHelpBroker();
+		   hb.initPresentation();
+
+		   hb.enableHelpKey(getRootPane(),"inicio", hs);//habilita la tecla f1
+		   //getRootPane incluye todos los paneles de la app
+		   
+		   //asociar ayuda a un elemento a un elemento de menu
+		   hb.enableHelpOnButton(getMmItemContenidos(), "inicio", hs);
+		   hb.enableHelpOnButton(getBtnAyuda(), "reserva", hs);
+//		   
+//		   //ayuda sensible a un componente el componete tiene que estar activo y seleccionado
+		   hb.enableHelp(getPnCastle(), "reserva", hs);
+		   hb.enableHelp(getPnConFiltros(), "filtro", hs);
+		   hb.enableHelp(getPnCastilloInfo(), "reserva", hs);
 	}
 }

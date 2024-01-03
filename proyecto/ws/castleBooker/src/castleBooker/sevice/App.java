@@ -13,7 +13,11 @@ public class App {
 	private Booker booker = new Booker();
 	
 	public Locale getLocation() {
-		return booker.getLocation();
+		return Booker.getLocation();
+	}
+	
+	public int getMovimientosRestantes() {
+		return booker.getGame().getMovimientosRestantes();
 	}
 	
 	public void setLocation(Locale location) {
@@ -168,7 +172,7 @@ public class App {
 		return booker.arriveDate();
 	}
 
-	public double getDiscountPrice() {
+	public String getDiscountPrice() {
 		return booker.getDiscountPrice();
 	}
 
@@ -203,6 +207,10 @@ public class App {
 
 	public int getMinPrice() {
 		return booker.minPrice();
+	}
+
+	public String getPriceLocaion() {
+		return booker.getPriceLocation();
 	}
 	
 	

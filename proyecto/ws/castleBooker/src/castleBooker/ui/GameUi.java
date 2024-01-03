@@ -15,12 +15,15 @@ import castleBooker.sevice.App;
 import java.awt.GridLayout;
 import java.awt.Image;
 import javax.swing.JButton;
+import javax.help.HelpBroker;
+import javax.help.HelpSet;
 import javax.swing.ImageIcon;
 import java.awt.Color;
 import java.awt.Component;
 import java.awt.event.ComponentAdapter;
 import java.awt.event.ComponentEvent;
-
+import java.io.File;
+import java.net.URL;
 
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
@@ -30,6 +33,11 @@ import javax.swing.border.TitledBorder;
 import javax.swing.border.EtchedBorder;
 import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
+import javax.swing.JMenuBar;
+import javax.swing.JMenu;
+import javax.swing.JMenuItem;
+import javax.swing.JSeparator;
+import javax.swing.SwingConstants;
 
 
 public class GameUi extends JDialog {
@@ -49,7 +57,18 @@ public class GameUi extends JDialog {
 	private ResourceBundle textos;
 	private JButton btDice;
 	private ProcesaMovimiento pM = new ProcesaMovimiento();
+	private ProcesaOpcionesMenu menuOpciones = new ProcesaOpcionesMenu();
 	private VentanaPrincipal vp;
+	private JMenuBar menuBar;
+	private JMenu mmJuego;
+	private JMenu mmHelp;
+	private JMenuItem mmItemNuevaPartida;
+	private JMenuItem mmItemSalir;
+	private JSeparator separator;
+	private JMenuItem mmItenHelp;
+	private JPanel pnVolver;
+	private JButton btnVolver;
+	private JLabel lbMovimientosRestantes;
 
 	/**
 	 * Create the dialog.
@@ -65,13 +84,17 @@ public class GameUi extends JDialog {
 			}
 		});
 		setIconImage(Toolkit.getDefaultToolkit().getImage(GameUi.class.getResource("/img/icon.png")));
-		setBounds(100, 100, 661, 712);
+		setBounds(100, 100, 661, 779);
 		setLocationRelativeTo(null);
 		getContentPane().setLayout(null);
 		getContentPane().add(getPnBoard());
 		getContentPane().add(getPnDiceValue());
+		getContentPane().add(getPnVolver());
+		getContentPane().add(getLbMovimientosRestantes());
+		setJMenuBar(getMenuBar());
 
 		setTextLocation();
+		crearAyuda();
 		
 	}
 	
@@ -85,6 +108,26 @@ public class GameUi extends JDialog {
 		setTitle(textos.getString("tituloJuego"));
 		((TitledBorder)pnDiceValue.getBorder()).setTitle(textos.getString("pnDice"));
 		getBtDice().setToolTipText(textos.getString("toolTipDado"));
+		
+		getMmJuego().setText(textos.getString("juegoMenu"));
+		getMmJuego().setMnemonic(textos.getString("mnemonicJuegoMenu").charAt(0));
+		
+		getMmItemNuevaPartida().setText(textos.getString("nuevo"));
+		getMmItemNuevaPartida().setMnemonic(textos.getString("mnemonicNuevo").charAt(0));
+		
+		getMmItemSalir().setText(textos.getString("salir"));
+		getMmItemSalir().setMnemonic(textos.getString("mnemonicSalir").charAt(0));
+		
+		getMmHelp().setText(textos.getString("ayuda"));
+		getMmHelp().setMnemonic(textos.getString("mnemonicAyuda").charAt(0));
+		
+		getMmItenHelp().setText(textos.getString("ayudaJuego"));
+		getMmItenHelp().setMnemonic(textos.getString("mnemonicAyudaJuego").charAt(0));
+		
+		getBtnVolver().setText(textos.getString("volver"));
+		getBtnVolver().setMnemonic(textos.getString("mnemonicVolver").charAt(0));
+		
+		setMovimientosTexto();
 		
 //		UIManager.put("OptionPane.okButtonText", textos.getString("guardar"));
 //		UIManager.put("OptionPane.cancelButtonText", textos.getString("salir"));
@@ -101,7 +144,7 @@ public class GameUi extends JDialog {
 	private JPanel getPnDiceValue() {
 		if (pnDiceValue == null) {
 			pnDiceValue = new JPanel();
-			pnDiceValue.setBounds(5, 492, 632, 182);
+			pnDiceValue.setBounds(5, 520, 632, 182);
 			pnDiceValue.setBorder(new TitledBorder(new EtchedBorder(EtchedBorder.LOWERED, new Color(255, 255, 255), new Color(160, 160, 160)), "", TitledBorder.LEADING, TitledBorder.TOP, null, new Color(0, 0, 0)));
 			pnDiceValue.setLayout(null);
 			pnDiceValue.add(getPnDic());
@@ -230,6 +273,7 @@ public class GameUi extends JDialog {
 			String messageNoDiscount = textos.getString("NoDescuento");
 			String titleNoDiscount = textos.getString("TituloSinDescuentoFinal");
 			JOptionPane.showMessageDialog(null, messageNoDiscount, titleNoDiscount , JOptionPane.INFORMATION_MESSAGE);
+			inicializar();
 		}
 	}
 	
@@ -251,6 +295,7 @@ public class GameUi extends JDialog {
 				public void actionPerformed(ActionEvent e) {
 					lanzar();
 					getBtDice().setEnabled(false);
+					setMovimientosTexto();
 				}
 			});
 			btDice.setBounds(62, 11, 130, 130);
@@ -346,4 +391,134 @@ public class GameUi extends JDialog {
 		if(vGuardadoDescuento!=null) vGuardadoDescuento.cambiarIdioma();
 	}
 	
+	private JMenuBar getMenuBar() {
+		if (menuBar == null) {
+			menuBar = new JMenuBar();
+			menuBar.add(getMmJuego());
+			menuBar.add(getMmHelp());
+		}
+		return menuBar;
+	}
+	private JMenu getMmJuego() {
+		if (mmJuego == null) {
+			mmJuego = new JMenu("New menu");
+			mmJuego.add(getMmItemNuevaPartida());
+			mmJuego.add(getSeparator());
+			mmJuego.add(getMmItemSalir());
+		}
+		return mmJuego;
+	}
+	private JMenu getMmHelp() {
+		if (mmHelp == null) {
+			mmHelp = new JMenu("New menu");
+			mmHelp.add(getMmItenHelp());
+		}
+		return mmHelp;
+	}
+	private JMenuItem getMmItemNuevaPartida() {
+		if (mmItemNuevaPartida == null) {
+			mmItemNuevaPartida = new JMenuItem("New menu item");
+			mmItemNuevaPartida.addActionListener(menuOpciones);
+			mmItemNuevaPartida.setActionCommand("nuevo");
+		}
+		return mmItemNuevaPartida;
+	}
+	private JMenuItem getMmItemSalir() {
+		if (mmItemSalir == null) {
+			mmItemSalir = new JMenuItem("New menu item");
+			mmItemSalir.addActionListener(menuOpciones);
+			mmItemSalir.setActionCommand("salir");
+		}
+		return mmItemSalir;
+	}
+	private JSeparator getSeparator() {
+		if (separator == null) {
+			separator = new JSeparator();
+		}
+		return separator;
+	}
+	private JMenuItem getMmItenHelp() {
+		if (mmItenHelp == null) {
+			mmItenHelp = new JMenuItem("New menu item");
+		}
+		return mmItenHelp;
+	}
+	
+	private class ProcesaOpcionesMenu implements ActionListener{
+
+		@Override
+		public void actionPerformed(ActionEvent e) {
+			procesaOpcion(e.getActionCommand());
+		}
+		
+	}
+	
+	private void procesaOpcion(String id) {
+		switch(id) {
+		case"nuevo":
+			inicializar();
+			break;
+		case"salir":
+			dispose();
+			break;
+		}
+	}
+	private JPanel getPnVolver() {
+		if (pnVolver == null) {
+			pnVolver = new JPanel();
+			pnVolver.setBounds(15, 700, 622, 36);
+			pnVolver.add(getBtnVolver());
+		}
+		return pnVolver;
+	}
+	private JButton getBtnVolver() {
+		if (btnVolver == null) {
+			btnVolver = new JButton("New button");
+			btnVolver.addActionListener(new ActionListener() {
+				public void actionPerformed(ActionEvent e) {
+					salir();
+				}
+			});
+		}
+		return btnVolver;
+	}
+	private JLabel getLbMovimientosRestantes() {
+		if (lbMovimientosRestantes == null) {
+			lbMovimientosRestantes = new JLabel("New label");
+			lbMovimientosRestantes.setHorizontalAlignment(SwingConstants.CENTER);
+			lbMovimientosRestantes.setBounds(0, 483, 637, 36);
+		}
+		return lbMovimientosRestantes;
+	}
+	
+	private void setMovimientosTexto() {
+		int movimientos = app.getMovimientosRestantes();
+		String info = textos.getString("move")+movimientos;
+		getLbMovimientosRestantes().setText(info);
+	}
+	
+	private void crearAyuda() {
+		URL hsURL;
+		   HelpSet hs;
+
+		    try {
+			    	File fichero = new File("help/ayuda.hs");
+			    	hsURL = fichero.toURI().toURL();
+			        hs = new HelpSet(null, hsURL);
+			      }
+
+		    catch (Exception e){
+		      System.out.println("Ayuda no encontrada");
+		      return;
+		   }
+
+		   HelpBroker hb = hs.createHelpBroker();
+		   hb.initPresentation();
+
+		   hb.enableHelpKey(getRootPane(),"juego", hs);//habilita la tecla f1
+		   //getRootPane incluye todos los paneles de la app
+		   
+		   //asociar ayuda a un elemento a un elemento de menu
+		   hb.enableHelpOnButton(getMmItenHelp(), "juego", hs);
+	}
 }

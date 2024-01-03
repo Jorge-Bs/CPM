@@ -14,8 +14,12 @@ import castleBooker.sevice.App;
 import java.awt.Toolkit;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.io.File;
+import java.net.URL;
 import java.util.ResourceBundle;
 import javax.swing.JPanel;
+import javax.help.HelpBroker;
+import javax.help.HelpSet;
 import javax.swing.JButton;
 import java.awt.Font;
 import java.awt.CardLayout;
@@ -76,6 +80,7 @@ public class VentanaGuardadoDescuento extends JDialog {
 		
 
 		setTextLocation();
+		crearAyuda();
 	}
 	
 	public void setTextLocation() {
@@ -510,5 +515,27 @@ public class VentanaGuardadoDescuento extends JDialog {
 	
 	void cambiarIdioma() {
 		setTextLocation();
+	}
+	
+	private void crearAyuda() {
+		URL hsURL;
+		   HelpSet hs;
+
+		    try {
+			    	File fichero = new File("help/ayuda.hs");
+			    	hsURL = fichero.toURI().toURL();
+			        hs = new HelpSet(null, hsURL);
+			      }
+
+		    catch (Exception e){
+		      System.out.println("Ayuda no encontrada");
+		      return;
+		   }
+
+		   HelpBroker hb = hs.createHelpBroker();
+		   hb.initPresentation();
+
+		   hb.enableHelpKey(getRootPane(),"juego", hs);//habilita la tecla f1
+
 	}
 }

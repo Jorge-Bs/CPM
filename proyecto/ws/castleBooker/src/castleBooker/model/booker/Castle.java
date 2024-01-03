@@ -1,5 +1,9 @@
 package castleBooker.model.booker;
 
+import java.text.NumberFormat;
+import java.util.Currency;
+import java.util.ResourceBundle;
+
 public class Castle {
 	
 	private String code;
@@ -66,23 +70,42 @@ public class Castle {
 		return enchantment;
 	}
 	
-	public String toStringDescriptionAndWithoutPrice(String formato) {
-		formato=info(formato);
+	public String enchantmentInText() {
+		ResourceBundle texto = ResourceBundle.getBundle("rcs/text",Booker.getLocation());
+		String[] parts = getEnchantment().split("-");
+		StringBuilder sb = new StringBuilder();
+		for(String part:parts) {
+			sb.append("("+part+")"+texto.getString(part)+"-");
+		}
+		sb.reverse();
+		sb.replace(0, 1,"");
+		sb.reverse();
+		return sb.toString();
+	}
+	
+//	public String toStringDescriptionAndWithoutPrice(String formato) {
+//		formato=info(formato);
+//		formato=formato.replaceFirst("@", getDescription());
+//		return formato;
+//	}
+	
+	 String info(String formato) {
+		formato=formato.replaceFirst("@", getName());
+		formato=formato.replaceFirst("@", getCountry());
+		formato=formato.replaceFirst("@", dineroFormateado());
+		formato=formato.replaceFirst("@", enchantmentInText());
 		formato=formato.replaceFirst("@", getDescription());
 		return formato;
 	}
 	
-	private String info(String formato) {
-		formato=formato.replaceFirst("@", getName());
-		formato=formato.replaceFirst("@", getCountry());
-		formato=formato.replaceFirst("@", getEnchantment());
-		return formato;
-	}
+//	public String toStringPriceAndWithoutDescription(String formato) {
+//		formato=info(formato);
+//		formato=formato.replaceFirst("@", getPrice()+"");
+//		return formato;
+//	}
 	
-	public String toStringPriceAndWithoutDescription(String formato) {
-		formato=info(formato);
-		formato=formato.replaceFirst("@", getPrice()+"");
-		return formato;
+	public String dineroFormateado() {
+		return Booker.formateo(getPrice())+"";
 	}
 	
 	@Override

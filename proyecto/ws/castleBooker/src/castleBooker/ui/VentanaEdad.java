@@ -4,6 +4,7 @@ package castleBooker.ui;
 import javax.swing.JButton;
 import javax.swing.JDialog;
 import javax.swing.JLabel;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.SwingConstants;
 
@@ -33,8 +34,10 @@ public class VentanaEdad extends JDialog {
 	private ProcesBotones pb = new ProcesBotones();
 	private App app;
 	private ResourceBundle textos;
+	private VentanaReserva reserva;
 	
-	public VentanaEdad(App app) {
+	public VentanaEdad(App app,VentanaReserva reserva) {
+		this.reserva= reserva;
 		this.app=app;
 		setIconImage(Toolkit.getDefaultToolkit().getImage(VentanaEdad.class.getResource("/img/icon.png")));
 		setModal(true);
@@ -62,7 +65,8 @@ public class VentanaEdad extends JDialog {
 		getBtnCancelar().setText(textos.getString("volver"));
 		getBtnCancelar().setMnemonic(textos.getString("mnemonicVolver").charAt(0));
 		
-		calendario.setLocale(app.getLocation());
+		getCalendario().setLocale(app.getLocation());
+		getCalendario().setDate(app.getDate());
 	}
 	
 	private JPanel getPnComprobarEdad() {
@@ -144,14 +148,24 @@ public class VentanaEdad extends JDialog {
 		switch(id) {
 		case "aceptarEdad":
 			app.saveAge(getCalendario().getDate());
-			dispose();
+			if(!app.isAgeValid()) {
+				JOptionPane.showMessageDialog(null, textos.getString("menor"));
+			}else {
+				dispose();
+			}
+			reserva.terminar();
 			break;
 		case "volverEdad":
 			dispose();
+			break;
 		}
 	}
 	
 	void cambiarIdioma() {
 		setTextLocation();
+	}
+	
+	void inicializar() {
+		getCalendario().setDate(app.getDate());
 	}
 }

@@ -182,6 +182,10 @@ public class Game {
 			return discount.getAmount();
 		}
 	}
+
+	public int getMovimientosRestantes() {
+		return remainingMoves;
+	}
 	
 	
 }

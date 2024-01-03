@@ -7,6 +7,8 @@ import java.awt.event.ActionListener;
 import java.util.ResourceBundle;
 
 import javax.swing.JPanel;
+import javax.help.HelpBroker;
+import javax.help.HelpSet;
 import javax.swing.JButton;
 import javax.swing.JLabel;
 import javax.swing.JTextField;
@@ -15,6 +17,9 @@ import castleBooker.sevice.App;
 import java.awt.FlowLayout;
 import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
+import java.io.File;
+import java.net.URL;
+
 import javax.swing.SwingConstants;
 
 public class VentanaDescuento extends JDialog {
@@ -52,6 +57,7 @@ public class VentanaDescuento extends JDialog {
 		setLocationRelativeTo(null);
 		setTextLocation();
 		
+		crearAyuda();
 	}
 	
 	private void setTextLocation() {
@@ -167,5 +173,26 @@ public class VentanaDescuento extends JDialog {
 			lbIndicaDescuento.setBounds(10, 101, 416, 33);
 		}
 		return lbIndicaDescuento;
+	}
+	
+	private void crearAyuda() {
+		URL hsURL;
+		   HelpSet hs;
+
+		    try {
+			    	File fichero = new File("help/ayuda.hs");
+			    	hsURL = fichero.toURI().toURL();
+			        hs = new HelpSet(null, hsURL);
+			      }
+
+		    catch (Exception e){
+		      System.out.println("Ayuda no encontrada");
+		      return;
+		   }
+
+		   HelpBroker hb = hs.createHelpBroker();
+		   hb.initPresentation();
+
+		   hb.enableHelpKey(getRootPane(),"descuento", hs);
 	}
 }

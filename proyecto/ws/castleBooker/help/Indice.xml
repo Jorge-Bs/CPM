@@ -1,0 +1,21 @@
+<?xml version='1.0' encoding='ISO-8859-1'  ?>
+<!DOCTYPE index
+  PUBLIC "-//Sun Microsystems Inc.//DTD JavaHelp Index Version 1.0//EN"
+         "http://java.sun.com/products/javahelp/index_1_0.dtd">
+
+<index version="1.0">
+
+
+  <indexitem text="confirmar" target="datos" />
+  <indexitem text="consulta de descuento" target="descuento" />
+  <indexitem text="datos personales" target="datos" />
+  <indexitem text="fecha" target="datos" />
+  <indexitem text="filtrado por precio" target="filtro" />
+  <indexitem text="filtro" target="filtro" />
+  <indexitem text="instrucciones" target="juego" />
+  <indexitem text="objetivos" target="juego" />
+  <indexitem text="obtener descuento" target="juego" />
+  <indexitem text="tipos de filtro" target="filtro" />
+  <indexitem text="verificar edad" target="datos"/>
+    
+</index>

@@ -54,4 +54,9 @@ public class DiscountData {
 		return descuentos.get(key).getAmount()*100;
 	}
 
+	public void remove(String dni) {
+		descuentos.remove(dni);
+		saveFile();
+	}
+
 }
