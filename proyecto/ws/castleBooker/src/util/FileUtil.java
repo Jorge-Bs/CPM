@@ -20,6 +20,13 @@ public abstract class FileUtil{
 	public static void save(String lines,String fileName,boolean option) {
 		BufferedWriter writer = null;
 		File file = new File(fileName);
+		if(!file.exists()) {
+			try {
+				file.createNewFile();
+			} catch (IOException e) {
+				System.out.println("No se ha podido guardar el archivo");
+			}
+		}
 		try {
 			try {
 				writer = createWriter(fileName,option);

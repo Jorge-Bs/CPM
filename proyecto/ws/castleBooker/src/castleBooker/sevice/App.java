@@ -212,6 +212,10 @@ public class App {
 	public String getPriceLocaion() {
 		return booker.getPriceLocation();
 	}
+
+	public void saveReserva(String path) {
+		booker.saveReserva(path);
+	}
 	
 	
 }

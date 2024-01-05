@@ -1,5 +1,7 @@
 package castleBooker.model.booker;
 
+import java.io.File;
+import java.io.IOException;
 import java.text.NumberFormat;
 import java.util.ArrayList;
 import java.util.Currency;
@@ -9,7 +11,6 @@ import java.util.Locale;
 import java.util.ResourceBundle;
 import java.util.Set;
 import java.util.TreeSet;
-
 import castleBooker.model.discount.Discount;
 import castleBooker.model.discount.DiscountData;
 import castleBooker.model.game.Game;
@@ -27,7 +28,6 @@ public class Booker {
 	private static Locale location;
 	private List<Castle> castillos;
 	private List<Castle> totalCastillos;
-	private List<Reserva> reservas = new ArrayList<>();
 	private Persona usuario = new Persona();
 	private Reserva reservaEnProgreso = new Reserva();
 	private String[] encantamientos;
@@ -301,7 +301,6 @@ public class Booker {
 		reservaEnProgreso.setFinished(true);
 		reservaEnProgreso.setPersona(usuario);
 		guardar();
-		inicializar();
 	}
 	
 	private void guardar() {
@@ -369,6 +368,19 @@ public class Booker {
 
 	public String getPriceLocation() {
 		return formateo(reservaEnProgreso.getPrice());
+	}
+
+
+	public void saveReserva(String path) {
+		File archivo = new File(path+"/reserva.dat");
+		ResourceBundle texto = ResourceBundle.getBundle("rcs/text", getLocation());
+		String formato= texto.getString("formatoGuardado");
+		String result = saveData(formato);
+		FileUtil.save(result, archivo.getPath(), false);
+	}
+	
+	private String saveData(String formato) {
+		return reservaEnProgreso.getReservaToSave(formato);
 	}
 
 }

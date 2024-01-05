@@ -2,6 +2,7 @@ package castleBooker.ui;
 
 
 import javax.swing.JDialog;
+import javax.swing.JFileChooser;
 
 import castleBooker.sevice.App;
 
@@ -10,7 +11,6 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.File;
 import java.net.URL;
-import java.util.Currency;
 import java.util.ResourceBundle;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
@@ -928,11 +928,25 @@ public class VentanaReserva extends JDialog {
 	 void terminar() {
 		if(app.isAgeValid()) {
 			app.procesarReserva(getRdbSi().isSelected());
+			if(JOptionPane.showConfirmDialog(null, textos.getString("reservar"), 
+					textos.getString("reservaTitulo"), JOptionPane.YES_NO_OPTION)==JOptionPane.YES_OPTION) {
+				save();
+			}
 			JOptionPane.showMessageDialog(null, textos.getString("guardadoFinal"));
 			vp.cambiarPanelInicio();
 			dispose();
+			app.inicializar();
 		}else {
 			getVentanaEdad();
+		}
+	}
+	 
+	private void save() {
+		JFileChooser file = new JFileChooser();
+		file.setFileSelectionMode(JFileChooser.DIRECTORIES_ONLY);
+		int returnVal = file.showSaveDialog(null);
+		if(returnVal==JFileChooser.APPROVE_OPTION) {
+			app.saveReserva(file.getSelectedFile().getAbsolutePath());
 		}
 	}
 	

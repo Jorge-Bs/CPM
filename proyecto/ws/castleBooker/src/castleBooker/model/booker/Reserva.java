@@ -86,6 +86,9 @@ public class Reserva {
 	}
 
 	protected String getComment() {
+		if(comment==null) {
+			return "";
+		}
 		return comment;
 	}
 
@@ -164,6 +167,20 @@ public class Reserva {
 		sb.append(getPrice()+";");
 		sb.append(getComment());
 		return sb.toString();
+	}
+
+	public String getReservaToSave(String formato) {
+		formato = formato.replaceFirst("@", persona.getFullName());
+		formato = formato.replaceFirst("@", persona.getDni());
+		formato = formato.replaceFirst("@", persona.getEmail());
+		formato = formato.replaceFirst("@", getPrice()+"");
+		formato = formato.replaceFirst("@", getCastle().getName());
+		formato = formato.replaceFirst("@", getCastle().getCountry());
+		formato = formato.replaceFirst("@", getArrive());
+		formato = formato.replaceFirst("@", getAmountOfDays()+"");
+		formato = formato.replaceFirst("@", getAmountOfRooms()+"");
+		formato = formato.replaceFirst("@", getComment());
+		return formato;
 	}
 	
 }
