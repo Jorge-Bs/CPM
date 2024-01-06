@@ -255,6 +255,7 @@ public class VentanaReserva extends JDialog {
 			calendario= new JDateChooser();
 			calendario.setBounds(289, 56, 128, 22);
 			calendario.setDate(app.getDate());
+			calendario.setMinSelectableDate(app.getDate());
 			
 		}
 		return calendario;
@@ -928,7 +929,7 @@ public class VentanaReserva extends JDialog {
 	 void terminar() {
 		if(app.isAgeValid()) {
 			app.procesarReserva(getRdbSi().isSelected());
-			if(JOptionPane.showConfirmDialog(null, textos.getString("reservar"), 
+			if(JOptionPane.showConfirmDialog(null, textos.getString("reservarFinal"), 
 					textos.getString("reservaTitulo"), JOptionPane.YES_NO_OPTION)==JOptionPane.YES_OPTION) {
 				save();
 			}

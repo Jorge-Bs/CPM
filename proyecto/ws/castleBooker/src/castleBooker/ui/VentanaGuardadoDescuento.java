@@ -124,6 +124,9 @@ public class VentanaGuardadoDescuento extends JDialog {
 		getBtnVolverGuardado().setText(textos.getString("volver"));
 		getBtnVolverGuardado().setMnemonic(textos.getString("mnemonicVolver").charAt(0));
 		
+		JButton boton = (JButton) getCalendario().getComponent(0);
+		boton.setToolTipText(textos.getString("tooltipCalendario"));
+		
 		updateTextsDiscount();
 	}
 	

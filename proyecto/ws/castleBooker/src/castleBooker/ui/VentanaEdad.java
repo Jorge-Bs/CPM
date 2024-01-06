@@ -67,6 +67,9 @@ public class VentanaEdad extends JDialog {
 		
 		getCalendario().setLocale(app.getLocation());
 		getCalendario().setDate(app.getDate());
+		
+		JButton boton = (JButton) getCalendario().getComponent(0);
+		boton.setToolTipText(textos.getString("tooltipCalendario"));
 	}
 	
 	private JPanel getPnComprobarEdad() {
@@ -105,6 +108,8 @@ public class VentanaEdad extends JDialog {
 		if(calendario==null) {
 			calendario = new JDateChooser();
 			calendario.setBounds(254, 97, 125, 20);
+			calendario.setDate(app.getDate());
+			calendario.setMaxSelectableDate(app.getDate());
 		}
 		return calendario;
 	}

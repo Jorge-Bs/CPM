@@ -36,7 +36,7 @@ public class Booker {
 	
 
 	public Booker() {
-		setLocation(new Locale("es"));
+		setLocation(Locale.getDefault());
 		loadCastle();
 		loadEncatamientos();
 	}
