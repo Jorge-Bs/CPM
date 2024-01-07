@@ -1,7 +1,5 @@
 package castleBooker.model.booker;
 
-import java.text.NumberFormat;
-import java.util.Currency;
 import java.util.ResourceBundle;
 
 public class Castle {

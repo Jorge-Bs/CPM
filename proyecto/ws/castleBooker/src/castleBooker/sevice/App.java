@@ -5,7 +5,6 @@ import java.util.List;
 import java.util.Locale;
 
 import castleBooker.model.booker.Booker;
-import castleBooker.model.game.Casilla;
 
 
 public class App {
