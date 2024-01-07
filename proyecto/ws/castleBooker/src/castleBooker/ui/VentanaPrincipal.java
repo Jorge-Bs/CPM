@@ -10,12 +10,8 @@ import javax.swing.JPanel;
 import javax.swing.JTextArea;
 import javax.swing.border.EmptyBorder;
 
-import castleBooker.sevice.App;
-import castleBooker.ui.frame.JScrollPanelWithPanel;
-
 import java.awt.Toolkit;
 import java.awt.CardLayout;
-import java.awt.Dimension;
 import java.awt.BorderLayout;
 import java.awt.GridLayout;
 import java.awt.Image;
@@ -43,6 +39,10 @@ import java.awt.Font;
 import java.awt.Color;
 import javax.swing.JSlider;
 import javax.swing.event.ChangeListener;
+
+import castleBooker.sevice.App;
+import castleBooker.ui.frame.JScrollPanelWithPanel;
+
 import javax.swing.event.ChangeEvent;
 import javax.swing.JMenuBar;
 import javax.swing.JMenu;
@@ -139,19 +139,9 @@ public class VentanaPrincipal extends JFrame {
 			}
 		});
 		setResizable(false);
-//		addComponentListener(new ComponentAdapter() {
-//			@Override
-//			public void componentResized(ComponentEvent e) {
-//				Dimension d = getSize();
-//				System.out.println(d);
-//			}
-//		});
 		setIconImage(Toolkit.getDefaultToolkit().getImage(VentanaPrincipal.class.getResource("/img/icon.png")));
 		this.app=app;
 		setDefaultCloseOperation(JFrame.DO_NOTHING_ON_CLOSE);
-		//setMinimumSize(new Dimension(380, 504));
-		//setBounds(100, 100, 378, 566);
-		//setBounds(100, 100, 950, 660);
 		setBounds(100, 100, 530, 722);
 		setLocationRelativeTo(null);
 		setJMenuBar(getMenuBar_1());
@@ -163,8 +153,6 @@ public class VentanaPrincipal extends JFrame {
 		contentPane.add(getPnInicio(), "pnInicio");
 		contentPane.add(getPnMuestraCastillos(), "pnCastillos");
 		contentPane.add(getPnCastilloInfo(), "pnCastilloInfo");
-		//253,336 dimensions min
-		//622 895 dimension max
 		setTextLocation();
 		crearAyuda();
 	}
@@ -290,7 +278,6 @@ public class VentanaPrincipal extends JFrame {
 	
 	private void changeImagesSize() {
 		int width= getLbBienvenida().getWidth();
-		//width= width>=1000? 1000:width;
 		int height=(int) (width/2.0);
 		height= height>=400? 400:height;
 		getLbBienvenida().setIcon(setImagenAdaptada(width, height, "/img/ING002.png"));
@@ -705,7 +692,7 @@ public class VentanaPrincipal extends JFrame {
 			texto=tipo+"-"+texto;
 			box.setText(texto);
 			box.setActionCommand(tipo);
-			box.setDisplayedMnemonicIndex(0);
+			box.setMnemonic(textos.getString("mnemonic"+tipo).charAt(0));
 		}
 	}
 	private JButton getBtnRestaurar() {

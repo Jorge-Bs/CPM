@@ -119,7 +119,7 @@ public class VentanaGuardadoDescuento extends JDialog {
 		getBtnGuardarYReservar().setMnemonic(textos.getString("mnemonicGuardarReservar").charAt(0));
 		
 		getBtnGuardarYSalir().setText(textos.getString("guardarSalir"));
-		getBtnGuardarYReservar().setMnemonic(textos.getString("mnemonicGuardarSalir").charAt(0));
+		getBtnGuardarYSalir().setMnemonic(textos.getString("mnemonicGuardarSalir").charAt(0));
 		
 		getBtnVolverGuardado().setText(textos.getString("volver"));
 		getBtnVolverGuardado().setMnemonic(textos.getString("mnemonicVolver").charAt(0));
@@ -153,6 +153,8 @@ public class VentanaGuardadoDescuento extends JDialog {
 		if(calendario==null) {
 			calendario = new JDateChooser();
 			calendario.setBounds(264, 61, 125, 20);
+			calendario.setMaxSelectableDate(app.getDate());
+			calendario.setDate(app.getDate());
 		}
 		return calendario;
 	}

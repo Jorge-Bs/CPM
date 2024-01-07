@@ -4,8 +4,6 @@ package castleBooker.ui;
 import javax.swing.JDialog;
 import javax.swing.JFileChooser;
 
-import castleBooker.sevice.App;
-
 import java.awt.Toolkit;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -16,6 +14,9 @@ import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 
 import com.toedter.calendar.JDateChooser;
+
+import castleBooker.sevice.App;
+
 import javax.swing.JSpinner;
 import javax.swing.SpinnerNumberModel;
 import javax.swing.event.ChangeEvent;
@@ -213,6 +214,13 @@ public class VentanaReserva extends JDialog {
 		getBtnVolverADatos().setText(textos.getString("volver"));
 		getBtnVolverADatos().setMnemonic(textos.getString("mnemonicVolver").charAt(0));
 		
+		getRdbSi().setText(textos.getString("si"));
+		getRdbSi().setMnemonic(textos.getString("mnemonicSi").charAt(0));
+		
+		getSrbNo().setText(textos.getString("no"));
+		getSrbNo().setMnemonic(textos.getString("mnemonicNo").charAt(0));
+		
+		cambiarTextoDescuento();
 	}
 	private void setTextLabelPrice() {
 		getLbPrice().setText(textos.getString("precio")+app.getPriceLocaion()+"   ");
@@ -401,8 +409,7 @@ public class VentanaReserva extends JDialog {
 		cd.show(getContentPane(), "confirmar");
 		getPnPreciosFinal().add(getLbPrice());
 		updateFinalFields();
-		String value = textos.getString("Preciodescuento")+app.getDiscountPrice();
-		getLbPrecioDescuento().setText(value);
+		cambiarTextoDescuento();
 		if(app.hasActualUserDiscount()) {
 			getPnDescuento().setVisible(true);
 			if(getRdbSi().isSelected()) {
@@ -414,15 +421,20 @@ public class VentanaReserva extends JDialog {
 			getLbPrecioDescuento().setVisible(false);
 		}
 	}
+	private void cambiarTextoDescuento(){
+		String value = textos.getString("Preciodescuento")+app.getDiscountPrice();
+		getLbPrecioDescuento().setText(value);
+	}
+	
 	
 	private boolean comprobarCampos() {
-		if(getTxName().getText().isEmpty()||getTxName().getText().isBlank()) {
+		if(!app.camposValidos(getTxName().getText())) {
 			getTxName().grabFocus();
 			return false;
-		}else if(getTxId().getText().isEmpty() || getTxId().getText().isBlank()) {
+		}else if(!app.camposValidos(getTxId().getText())) {
 			getTxId().grabFocus();
 			return false;
-		}else if(getTxEmail().getText().isEmpty() || getTxEmail().getText().isBlank()) {
+		}else if(!app.camposValidos(getTxEmail().getText())) {
 			getTxEmail().grabFocus();
 			return false;
 		}else {

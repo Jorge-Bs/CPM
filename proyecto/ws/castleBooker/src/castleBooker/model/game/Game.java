@@ -84,7 +84,7 @@ public class Game {
 	
 	private String randomType() {
 		Random rd = new Random();
-		if(listaType.size()==0) throw new IllegalStateException("El tamaño del array es 0, no se puede seguir con la operacion");
+		if(listaType.size()==0) throw new IllegalStateException("El tamaÃ±o del array es 0, no se puede seguir con la operacion");
 		int value = rd.nextInt(listaType.size());
 		String type = listaType.get(value);
 		listaType.remove(value);
@@ -130,7 +130,7 @@ public class Game {
 				return i;
 			}
 		}
-		throw new IllegalArgumentException("El elemento no se encontró");
+		throw new IllegalArgumentException("El elemento no se encontrÃ³");
 	}
 
 	public boolean move(int location) { 

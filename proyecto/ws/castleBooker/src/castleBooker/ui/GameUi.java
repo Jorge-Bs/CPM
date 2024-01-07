@@ -9,9 +9,6 @@ import java.awt.Toolkit;
 
 import javax.swing.JPanel;
 
-import castleBooker.model.game.Casilla;
-import castleBooker.model.game.Game;
-import castleBooker.sevice.App;
 import java.awt.GridLayout;
 import java.awt.Image;
 import javax.swing.JButton;
@@ -30,6 +27,9 @@ import javax.swing.JOptionPane;
 
 
 import javax.swing.border.TitledBorder;
+import castleBooker.model.game.Game;
+import castleBooker.sevice.App;
+
 import javax.swing.border.EtchedBorder;
 import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
@@ -145,7 +145,7 @@ public class GameUi extends JDialog {
 		if (pnDiceValue == null) {
 			pnDiceValue = new JPanel();
 			pnDiceValue.setBounds(5, 520, 632, 182);
-			pnDiceValue.setBorder(new TitledBorder(new EtchedBorder(EtchedBorder.LOWERED, new Color(255, 255, 255), new Color(160, 160, 160)), "", TitledBorder.LEADING, TitledBorder.TOP, null, new Color(0, 0, 0)));
+			pnDiceValue.setBorder(new TitledBorder(new EtchedBorder(EtchedBorder.LOWERED, new Color(255, 255, 255), new Color(160, 160, 160)), "", TitledBorder.LEADING, TitledBorder.TOP, null, null));
 			pnDiceValue.setLayout(null);
 			pnDiceValue.add(getPnDic());
 			pnDiceValue.add(getPnResult());
@@ -190,7 +190,7 @@ public class GameUi extends JDialog {
 		for(int i=0;i<Game.FILAS;i++) {
 			for(int j=0;j<Game.COLUMNAS;j++) {
 				JButton button =(JButton)getPnBoard().getComponent(counter);
-				setImageButton(button,app.getCasilla(i, j));
+				setImageButton(button,app.getCasillaImage(i, j));
 				counter++;
 			}
 		}
@@ -215,13 +215,12 @@ public class GameUi extends JDialog {
 	}
 
 
-	private void setImageButton(JButton button, Casilla casilla) {
-		String name=casilla.getImg();
-		String path = "/img/"+name;
+	private void setImageButton(JButton button, String img) {
+		String path = "/img/"+img;
 		int width=button.getWidth();
 		int height = button.getHeight();
 		
-		ImageIcon image = setImagenAdaptada(width,height, path,name);
+		ImageIcon image = setImagenAdaptada(width,height, path,img);
 		button.setDisabledIcon(image);
 		button.setBorderPainted(true);
 		if(path.equals("/img/wall.png")) {
@@ -295,6 +294,7 @@ public class GameUi extends JDialog {
 				public void actionPerformed(ActionEvent e) {
 					lanzar();
 					getBtDice().setEnabled(false);
+					getBtDice().setToolTipText(null);
 					setMovimientosTexto();
 				}
 			});
@@ -309,6 +309,9 @@ public class GameUi extends JDialog {
 			JButton ele = (JButton)elemento;
 			if(ele.getIcon().toString().equals("ghostBuster.png")) {
 				ele.setEnabled(status);
+				if(status) {
+					ele.setToolTipText(textos.getString("toolTipCaza"));
+				}
 			}
 
 		}
@@ -338,7 +341,7 @@ public class GameUi extends JDialog {
 		int counter = value;
 		for(int i=0;i<Game.FILAS;i++) {
 			JButton button =(JButton)getPnBoard().getComponent(counter);
-			setImageButton(button,app.getCasilla(i, value));
+			setImageButton(button,app.getCasillaImage(i, value));
 			counter+=Game.COLUMNAS;
 		}
 	}
@@ -346,6 +349,7 @@ public class GameUi extends JDialog {
 	private void checkEnd() {
 		if(!app.isFinishedGame()) {
 			getBtDice().setEnabled(true);
+			getBtDice().setToolTipText(textos.getString("toolTipDado"));
 		}else {
 			showFinalDialog();
 		}

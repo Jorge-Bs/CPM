@@ -1,7 +1,6 @@
 package castleBooker.model.booker;
 
 import java.io.File;
-import java.io.IOException;
 import java.text.NumberFormat;
 import java.util.ArrayList;
 import java.util.Currency;
@@ -11,6 +10,7 @@ import java.util.Locale;
 import java.util.ResourceBundle;
 import java.util.Set;
 import java.util.TreeSet;
+
 import castleBooker.model.discount.Discount;
 import castleBooker.model.discount.DiscountData;
 import castleBooker.model.game.Game;
@@ -68,7 +68,7 @@ public class Booker {
 	
 	public void setLocation(Locale location) {
 		Locale.setDefault(location);
-		this.location=location;
+		Booker.location=location;
 		loadCastle();
 	}
 	
@@ -331,10 +331,7 @@ public class Booker {
 
 
 	public boolean camposValidos(String text) {
-		if(text.isEmpty() || text.isBlank()) {
-			return false;
-		}
-		return true;
+		return !(text.isEmpty() || text.isBlank());
 	}
 
 

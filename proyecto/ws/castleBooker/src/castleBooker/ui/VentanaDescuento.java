@@ -13,7 +13,6 @@ import javax.swing.JButton;
 import javax.swing.JLabel;
 import javax.swing.JTextField;
 
-import castleBooker.sevice.App;
 import java.awt.FlowLayout;
 import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
@@ -21,6 +20,8 @@ import java.io.File;
 import java.net.URL;
 
 import javax.swing.SwingConstants;
+
+import castleBooker.sevice.App;
 
 public class VentanaDescuento extends JDialog {
 	/**

@@ -24,8 +24,8 @@ public class App {
 		booker.setLocation(location);
 	}
 	
-	public Casilla getCasilla(int fila,int columna) {
-		return booker.getGame().getCasilla(fila, columna);
+	public String getCasillaImage(int fila,int columna) {
+		return booker.getGame().getCasilla(fila, columna).getImg();
 	}
 	
 	public void lanzar() {
